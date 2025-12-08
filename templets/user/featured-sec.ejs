@@ -1,0 +1,57 @@
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- Heading -->
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-10">
+      Featured Packages
+    </h2>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+
+      <% featuredPackages.forEach(pkg => { %>
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition overflow-hidden">
+
+        <!-- Image -->
+        <img src="/uploads/packages/<%= pkg.images %>" class="h-52 w-full object-cover">
+
+        <div class="p-6">
+
+          <h3 class="text-2xl font-semibold mb-1"><%= pkg.title %></h3>
+          <!-- Location -->
+          <p class="text-gray-600 mb-3"><%= pkg.location %></p>  
+          <!-- Price -->
+          <p class="text-blue-600 font-bold text-lg mb-2">₹ <%= pkg.price %></p>
+
+          <!-- Duration -->
+          <p class="text-gray-600 mb-3"><%= pkg.days %>Days</p>
+
+          <!-- Short Description -->
+          <p class="text-gray-500 text-sm mb-4">
+            <%= pkg.description.substring(0, 80) %>...
+          </p>
+
+          <!-- Ratings -->
+          <div class="flex items-center gap-1 mb-4">
+            <% for (let i = 0; i < pkg.rating; i++) { %>
+              <span class="text-yellow-400">★</span>
+            <% } %>
+            <% for (let i = pkg.rating; i < 5; i++) { %>
+              <span class="text-gray-300">★</span>
+            <% } %>
+          </div>
+
+          <!-- Button -->
+          <a href="/user/package/<%= pkg._id %>"
+             class="block text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">
+            View Details
+          </a>
+
+        </div>
+      </div>
+      <% }) %>
+
+    </div>
+
+  </div>
+</section>

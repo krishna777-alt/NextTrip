@@ -1,0 +1,41 @@
+
+
+<section class="relative h-[100vh] flex items-center justify-center">
+  
+  <!-- Background Image -->
+  <img src="/images/ocean.jpeg"
+       class="absolute w-full h-full object-cover">
+
+  <!-- Overlay -->
+  <div class="absolute w-full h-full bg-black/50"></div>
+
+  <!-- Text Content -->
+  <div class="relative text-center text-white px-6 max-w-2xl">
+    <h1 class="text-4xl md:text-6xl font-bold mb-4">Explore The World With Us</h1>
+    <p class="text-lg md:text-xl mb-8">
+      Find your perfect holiday package — from mountains to beaches, we have it all.
+    </p>
+
+    <!-- Search Bar -->
+    <form action="/search" method="GET" class="flex bg-white rounded-xl overflow-hidden shadow-lg">
+      <input type="text" name="q"
+             class="w-full px-4 py-3 text-gray-700 focus:outline-none"
+             placeholder="Search destinations...">
+      <button class="bg-blue-600 px-6 text-white font-semibold hover:bg-blue-700">
+        Search
+      </button>
+    </form>
+
+    <!-- Buttons -->
+    <div class="mt-6 flex justify-center gap-4">
+      <a href="/user/packages" class="px-6 py-3 bg-blue-600 rounded-xl hover:bg-blue-700 font-semibold">
+        Explore Packages
+      </a>
+
+      <a href="/popular" class="px-6 py-3 border border-white rounded-xl hover:bg-white hover:text-black font-semibold">
+        Popular Trips
+      </a>
+    </div>
+  </div>
+
+</section>

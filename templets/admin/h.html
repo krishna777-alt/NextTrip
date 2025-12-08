@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trip Next — Frontend Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Small helpers beyond Tailwind */
+    .card-shadow { box-shadow: 0 6px 18px rgba(15,23,42,0.08); }
+    .glass { background: rgba(255,255,255,0.6); backdrop-filter: blur(6px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <!-- NAVBAR -->
+  <header class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-4">
+          <a href="#" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-emerald-400 to-sky-500 flex items-center justify-center text-white font-bold">TN</div>
+            <div class="hidden sm:block">
+              <h1 class="text-lg font-semibold">Trip Next</h1>
+              <p class="text-xs text-slate-500">Discover • Book • Travel</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="flex-1 mx-6">
+          <form id="searchForm" class="w-full">
+            <div class="relative">
+              <input id="searchInput" type="search" placeholder="Search destinations, packages, cities..." class="w-full rounded-full border px-4 py-2 pr-36 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+              <button type="submit" class="absolute right-1 top-1.5 bg-sky-600 text-white px-4 py-1.5 rounded-full text-sm">Search</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="uploadBtn" class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 border rounded-full hover:bg-slate-50">Upload (Agent)</button>
+          <button id="loginBtn" class="px-3 py-1.5 bg-white border rounded-full">Login</button>
+          <button id="signupBtn" class="px-3 py-1.5 bg-sky-600 text-white rounded-full">Sign up</button>
+
+          <!-- mobile menu -->
+          <button id="mobileMenuBtn" class="sm:hidden p-2 rounded-md hover:bg-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main class="max-w-7xl mx-auto px-4 md:px-8 mt-8">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="rounded-2xl overflow-hidden card-shadow">
+          <div class="relative h-64 md:h-80 lg:h-96 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=0a86a8c6b9ff4541e4e6a3a50c4d3bb8');">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900/40 to-transparent"></div>
+            <div class="absolute left-6 bottom-6 text-white">
+              <h2 class="text-3xl md:text-4xl font-bold">Explore the world with Trip Next</h2>
+              <p class="mt-2 text-sm md:text-base max-w-xl">Handpicked destinations, flexible packages, and agents who post instantly. Report wrong info — we act when needed.</p>
+              <div class="mt-4 flex gap-3">
+                <button id="discoverBtn" class="bg-emerald-400 px-4 py-2 rounded-full font-semibold">Discover</button>
+                <button id="howBtn" class="bg-white text-slate-800 px-4 py-2 rounded-full font-medium">How it works</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="mt-6 flex flex-wrap gap-3 items-center">
+          <select id="filterCountry" class="border rounded px-3 py-2">
+            <option value="">All countries</option>
+            <option>India</option>
+            <option>Nepal</option>
+            <option>France</option>
+            <option>Thailand</option>
+          </select>
+
+          <select id="filterDays" class="border rounded px-3 py-2">
+            <option value="">Any duration</option>
+            <option value="1-3">1-3 days</option>
+            <option value="4-7">4-7 days</option>
+            <option value=">7">8+ days</option>
+          </select>
+
+          <div class="flex items-center gap-2 ml-auto">
+            <span class="text-sm text-slate-500">Sort:</span>
+            <select id="sortBy" class="border rounded px-3 py-2">
+              <option value="relevance">Relevance</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Top rated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- DESTINATIONS / PACKAGES GRID -->
+        <section id="cardsGrid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- cards rendered by JS -->
+        </section>
+
+        <!-- Load more -->
+        <div class="mt-6 text-center">
+          <button id="loadMoreBtn" class="px-4 py-2 border rounded">Load more</button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Quick Stats & Top Agents -->
+      <aside class="space-y-6">
+        <div class="p-4 rounded-xl glass card-shadow">
+          <h3 class="font-semibold">Quick Stats</h3>
+          <div class="mt-3 grid grid-cols-3 gap-3 text-center">
+            <div>
+              <div class="text-2xl font-bold">1.2k</div>
+              <div class="text-xs text-slate-500">Bookings</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">480</div>
+              <div class="text-xs text-slate-500">Agents</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">98%</div>
+              <div class="text-xs text-slate-500">On-time</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl card-shadow">
+          <h3 class="font-semibold">Top Agents</h3>
+          <ul id="topAgents" class="mt-3 space-y-3 text-sm text-slate-700">
+            <!-- populated by JS -->
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-xl card-shadow">
+          <h3 class="font-semibold">Need help?</h3>
+          <p class="mt-2 text-sm text-slate-500">Contact support or read our policies. Agents can upload instantly; report suspicious listings.</p>
+          <div class="mt-3">
+            <button id="contactBtn" class="px-3 py-1.5 bg-sky-600 text-white rounded">Contact support</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-12 border-t bg-white">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col md:flex-row items-start justify-between gap-6">
+      <div>
+        <h4 class="text-lg font-semibold">Trip Next</h4>
+        <p class="text-sm text-slate-500 mt-2">Fast uploads for agents • Complaint-driven moderation • Trusted trips</p>
+      </div>
+      <div class="flex gap-8">
+        <div>
+          <h5 class="font-medium">Product</h5>
+          <ul class="mt-2 text-sm text-slate-600 space-y-1">
+            <li>Destinations</li>
+            <li>Packages</li>
+            <li>Agents</li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-medium">Company</h5>
+          <ul class="mt-2 text-sm text-slate-600 space-y-1">
+            <li>About</li>
+            <li>Careers</li>
+            <li>Contact</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <!-- Package Modal -->
+  <div id="packageModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative max-w-3xl w-full p-6 bg-white rounded-2xl card-shadow">
+      <button id="closePackageModal" class="absolute right-4 top-4 text-slate-500">✕</button>
+      <div id="packageContent"></div>
+    </div>
+  </div>
+
+  <!-- Upload Modal (Agent) -->
+  <div id="uploadModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative max-w-2xl w-full p-6 bg-white rounded-2xl card-shadow">
+      <button id="closeUploadModal" class="absolute right-4 top-4 text-slate-500">✕</button>
+      <h3 class="text-lg font-semibold">Upload Destination / Package</h3>
+      <form id="uploadForm" class="mt-4 space-y-3">
+        <div>
+          <label class="text-sm">Title</label>
+          <input name="title" required class="w-full border rounded px-3 py-2" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="text-sm">Country</label>
+            <input name="country" required class="w-full border rounded px-3 py-2" />
+          </div>
+          <div>
+            <label class="text-sm">Price</label>
+            <input name="price" type="number" required class="w-full border rounded px-3 py-2" />
+          </div>
+        </div>
+        <div>
+          <label class="text-sm">Short description</label>
+          <textarea name="short" class="w-full border rounded px-3 py-2" rows="3"></textarea>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="px-4 py-2 bg-emerald-400 rounded text-white">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div id="reportModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative max-w-xl w-full p-6 bg-white rounded-2xl card-shadow">
+      <button id="closeReportModal" class="absolute right-4 top-4 text-slate-500">✕</button>
+      <h3 class="text-lg font-semibold">Report Listing</h3>
+      <form id="reportForm" class="mt-4 space-y-3">
+        <input type="hidden" name="targetId" />
+        <div>
+          <label class="text-sm">Report type</label>
+          <select name="type" required class="w-full border rounded px-3 py-2">
+            <option value="wrong-info">Wrong information</option>
+            <option value="fake-price">Fake price</option>
+            <option value="fake-images">Fake images</option>
+            <option value="non-existent">Place does not exist</option>
+            <option value="agent-rude">Agent rude/scam</option>
+            <option value="safety">Safety concern</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Description</label>
+          <textarea name="description" class="w-full border rounded px-3 py-2" rows="4"></textarea>
+        </div>
+        <div>
+          <label class="text-sm">Optional image proof (URL)</label>
+          <input name="image" class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <div class="flex justify-between items-center">
+          <div class="text-xs text-slate-500">Your report will be sent to admins for review.</div>
+          <div>
+            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded">Submit report</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // --- Sample data (replace with API data) ---
+    const samplePackages = [
+      { id: 'p1', title: 'Himachal Nature Retreat', country: 'India', days: 5, nights: 4, price: 29999, rating: 4.6, images: ['https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop'] , agent: { id: 'a1', name: 'AlpineTours', score: 88 } },
+      { id: 'p2', title: 'Paris Classic', country: 'France', days: 4, nights: 3, price: 54999, rating: 4.8, images: ['https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop'] , agent: { id: 'a2', name: 'EuroWings', score: 92 } },
+      { id: 'p3', title: 'Bangkok Food & Fun', country: 'Thailand', days: 3, nights:2, price: 19999, rating: 4.3, images: ['https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=1200&auto=format&fit=crop'] , agent: { id: 'a3', name: 'ThaiGetaways', score: 79 } },
+      { id: 'p4', title: 'Annapurna Trek', country: 'Nepal', days: 8, nights:7, price: 69999, rating: 4.9, images: ['https://images.unsplash.com/photo-1508610048659-a06f5e62b5a3?q=80&w=1200&auto=format&fit=crop'] , agent: { id: 'a4', name: 'HimalayaTrips', score: 95 } }
+    ];
+
+    const topAgents = [
+      { id: 'a4', name: 'HimalayaTrips', score: 95 },
+      { id: 'a2', name: 'EuroWings', score: 92 },
+      { id: 'a1', name: 'AlpineTours', score: 88 }
+    ];
+
+    // --- Rendering functions ---
+    function formatPrice(v){ return '₹' + v.toLocaleString(); }
+
+    function renderCards(items){
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = '';
+      items.forEach(pkg=>{
+        const div = document.createElement('article');
+        div.className = 'bg-white rounded-2xl overflow-hidden card-shadow';
+        div.innerHTML = `
+          <div class="h-44 bg-cover bg-center" style="background-image:url('${pkg.images[0]}')"></div>
+          <div class="p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h4 class="font-semibold">${pkg.title}</h4>
+                <div class="text-xs text-slate-500">${pkg.country} • ${pkg.days} days</div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-semibold">${formatPrice(pkg.price)}</div>
+                <div class="text-xs text-amber-500">★ ${pkg.rating}</div>
+              </div>
+            </div>
+
+            <div class="mt-3 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-sm text-slate-600">
+                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700">${pkg.agent.name.split(' ')[0].charAt(0)}</div>
+                <div>${pkg.agent.name}</div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button class="openPkgBtn px-3 py-1.5 border rounded text-sm" data-id="${pkg.id}">View</button>
+                <button class="reportBtn text-sm text-red-600" data-id="${pkg.id}">Report</button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+
+      // attach handlers
+      document.querySelectorAll('.openPkgBtn').forEach(b=> b.addEventListener('click', e=> openPackageModal(e.target.dataset.id)));
+      document.querySelectorAll('.reportBtn').forEach(b=> b.addEventListener('click', e=> openReportModal(e.target.dataset.id)));
+    }
+
+    function renderTopAgents(){
+      const ul = document.getElementById('topAgents');
+      ul.innerHTML = '';
+      topAgents.forEach(a=>{
+        const li = document.createElement('li');
+        li.className = 'flex items-center justify-between';
+        li.innerHTML = `<div>${a.name}</div><div class="text-sm text-slate-500">${a.score}</div>`;
+        ul.appendChild(li);
+      });
+    }
+
+    // --- Modals & forms ---
+    const packageModal = document.getElementById('packageModal');
+    const packageContent = document.getElementById('packageContent');
+    function openPackageModal(id){
+      const pkg = samplePackages.find(p=>p.id===id);
+      if(!pkg) return;
+      packageContent.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2">
+            <div class="h-60 bg-cover bg-center rounded-lg" style="background-image:url('${pkg.images[0]}')"></div>
+            <h3 class="mt-4 text-xl font-semibold">${pkg.title}</h3>
+            <p class="mt-2 text-sm text-slate-600">${pkg.days} days • ${pkg.nights} nights • ${pkg.country}</p>
+            <p class="mt-3 text-sm">${pkg.agent.name} — Trusted agent score ${pkg.agent.score}.</p>
+            <div class="mt-4">
+              <h4 class="font-medium">Itinerary</h4>
+              <ol class="list-decimal ml-6 mt-2 text-sm text-slate-600"><li>Day 1: Arrival</li><li>Day 2: Explore</li><li>Day 3: Activities</li></ol>
+            </div>
+          </div>
+          <div class="md:col-span-1 p-4 border rounded-lg">
+            <div class="text-2xl font-bold">${formatPrice(pkg.price)}</div>
+            <div class="text-sm text-amber-500">★ ${pkg.rating}</div>
+            <div class="mt-4">
+              <button id="bookNowBtn" class="w-full px-4 py-2 bg-emerald-400 rounded text-white">Book now</button>
+            </div>
+            <div class="mt-3">
+              <button id="openReportFromModal" class="w-full px-4 py-2 border rounded text-sm">Report this listing</button>
+            </div>
+          </div>
+        </div>
+      `;
+      packageModal.classList.remove('hidden');
+      packageModal.classList.add('flex');
+
+      // attach report button
+      setTimeout(()=>{
+        const r = document.getElementById('openReportFromModal');
+        if(r) r.addEventListener('click', ()=> openReportModal(pkg.id));
+      }, 20);
+    }
+    document.getElementById('closePackageModal').addEventListener('click', ()=> { packageModal.classList.add('hidden'); packageModal.classList.remove('flex'); });
+
+    // Report modal
+    const reportModal = document.getElementById('reportModal');
+    function openReportModal(targetId){
+      reportModal.querySelector('input[name="targetId"]').value = targetId;
+      reportModal.classList.remove('hidden');
+      reportModal.classList.add('flex');
+    }
+    document.getElementById('closeReportModal').addEventListener('click', ()=> { reportModal.classList.add('hidden'); reportModal.classList.remove('flex'); });
+
+    // Upload modal
+    const uploadModal = document.getElementById('uploadModal');
+    document.getElementById('uploadBtn').addEventListener('click', ()=> { uploadModal.classList.remove('hidden'); uploadModal.classList.add('flex'); });
+    document.getElementById('closeUploadModal').addEventListener('click', ()=> { uploadModal.classList.add('hidden'); uploadModal.classList.remove('flex'); });
+
+    // handle upload (client-side simulation)
+    document.getElementById('uploadForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const fd = new FormData(this);
+      const obj = Object.fromEntries(fd.entries());
+      // In production: POST /api/packages with auth
+      alert('Uploaded (simulated): ' + obj.title + '\nImplement API integration to persist.');
+      uploadModal.classList.add('hidden'); uploadModal.classList.remove('flex');
+    });
+
+    // Submit report (client-side simulation)
+    document.getElementById('reportForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const fd = new FormData(this);
+      const data = Object.fromEntries(fd.entries());
+      // Auto capture userId & timestamp should be done server-side.
+      data.userId = 'u-demo';
+      data.timestamp = new Date().toISOString();
+      console.log('REPORT SUBMIT (simulated):', data);
+      alert('Report submitted. Admins will review it.');
+      reportModal.classList.add('hidden'); reportModal.classList.remove('flex');
+    });
+
+    // Search / filters (client-side)
+    document.getElementById('searchForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const filtered = samplePackages.filter(p=> p.title.toLowerCase().includes(q) || p.country.toLowerCase().includes(q));
+      renderCards(filtered.length ? filtered : samplePackages);
+    });
+
+    // Sort and filter hooks
+    document.getElementById('filterCountry').addEventListener('change', function(){
+      const country = this.value;
+      const list = country ? samplePackages.filter(p=> p.country===country) : samplePackages;
+      renderCards(list);
+    });
+
+    document.getElementById('sortBy').addEventListener('change', function(){
+      const val = this.value; let arr = [...samplePackages];
+      if(val==='price-low') arr.sort((a,b)=> a.price-b.price);
+      if(val==='price-high') arr.sort((a,b)=> b.price-a.price);
+      if(val==='rating') arr.sort((a,b)=> b.rating-a.rating);
+      renderCards(arr);
+    });
+
+    document.getElementById('loadMoreBtn').addEventListener('click', ()=> alert('Load more (simulated) — integrate pagination API.'));
+
+    // Mobile menu toggle
+    document.getElementById('mobileMenuBtn').addEventListener('click', ()=> alert('Open mobile menu (implement drawer)'));
+
+    // Init
+    renderCards(samplePackages);
+    renderTopAgents();
+
+    // Responsive accessibility note: keyboard bindings
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Escape'){
+        [packageModal, reportModal, uploadModal].forEach(m=>{ if(!m.classList.contains('hidden')){ m.classList.add('hidden'); m.classList.remove('flex'); } });
+      }
+    });
+
+  </script>
+</body>
+</html>

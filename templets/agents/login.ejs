@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Login</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen px-4">
+   
+
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+        <%- success %>
+        <h1 class="text-2xl font-bold text-center mb-6 text-blue-600">
+            TravelLink Agent Portal
+        </h1>
+
+        <h2 class="text-xl font-semibold text-center mb-6">Agent Login</h2>
+
+        <form action="http://localhost:3000/api/v1/agent/login" method="POST" class="space-y-5">
+
+            <div>
+                <label class="block mb-1 font-medium">Email Address</label>
+                <input type="email" name="email"
+                       class="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" 
+                       placeholder="agent@example.com" required>
+            </div>
+
+            <div>
+                <label class="block mb-1 font-medium">Password</label>
+                <input type="password" name="password"
+                       class="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" 
+                       placeholder="••••••••" required>
+            </div>
+
+            <button class="w-full bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700">
+                Login
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <p class="text-gray-600">Don't have an account?</p>
+            <a href="http://localhost:3000/api/v1/agent/register" class="text-blue-600 font-medium hover:underline">
+                Register as Agent
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
