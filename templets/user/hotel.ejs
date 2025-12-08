@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotels - NextTrip</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <%- include("navBar") %>
+
+    <!-- Header -->
+    <section
+      class="text-center py-20 text-white bg-cover bg-center relative"
+      style="background-image: url('/images/hotel-bg.jpg')"
+    >
+      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="relative z-10">
+        <h1 class="text-4xl font-bold">Find the Best Hotels</h1>
+        <p class="mt-2 text-lg">Comfortable stays at the best prices</p>
+      </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <!-- Filters -->
+      <div
+        class="bg-white shadow p-5 rounded-xl mb-8 border grid grid-cols-1 md:grid-cols-3 gap-6"
+      >
+        <!-- Rating Filter -->
+        <div>
+          <label class="font-semibold">Rating</label>
+          <select
+            id="filterRating"
+            class="w-full mt-1 p-3 border rounded-lg bg-gray-50"
+          >
+            <option value="all">All Ratings</option>
+            <option value="4">4★ & above</option>
+            <option value="3">3★ & above</option>
+            <option value="2">2★ & above</option>
+          </select>
+        </div>
+
+        <!-- Price Filter -->
+        <div>
+          <label class="font-semibold">Price</label>
+          <select
+            id="filterPrice"
+            class="w-full mt-1 p-3 border rounded-lg bg-gray-50"
+          >
+            <option value="all">All Prices</option>
+            <option value="low">Below ₹1500</option>
+            <option value="mid">₹1500 - ₹3000</option>
+            <option value="high">₹3000+</option>
+          </select>
+        </div>
+
+        <!-- AC Filter -->
+        <div>
+          <label class="font-semibold">Room Type</label>
+          <select
+            id="filterAC"
+            class="w-full mt-1 p-3 border rounded-lg bg-gray-50"
+          >
+            <option value="all">All</option>
+            <option value="ac">AC</option>
+            <option value="nonac">Non-AC</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Hotel Cards -->
+      <div
+        id="hotelContainer"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        <% hotels.forEach(hotel => { %>
+        <div class="bg-white border rounded-xl shadow overflow-hidden">
+          <img
+            src="/uploads/hotels/<%= hotel.image %>"
+            class="h-48 w-full object-cover"
+          />
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold"><%= hotel.name %></h3>
+            <p class="text-yellow-500 font-semibold mb-1">
+              ⭐ <%= hotel.rating %>/5
+            </p>
+            <p class="text-gray-700 mb-2 font-medium">
+              ₹ <%= hotel.price %> / night
+            </p>
+            <p class="text-sm mb-4">
+              <span
+                class="px-3 py-1 rounded-full text-white <%= hotel.ac ? 'bg-blue-600' : 'bg-gray-600' %>"
+              >
+                <%= hotel.ac ? "AC Room" : "Non-AC Room" %>
+              </span>
+            </p>
+
+            <div class="flex gap-3 mt-4">
+              <a
+                href="/bookHotel/<%= hotel._id %>"
+                class="w-1/2 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              >
+                Book Now
+              </a>
+
+              <a
+                href="/hotelDetails/<%= hotel._id %>"
+                class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+              >
+                Details
+              </a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <%- include("footer") %>
+
+    <!-- Filter Script -->
+    <script>
+      const allHotels = <%- JSON.stringify(hotels) %>;
+      const container = document.getElementById("hotelContainer");
+
+      const filterRating = document.getElementById("filterRating");
+      const filterPrice = document.getElementById("filterPrice");
+      const filterAC = document.getElementById("filterAC");
+
+      function renderHotels(list) {
+        container.innerHTML = "";
+
+        list.forEach((h) => {
+          container.innerHTML += `
+            <div class="bg-white border rounded-xl shadow overflow-hidden">
+              <img src="/uploads/hotels/${h.images[0]}" class="h-48 w-full object-cover" />
+
+              <div class="p-5">
+                <h3 class="text-xl font-bold">${h.name}</h3>
+                <p class="text-yellow-500 font-semibold">⭐ ${h.rating}/5</p>
+                <p class="text-gray-700 font-medium">₹ ${h.price} / night</p>
+
+                <p class="text-sm mb-4">
+                  <span class="px-3 py-1 rounded-full text-white ${
+                    h.ac ? "bg-blue-600" : "bg-gray-600"
+                  }">
+                  ${h.ac ? "AC Room" : "Non-AC Room"}
+                  </span>
+                </p>
+
+                <div class="flex gap-3 mt-4">
+                  <a href="/bookHotel/${h._id}" class="w-1/2 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                    Book Now
+                  </a>
+                  <a href="/hotelDetails/${h._id}" class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50">
+                    Details
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      function applyFilters() {
+        const rating = filterRating.value;
+        const price = filterPrice.value;
+        const ac = filterAC.value;
+
+        let filtered = allHotels;
+
+        // Rating filter
+        if (rating !== "all") {
+          filtered = filtered.filter((h) => h.rating >= Number(rating));
+        }
+
+        // Price filter
+        if (price === "low") filtered = filtered.filter((h) => h.price < 1500);
+        if (price === "mid")
+          filtered = filtered.filter((h) => h.price >= 1500 && h.price <= 3000);
+        if (price === "high") filtered = filtered.filter((h) => h.price > 3000);
+
+        // AC Filter
+        if (ac === "ac") filtered = filtered.filter((h) => h.ac === true);
+        if (ac === "nonac") filtered = filtered.filter((h) => h.ac === false);
+
+        renderHotels(filtered);
+      }
+
+      filterRating.addEventListener("change", applyFilters);
+      filterPrice.addEventListener("change", applyFilters);
+      filterAC.addEventListener("change", applyFilters);
+    </script>
+  </body>
+</html>

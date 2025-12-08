@@ -1,0 +1,109 @@
+<!-- views/about.ejs -->
+<%- include('navBar') %>
+    <title>About Us</title>
+
+    <!-- Tailwind CDN (optional if you're using it) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- HERO SECTION -->
+    <section class="relative h-[60vh] flex items-center justify-center">
+      <img
+        src="/images/wp5168905-foggy-wallpapers.jpg"
+        class="absolute inset-0 h-full w-full object-cover opacity-70"
+        alt="Travel Background"
+      />
+      <div class="relative text-center text-white">
+        <h1 class="text-5xl font-bold drop-shadow-lg">About Us</h1>
+        <p class="mt-3 text-lg drop-shadow-lg">
+          Discover why we built this travel experience
+        </p>
+      </div>
+    </section>
+
+    <!-- MISSION SECTION -->
+    <section class="max-w-6xl mx-auto py-16 px-6 grid md:grid-cols-2 gap-10">
+      <div>
+        <h2 class="text-3xl font-bold mb-4">Our Mission</h2>
+        <p class="text-gray-700 leading-relaxed">
+          Our mission is simple — to make travel easy, inspiring, and full of
+          real experiences. We believe that exploring new places brings people
+          closer and creates unforgettable memories.
+        </p>
+      </div>
+      <div>
+        <img
+          src="/images/mantas-hesthaven-_g1WdcKcV3w-unsplash.jpg"
+          class="rounded-xl shadow-lg"
+          alt="Mission Image"
+        />
+      </div>
+    </section>
+
+    <!-- STORY SECTION -->
+    <section class="bg-white py-16 px-6">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl font-bold mb-6">Our Story</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          This website began as a simple collection of travel memories. We
+          wanted to help people discover beautiful destinations with detailed
+          guides, photos, and local insights.
+        </p>
+        <p class="text-gray-700 leading-relaxed">
+          Over time, we expanded our vision to create a platform where anyone
+          can explore places, plan trips, and get inspired to travel more.
+        </p>
+      </div>
+    </section>
+
+    <!-- WHAT WE OFFER -->
+    <section class="py-16 px-6 bg-gray-100">
+      <h2 class="text-center text-3xl font-bold mb-10">What We Offer</h2>
+
+      <div class="max-w-6xl mx-auto grid md:grid-cols-4 sm:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="font-semibold text-xl mb-2">Explore Places</h3>
+          <p class="text-gray-600 text-sm">Detailed guides and photos.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="font-semibold text-xl mb-2">Travel Tips</h3>
+          <p class="text-gray-600 text-sm">Local experiences & safety info.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="font-semibold text-xl mb-2">Photo Gallery</h3>
+          <p class="text-gray-600 text-sm">Beautiful images of all places.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 class="font-semibold text-xl mb-2">Trip Planning</h3>
+          <p class="text-gray-600 text-sm">Plan your journey easily.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATOR SECTION -->
+    <!-- <section class="py-16 px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-6">Meet the Creator</h2>
+
+        <img
+          src="/images/creator.jpg"
+          class="w-40 h-40 rounded-full mx-auto shadow-lg mb-5"
+          alt="Creator"
+        />
+
+        <h3 class="text-xl font-semibold">Thejas</h3>
+        <p class="text-gray-600 mt-2">
+          Hi, I built this website to help people discover beautiful places and
+          learn more about the world through real experiences.
+        </p>
+      </div>
+    </section> -->
+
+    <!-- CTA SECTION -->
+    <!-- <section class="py-16 bg-blue-600 text-white text-center"></section> -->
+     <%- include('footer')%>
+  </body>
+</html>

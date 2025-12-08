@@ -1,31 +1,29 @@
-const path = require('path');
-const multer = require('multer');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const flash = require('connect-flash');
-const Admin = require('./../Models/adminModel');
+const path = require("path");
+const multer = require("multer");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const flash = require("connect-flash");
+const Admin = require("./../Models/adminModel");
 
 //////////////////////////////////////////////////////////////ADMIN AUTH///////////////////////////////
 
-exports.auth = (req,res,next)=> {
+exports.auth = (req, res, next) => {
   const token = req.cookies.jwt;
-  console.log('token:',token);
-  if(!token)
-    {
-      return res.status(401).json({message:'You are not logged in!'});
-    } 
-  try{
-    const decode = jwt.verify(token,process.env.JWT_SECRET_KEY);
-    console.log('decode: ',decode);
+  console.log("token:", token);
+  if (!token) {
+    return res.status(401).json({ message: "You are not logged in!" });
+  }
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    console.log("decode: ", decode);
     req.admin = decode;
     next();
-  }  
-  catch(err){
-    return res.status(403).json({message:'Invalid Token!'+err});
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid Token!" + err });
   }
-}
-exports.isAdmin = async(req,res,next)=>{
-  if(req.admin.role !== "admin"){
+};
+exports.isAdmin = async (req, res, next) => {
+  if (req.admin.role !== "admin") {
     return res.status(403).send("Access Denied. Admins only");
   }
   // console.log('admin ID:'+req.admin.id,'admin role:'+req.admin.role);
@@ -33,25 +31,25 @@ exports.isAdmin = async(req,res,next)=>{
   console.log(currentAdmin);
   req.adminData = currentAdmin;
   next();
-}
+};
 
-exports.getLogin = (req,res)=>{
-    try{
-        // res.sendFile(path.join(__dirname,'../templets','admin','login.ejs'));
-        // res.redirect("/api/v1/admin/login");
-            res.render("admin/login", {
-          successMsg: req.flash("success"),
-          errorMsg: req.flash("error")
-        });
-    }catch(err){
-        res.sendFile(path.join(__dirname,'../templets','status','404.html'));
-    }
-}
+exports.getLogin = (req, res) => {
+  try {
+    // res.sendFile(path.join(__dirname,'../templets','admin','login.ejs'));
+    // res.redirect("/api/v1/admin/login");
+    res.render("admin/login", {
+      successMsg: req.flash("success"),
+      errorMsg: req.flash("error"),
+    });
+  } catch (err) {
+    res.sendFile(path.join(__dirname, "../templets", "status", "404.html"));
+  }
+};
 
-exports.logout = (req,res)=>{
+exports.logout = (req, res) => {
   res.clearCookie("jwt");
-  return res.redirect('/api/v1/admin/login');
-}
+  return res.redirect("/admin/login");
+};
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -61,7 +59,7 @@ exports.login = async (req, res) => {
 
     if (!admin) {
       req.flash("error", "Admin not found");
-      return res.redirect("/api/v1/admin/login");
+      return res.redirect("/admin/login");
     }
 
     // 2. Compare passwords
@@ -73,73 +71,73 @@ exports.login = async (req, res) => {
     //3. creating jwt token
     const token = jwt.sign(
       {
-        id:admin._id,
-        role:admin.role
+        id: admin._id,
+        role: admin.role,
       },
       process.env.JWT_SECRET_KEY,
-      // {expresIn:process.env.JWT_TOKEN_EXPRIES} 
-     { expiresIn: process.env.JWT_TOKEN_EXPRIES }
+      // {expresIn:process.env.JWT_TOKEN_EXPRIES}
+      { expiresIn: process.env.JWT_TOKEN_EXPRIES }
+    );
 
-    )
-    
     //4.Stores token in cookie
-    res.cookie('jwt',token,{
-      httpOnly:true,
-      secure:false,
-      maxAge:24 * 60 * 60 * 1000
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
     });
     //5. Success -> Redirect to admin dashboard
-    return res.redirect("/api/v1/admin/");
-  //   return res.render("admin/home", {
-  //   successMsg: req.flash("success")
-  // });
+    return res.redirect("/admin/");
+    //   return res.render("admin/home", {
+    //   successMsg: req.flash("success")
+    // });
   } catch (err) {
     console.log("LOGIN ERROR:", err);
-    return res
-      .status(500)
-      .json({ERROR:err});
-      // .sendFile(path.join(__dirname, "../templets/status/404.html"));
+    return res.status(500).json({ ERROR: err });
+    // .sendFile(path.join(__dirname, "../templets/status/404.html"));
   }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-exports.adminHome = (req,res)=>{
-    try{
-        // res.status(200).sendFile(path.join(__dirname,'../templets','admin','home.ejs'));
-        return res.render("admin/home", {
-        admin: req.adminData, 
-        successMsg: req.flash("success")
-      });
-    }catch(err){
-        res.status(404).json({
-            message:'Failed '+err
-        });
-    }
-}
+exports.adminHome = (req, res) => {
+  try {
+    // res.status(200).sendFile(path.join(__dirname,'../templets','admin','home.ejs'));
+    return res.render("admin/home", {
+      admin: req.adminData,
+      successMsg: req.flash("success"),
+    });
+  } catch (err) {
+    res.status(404).json({
+      message: "Failed " + err,
+    });
+  }
+};
 
-exports.getManageAdmin2 = (req,res)=>{
-    try{
-        res.status(200).sendFile(path.join(__dirname,'../templets','admin','manage-admin.ejs'));
-    }
-    catch(err){
-        res.status(404).json({
-            message:'Failed'+err
-        });
-    }
-}
+exports.getManageAdmin2 = (req, res) => {
+  try {
+    res
+      .status(200)
+      .sendFile(
+        path.join(__dirname, "../templets", "admin", "manage-admin.ejs")
+      );
+  } catch (err) {
+    res.status(404).json({
+      message: "Failed" + err,
+    });
+  }
+};
 exports.getManageAdmin = (req, res) => {
   res.render("admin/manage-admin", {
-    successMsg: req.flash("success")
+    successMsg: req.flash("success"),
   });
 };
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '..', 'uploads', 'adminProfiles'));
+    cb(null, path.join(__dirname, "..", "uploads", "adminProfiles"));
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
 // FILE FILTER (optional)
@@ -151,15 +149,14 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 
 // MATCHES THE HTML FIELD NAME ↓↓↓
-exports.uploadAdminImage = upload.single('image');
+exports.uploadAdminImage = upload.single("image");
 
 exports.createAdmin = async (req, res) => {
   try {
-
     if (!req.file) {
       return res.status(400).json({
         status: "fail",
-        message: "No profile image uploaded!"
+        message: "No profile image uploaded!",
       });
     }
 
@@ -167,89 +164,102 @@ exports.createAdmin = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      image: req.file.filename   // << Correct
+      image: req.file.filename, // << Correct
     });
     await admin.save();
 
-    req.flash('success','Admin created successfully!');
-    res.redirect('http://localhost:3000/api/v1/admin/manage-admin');
-  //   res.render('admin/manage-admin"', {
-  //   // admin,
-  //   successMsg: req.flash('success'),
-  //   errorMsg: req.flash('error')
-  // });
-      
+    req.flash("success", "Admin created successfully!");
+    res.redirect("http://localhost:3000/admin/manage-admin");
+    //   res.render('admin/manage-admin"', {
+    //   // admin,
+    //   successMsg: req.flash('success'),
+    //   errorMsg: req.flash('error')
+    // });
+
     // res.status(201).json({
     //   status: "success",
     //   message: "Admin created successfully!",
     //   admin
     // });
-
   } catch (err) {
     console.log(`ERR: ${err}`);
 
     res.status(500).json({
       status: "error",
-      message: err.message
+      message: err.message,
     });
   }
 };
 
 exports.updateAdmin = async (req, res) => {
-    try {
-        const adminId = req.params.id;
+  try {
+    const adminId = req.params.id;
 
-        // Fetch the admin from DB
-        const admin = await Admin.findById(adminId);
-        if (!admin) return res.status(404).send("Admin not found");
+    // Fetch the admin from DB
+    const admin = await Admin.findById(adminId);
+    if (!admin) return res.status(404).send("Admin not found");
 
-        // Update fields
-        admin.name = req.body.name || admin.name;
-        admin.email = req.body.email || admin.email;
-        admin.role = req.body.role || admin.role;
+    // Update fields
+    admin.name = req.body.name || admin.name;
+    admin.email = req.body.email || admin.email;
+    admin.role = req.body.role || admin.role;
 
-        // Update password only if given
-        if (req.body.password && req.body.password.trim() !== "") {
-            admin.password = req.body.password; // (Hash this in real projects)
-        }
-
-        // Update profile image (if new file uploaded)
-        if (req.file) {
-            admin.image = req.file.filename;
-        }
-
-        await admin.save();
-
-        res.redirect("/manage-admin");  // redirect after update
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Server Error"+err);
+    // Update password only if given
+    if (req.body.password && req.body.password.trim() !== "") {
+      admin.password = req.body.password; // (Hash this in real projects)
     }
+
+    // Update profile image (if new file uploaded)
+    if (req.file) {
+      admin.image = req.file.filename;
+    }
+
+    await admin.save();
+
+    res.redirect("/manage-admin"); // redirect after update
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error" + err);
+  }
 };
 
 // GET Update Admin Page
 exports.updateAdminPage = async (req, res) => {
-    try {
-        const adminId = req.params.id;
-        const admin = await Admin.findById(adminId);
+  try {
+    const adminId = req.params.id;
+    const admin = await Admin.findById(adminId);
 
-        if (!admin) {
-            return res.status(404).send("Admin not found");
-        }
-
-        res.render("updateAdmin", { admin }); // render your EJS/HTML page
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Server Error");
+    if (!admin) {
+      return res.status(404).send("Admin not found");
     }
+
+    res.render("updateAdmin", { admin }); // render your EJS/HTML page
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error");
+  }
 };
 
+exports.getAllAdmin = async (req, res) => {
+  try {
+    const admins = await Admin.find();
+    res.status(200).json(admins);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-exports.getAllAdmin = async (req,res)=>{
-    try{
-        const admins = await Admin.find();
-        res.status(200).json(admins);
-    }catch(err){
-        console.log(err);
-    }
-}
+exports.displayAgentPackage = async function (req, res) {
+  try {
+    const agentId = req.agent.id;
+    const packages = await Package.find({ agentId });
+    console.log(packages);
+    res.render("agents/myPackage", { packages });
+  } catch (err) {
+    console.log("ERROR" + err);
+  }
+};
+
+exports.agentProfile = function (req, res) {
+  res.render("agents/agentProfile");
+};

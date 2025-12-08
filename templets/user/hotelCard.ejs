@@ -1,0 +1,54 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<% hotels.forEach(hotel => { %>
+
+<div class="w-full flex justify-center my-6">
+  <div
+    class="w-[85%] bg-white border border-gray-200 rounded-2xl shadow-md p-5 flex items-center gap-6 hover:shadow-lg transition"
+  >
+    <!-- Image -->
+    <div class="w-44 h-32 rounded-xl overflow-hidden flex-shrink-0">
+      <img
+        src="http://localhost:3000/uploads/hotels/<%= hotel.image %>"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1">
+      <!-- Name + Rating -->
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-gray-900"><%= hotel.name %></h2>
+
+        <span
+          class="px-3 py-1 bg-green-100 text-green-700 text-sm font-semibold rounded-full"
+        >
+          ⭐ <%= hotel.rating %>
+        </span>
+      </div>
+
+      <!-- Description -->
+      <p class="text-gray-500 mt-2 text-sm leading-relaxed">
+        <%= hotel.description.substring(0, 120) %>...
+      </p>
+
+      <!-- Buttons -->
+      <div class="mt-4 flex gap-4 justify-end">
+        <a
+          href="/hotels/<%= hotel._id %>"
+          class="px-4 py-2 bg-black-600 text-blue-600 font-medium hover:underline"
+        >
+          Details →
+        </a>
+
+        <a
+          href="/book/<%= hotel._id %>"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          Book Now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% }) %>

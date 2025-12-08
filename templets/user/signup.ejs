@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
+
     <title>User Signup</title>
   </head>
-
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <body
     class="h-screen w-screen bg-cover bg-center"
     style="
@@ -36,7 +36,7 @@
         </div>
         <br />
         <form
-          action="http://localhost:3000/api/v1/user/signup"
+          action="http://localhost:3000/signup"
           method="POST"
           class="space-y-4"
         >
@@ -91,7 +91,7 @@
         <p class="text-white text-center mt-4">
           Already registered?
           <a
-            href="/user/login"
+            href="http://localhost:3000/login"
             class="text-green-300 font-semibold hover:underline"
             >Login</a
           >

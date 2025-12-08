@@ -1,0 +1,163 @@
+
+   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Contact Us</title>
+
+    <style>
+      /* ====== Hero Section ====== */
+      .contact-hero {
+        background: url("/images/julian-timmerman-Fn27DlI8bZ8-unsplash.jpg") center/cover no-repeat;
+        height: 45vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+      }
+
+      .contact-hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+      }
+
+      /* ====== Contact Section ====== */
+      .contact-container {
+        width: 90%;
+        max-width: 1100px;
+        margin: 40px auto;
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+
+      .contact-info,
+      .contact-form {
+        flex: 1;
+        min-width: 300px;
+        background: #fff;
+        padding: 25px 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+      }
+
+      .contact-info h2,
+      .contact-form h2 {
+        margin-bottom: 15px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .contact-info p {
+        margin: 8px 0;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      /* ====== Contact Form ====== */
+      form input,
+      form textarea {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+      }
+
+      form button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        background: #0077ff;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s ease;
+      }
+
+      form button:hover {
+        background: #005bd1;
+      }
+
+      /* ====== Map ====== */
+      .map-box {
+        width: 100%;
+        height: 300px;
+        margin-top: 30px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <%- include("navBar") %>
+  <body>
+   
+    <!-- ===== Hero Section ===== -->
+    <section class="contact-hero">
+      <h1>Contact Us</h1>
+    </section>
+    <!-- Toast Container -->
+
+    <!-- ===== Main Contact Section ===== -->
+    <div class="contact-container">
+      <div id="toastBox" class="fixed top-5 right-5 space-y-3 z-50">
+        <% if (success && success.length > 0) { %>
+          <div class="toast px-5 py-3 rounded-lg shadow-lg text-white font-medium bg-green-600"><%= success[0] %></div>
+           <!-- <script>
+            showToast("success", "<%= success[0] %>");
+            console.log("success:"+success[0])
+          </script> -->
+        <% } %>
+        <% if (error && error.length > 0) { %>
+          <div class="toast px-5 py-3 rounded-lg shadow-lg text-white font-medium bg-red-600"><%= error[0] %></div>
+        <% } %>
+      </div>
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h2>Reach Us</h2>
+
+        <p><strong>📍 Address:</strong> 123 Travel Street, Kerala, India</p>
+        <p><strong>📞 Phone:</strong> +91 98765 43210</p>
+        <p><strong>📧 Email:</strong> support@travelwebsite.com</p>
+        <p><strong>🕒 Working Hours:</strong> Mon–Sat, 9 AM – 7 PM</p>
+
+        <h3 style="margin-top: 15px">Follow Us</h3>
+        <p>🌐 Facebook | Instagram | YouTube</p>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <h2>Send Us a Message</h2>
+        <form action="http://localhost:3000/contact" method="POST">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <input type="text" name="subject" placeholder="Subject" required />
+          <textarea
+            name="message"
+            rows="6"
+            placeholder="Your Message"
+            required
+          ></textarea>
+
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== Google Map ===== -->
+   <div class="map-box">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.244893345616!2d76.27111231574579!3d9.981635976209089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d123456abcd%3A0x9876543210fedcba!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000"
+    width="100%"
+    height="100%"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+  ></iframe>
+</div>
+<!-- <script src="/js/toast.js"></script> -->
+   <%- include("footer")%>
+  </body>
+</html>

@@ -1,217 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trip Next – Admin Panel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex h-screen w-full overflow-hidden">
-  <!-- SIDEBAR -->
-  <aside class="w-72 bg-gray-900 text-white flex flex-col">
-    <div class="p-6 text-2xl font-bold border-b border-gray-700">Trip Next Admin</div>
-    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-      <button class="w-full text-left p-3 rounded-lg bg-gray-800">Dashboard</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Destinations</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Packages</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Agents</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Users</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Bookings</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Reports</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Reviews</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Payments</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Settings</button>
-      <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Activity Logs</button>
-      <a href="http://localhost:3000/api/v1/admin/manage-admin" class="w-full text-left p-3 rounded-lg hover:bg-gray-800">Manage Admin</a><br><br>
-      <a href="http://localhost:3000/api/v1/admin/logout" class="w-full text-left p-3 rounded-lg hover:bg-red-700 mt-4">Logout</a>
-    </nav>
-  </aside>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trip Next – Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex h-screen w-full overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-gray-900 text-white flex flex-col">
+      <div class="p-6 text-2xl font-bold border-b border-gray-700">
+        Trip Next Admin
+      </div>
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <button class="w-full text-left p-3 rounded-lg bg-gray-800">
+          Dashboard
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Destinations
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Packages
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Agents
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Users
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Bookings
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Reports
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Reviews
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Payments
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Settings
+        </button>
+        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+          Activity Logs
+        </button>
+        <a
+          href="http://localhost:3000/admin/manage-admin"
+          class="w-full text-left p-3 rounded-lg hover:bg-gray-800"
+          >Manage Admin</a
+        ><br /><br />
+        <a
+          href="http://localhost:3000/admin/logout"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-700 mt-4"
+          >Logout</a
+        >
+      </nav>
+    </aside>
 
-  <!-- MAIN CONTENT AREA -->
-  <main class="flex-1 overflow-y-auto">
-    <!-- <header class="p-4 bg-white shadow flex justify-between items-center">
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 overflow-y-auto">
+      <!-- <header class="p-4 bg-white shadow flex justify-between items-center">
       <h1 class="text-2xl font-semibold">Dashboard</h1>
       <div class="flex items-center gap-4">
         <span class="text-gray-600">Admin</span>
         <img src="https://i.pravatar.cc/40" class="w-10 h-10 rounded-full" />
       </div>
     </header> -->
-    <header class="p-4 bg-white shadow flex justify-between items-center">
-      <h1 class="text-2xl font-semibold">Dashboard</h1>
+      <header class="p-4 bg-white shadow flex justify-between items-center">
+        <h1 class="text-2xl font-semibold">Dashboard</h1>
 
-      <div class="flex items-center gap-4">
-        <span class="text-gray-600"><%= admin.role %></span>
+        <div class="flex items-center gap-4">
+          <span class="text-gray-600"><%= admin.name %></span>
 
-        <img src="/uploads/adminProfiles/<%= admin.image %>"
+          <img
+            src="/uploads/adminProfiles/<%= admin.image %>"
             class="w-10 h-10 rounded-full"
-            alt="Admin Profile" />
-      </div>
-    </header>
+            alt="Admin Profile"
+          />
+        </div>
+      </header>
 
-    <!-- DASHBOARD CARDS -->
-    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 p-6">
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h2 class="text-lg font-semibold">Total Users</h2>
-        <p class="text-3xl font-bold mt-2">1,248</p>
-      </div>
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h2 class="text-lg font-semibold">Agents</h2>
-        <p class="text-3xl font-bold mt-2">342</p>
-      </div>
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h2 class="text-lg font-semibold">Bookings</h2>
-        <p class="text-3xl font-bold mt-2">7,921</p>
-      </div>
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h2 class="text-lg font-semibold">Reports Pending</h2>
-        <p class="text-3xl font-bold mt-2 text-red-600">32</p>
-      </div>
-    </section>
+      <!-- DASHBOARD CARDS -->
+      <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 p-6">
+        <div class="p-6 bg-white shadow rounded-xl">
+          <h2 class="text-lg font-semibold">Total Users</h2>
+          <p class="text-3xl font-bold mt-2">1,248</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-xl">
+          <h2 class="text-lg font-semibold">Agents</h2>
+          <p class="text-3xl font-bold mt-2">342</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-xl">
+          <h2 class="text-lg font-semibold">Bookings</h2>
+          <p class="text-3xl font-bold mt-2">7,921</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-xl">
+          <h2 class="text-lg font-semibold">Reports Pending</h2>
+          <p class="text-3xl font-bold mt-2 text-red-600">32</p>
+        </div>
+      </section>
 
-    <!-- TABLE EXAMPLE (Reports) -->
-    <section class="p-6">
-      <h2 class="text-xl font-semibold mb-4">Latest Reports</h2>
-      <div class="overflow-x-auto bg-white shadow rounded-xl">
-        <table class="w-full text-left">
-          <thead class="bg-gray-200">
-            <tr>
-              <th class="p-3">User</th>
-              <th class="p-3">Agent</th>
-              <th class="p-3">Reason</th>
-              <th class="p-3">Date</th>
-              <th class="p-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b">
-              <td class="p-3">John Doe</td>
-              <td class="p-3">Agent123</td>
-              <td class="p-3">Fake images</td>
-              <td class="p-3">2025-11-18</td>
-              <td class="p-3">
-                <button class="px-3 py-1 bg-blue-600 text-white rounded-lg">Review</button>
-              </td>
-            </tr>
-            <tr class="border-b">
-              <td class="p-3">Priya Sharma</td>
-              <td class="p-3">TravelPro</td>
-              <td class="p-3">Wrong price</td>
-              <td class="p-3">2025-11-17</td>
-              <td class="p-3">
-                <button class="px-3 py-1 bg-blue-600 text-white rounded-lg">Review</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-    
-    <!-- DESTINATIONS MODULE -->
-    <section id="destinationsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Destinations</h2>
-      <p class="text-gray-600">Manage all uploaded destinations here.</p>
-    </section>
+      <!-- TABLE EXAMPLE (Reports) -->
+      <!-- <section class="p-6">
+        <h2 class="text-xl font-semibold mb-4">Latest Reports</h2>
+        <div class="overflow-x-auto bg-white shadow rounded-xl">
+          <table class="w-full text-left">
+            <thead class="bg-gray-200">
+              <tr>
+                <th class="p-3">User</th>
+                <th class="p-3">Agent</th>
+                <th class="p-3">Reason</th>
+                <th class="p-3">Date</th>
+                <th class="p-3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="p-3">John Doe</td>
+                <td class="p-3">Agent123</td>
+                <td class="p-3">Fake images</td>
+                <td class="p-3">2025-11-18</td>
+                <td class="p-3">
+                  <button class="px-3 py-1 bg-blue-600 text-white rounded-lg">
+                    Review
+                  </button>
+                </td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-3">Priya Sharma</td>
+                <td class="p-3">TravelPro</td>
+                <td class="p-3">Wrong price</td>
+                <td class="p-3">2025-11-17</td>
+                <td class="p-3">
+                  <button class="px-3 py-1 bg-blue-600 text-white rounded-lg">
+                    Review
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section> -->
 
-    <!-- PACKAGES MODULE -->
-    <section id="packagesModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Packages</h2>
-      <p class="text-gray-600">Manage travel packages here.</p>
-    </section>
+      <!-- DESTINATIONS MODULE -->
+      <section id="destinationsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Places</h2>
+        <p class="text-gray-600">Manage all uploaded destinations here.</p>
+        <%- include('addPlaces') %>
+      </section>
 
-    <!-- AGENTS MODULE -->
-    <section id="agentsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Agents</h2>
-      <p class="text-gray-600">Agent list, reputation scores, bans, warnings.</p>
-    </section>
+      <!-- PACKAGES MODULE -->
+      <section id="packagesModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Packages</h2>
+        <p class="text-gray-600">Manage travel packages here.</p>
+      </section>
 
-    <!-- USERS MODULE -->
-    <section id="usersModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Users</h2>
-      <p class="text-gray-600">Manage platform users.</p>
-    </section>
+      <!-- AGENTS MODULE -->
+      <section id="agentsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Agents</h2>
+        <p class="text-gray-600">
+          Agent list, reputation scores, bans, warnings.
+        </p>
+      </section>
 
-    <!-- BOOKINGS MODULE -->
-    <section id="bookingsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Bookings</h2>
-      <p class="text-gray-600">Booking list, approvals, cancellations, refunds.</p>
-    </section>
+      <!-- USERS MODULE -->
+      <section id="usersModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Users</h2>
+        <p class="text-gray-600">Manage platform users.</p>
+      </section>
 
-    <!-- REPORTS MODULE -->
-    <section id="reportsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Reports</h2>
-      <p class="text-gray-600">User reports on destinations and packages.</p>
-    </section>
+      <!-- BOOKINGS MODULE -->
+      <section id="bookingsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Bookings</h2>
+        <p class="text-gray-600">
+          Booking list, approvals, cancellations, refunds.
+        </p>
+      </section>
 
-    <!-- REVIEWS MODULE -->
-    <section id="reviewsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
-      <p class="text-gray-600">Manage ratings and user reviews.</p>
-    </section>
+      <!-- REPORTS MODULE -->
+      <section id="reportsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Reports</h2>
+        <p class="text-gray-600">User reports on destinations and packages.</p>
+      </section>
 
-    <!-- PAYMENTS MODULE -->
-    <section id="paymentsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Payments</h2>
-      <p class="text-gray-600">Revenue, failed payments, refund requests.</p>
-    </section>
+      <!-- REVIEWS MODULE -->
+      <section id="reviewsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
+        <p class="text-gray-600">Manage ratings and user reviews.</p>
+      </section>
 
-    <!-- SETTINGS MODULE -->
-    <section id="settingsModule" class="hidden p-6">
-      <h2 class="text-2xl font-semibold mb-4">Settings</h2>
-      <p class="text-gray-600">Website name, logo, social links, homepage sliders.</p>
-    </section>
+      <!-- PAYMENTS MODULE -->
+      <section id="paymentsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Payments</h2>
+        <p class="text-gray-600">Revenue, failed payments, refund requests.</p>
+      </section>
 
-    <!-- ACTIVITY LOGS MODULE -->
-    <section id="logsModule" class="hidden p-6">
-      <a class="text-2xl font-semibold mb-4">Activity Logs</a>
-      <p class="text-gray-600">Admin actions, login attempts, system logs.</p>
-    </section>
+      <!-- SETTINGS MODULE -->
+      <section id="settingsModule" class="hidden p-6">
+        <h2 class="text-2xl font-semibold mb-4">Settings</h2>
+        <p class="text-gray-600">
+          Website name, logo, social links, homepage sliders.
+        </p>
+      </section>
 
-    <section id="manage-admin" class="hidden p-6">
-      <a class="text-2xl font-semibold mb-4">Manage Admin</a>
-      <p class="text-gray-600">Admin actions, login attempts, system logs.</p>
-    </section>
+      <!-- ACTIVITY LOGS MODULE -->
+      <section id="logsModule" class="hidden p-6">
+        <a class="text-2xl font-semibold mb-4">Activity Logs</a>
+        <p class="text-gray-600">Admin actions, login attempts, system logs.</p>
+      </section>
 
-</main>
-  <script>
-    const sections = {
-      Dashboard: document.querySelector('section.grid'),
-      Destinations: document.getElementById('destinationsModule'),
-      Packages: document.getElementById('packagesModule'),
-      Agents: document.getElementById('agentsModule'),
-      Users: document.getElementById('usersModule'),
-      Bookings: document.getElementById('bookingsModule'),
-      Reports: document.getElementById('reportsModule'),
-      Reviews: document.getElementById('reviewsModule'),
-      Payments: document.getElementById('paymentsModule'),
-      Settings: document.getElementById('settingsModule'),
-      Logs: document.getElementById('logsModule'),
-      admin:document.getElementById('manage-admin')
-    };
+      <section id="manage-admin" class="hidden p-6">
+        <a class="text-2xl font-semibold mb-4">Manage Admin</a>
+        <p class="text-gray-600">Admin actions, login attempts, system logs.</p>
+      </section>
+    </main>
+    <script>
+      const sections = {
+        Dashboard: document.querySelector("section.grid"),
+        Destinations: document.getElementById("destinationsModule"),
+        Packages: document.getElementById("packagesModule"),
+        Agents: document.getElementById("agentsModule"),
+        Users: document.getElementById("usersModule"),
+        Bookings: document.getElementById("bookingsModule"),
+        Reports: document.getElementById("reportsModule"),
+        Reviews: document.getElementById("reviewsModule"),
+        Payments: document.getElementById("paymentsModule"),
+        Settings: document.getElementById("settingsModule"),
+        Logs: document.getElementById("logsModule"),
+        admin: document.getElementById("manage-admin"),
+      };
 
-    const buttons = document.querySelectorAll('aside button');
+      const buttons = document.querySelectorAll("aside button");
 
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const name = btn.textContent.trim();
-        if(name === 'Logout'){
-          //window.location.href = 'http://localhost:3000/api/v1/admin/login';
-          return;
-        } 
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const name = btn.textContent.trim();
+          if (name === "Logout") {
+            //window.location.href = 'http://localhost:3000/api/v1/admin/login';
+            return;
+          }
 
-        Object.values(sections).forEach(s => {
-          if(!s) return;
-          s.classList.add('hidden');
+          Object.values(sections).forEach((s) => {
+            if (!s) return;
+            s.classList.add("hidden");
+          });
+
+          if (name === "Dashboard") {
+            document.querySelector("section.grid").classList.remove("hidden");
+          }
+
+          if (sections[name]) {
+            sections[name].classList.remove("hidden");
+          }
         });
-
-        if(name === 'Dashboard') {
-          document.querySelector('section.grid').classList.remove('hidden');
-        }
-
-        if(sections[name]) {
-          sections[name].classList.remove('hidden');
-        }
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

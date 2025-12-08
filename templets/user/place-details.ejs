@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= place.name %> - Details</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- NAVBAR -->
+    <%- include("navBar") %>
+
+    <!-- HERO SECTION -->
+    <!-- <section
+      class="text-center py-20 text-white bg-cover bg-center relative"
+      style="
+        background-image: url('/images/nopparuj-lamaikul-7Wbt9HiAR3o-unsplash.jpg');
+      "
+    >
+      
+      <div class="absolute inset-0 bg-black/50"></div>
+
+      <div class="relative z-10">
+        <h1 class="text-4xl font-bold"></h1>
+        <p class="mt-2 text-lg"></p>
+      </div>
+    </section> -->
+    <section
+      class="text-center py-20 text-white bg-cover bg-center relative"
+      style="
+        background-image: url('/images/julian-timmerman-Fn27DlI8bZ8-unsplash.jpg');
+      "
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-blue-700/50"></div>
+
+      <div class="relative z-10">
+        <h1 class="text-4xl font-bold"><%= place.title %></h1>
+        <p class="mt-2 text-lg"><%= place.state %>, India</p>
+      </div>
+    </section>
+    <!-- MAIN CONTENT -->
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- LEFT COLUMN — IMAGES + DESCRIPTION -->
+        <div class="lg:col-span-2">
+          <!-- MAIN IMAGE -->
+          <img
+            src="/uploads/places/<%= place.images %>"
+            class="w-full h-80 object-cover rounded-xl shadow-lg"
+          />
+
+          <!-- THUMBNAILS -->
+          <br />
+          <p
+            class="text-xl font-bold text-gray-900 mb-4 pl-3 border-l-4 border-blue-600"
+          >
+            Related Images
+          </p>
+
+          <div class="flex gap-4 mt-4 overflow-x-auto pb-2">
+            <% gimg.forEach(image => { %>
+            <img
+              src="/uploads/places/<%= image %>"
+              class="w-24 h-20 rounded-lg border object-cover cursor-pointer hover:opacity-80 flex-shrink-0"
+            />
+            <% }) %>
+          </div>
+
+          <!-- DESCRIPTION -->
+          <p class="mt-6 text-gray-700 text-lg leading-7">
+            <%= place.description %>
+          </p>
+        </div>
+
+        <!-- RIGHT COLUMN — MAP -->
+        <div>
+          <h2 class="text-xl font-bold mb-4">Location Map</h2>
+
+          <iframe
+            width="100%"
+            height="300"
+            class="rounded-xl shadow-lg"
+            loading="lazy"
+            src="https://www.google.com/maps?q=<%= place.location.lat %>,<%= place.location.lng %>&hl=es&z=14&output=embed"
+          ></iframe>
+
+          <p class="text-gray-700 mt-3">
+            <strong>Latitude:</strong> <%= place.location.lat %><br />
+            <strong>Longitude:</strong> <%= place.location.lng %>
+          </p>
+        </div>
+      </div>
+
+      <!-- DIVIDER -->
+      <hr class="my-10 border-gray-300" />
+
+      <!-- HOTEL SECTION -->
+      <h2 class="text-2xl font-bold mb-6">Hotels in <%= place.title %></h2>
+
+      <%- include("hotelCard") %>
+    </div>
+
+    <!-- FOOTER SHOULD BE INSIDE BODY -->
+    <%- include("footer") %>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Places - NextTrip</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <%- include("navBar") %>
+    <!-- Page Header -->
+    <section
+      class="text-center py-20 text-white bg-cover bg-center relative"
+      style="
+        background-image: url('/images/julian-timmerman-Fn27DlI8bZ8-unsplash.jpg');
+      "
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-blue-700/50"></div>
+
+      <div class="relative z-10">
+        <h1 class="text-4xl font-bold">Explore Places</h1>
+        <p class="mt-2 text-lg">Find the best tourist places across India</p>
+      </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <!-- Sorting Filters -->
+      <div class="flex flex-col md:flex-row gap-4 justify-between mb-8">
+        <!-- Sort by State -->
+        <div>
+          <label class="font-semibold mr-2">Sort by State:</label>
+          <select id="sortState" class="px-4 py-2 border rounded-lg">
+            <option value="all">All States</option>
+            <% states.forEach(st => { %>
+            <option value="<%= st %>"><%= st %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Filter Within a State -->
+        <div>
+          <label class="font-semibold mr-2">Sort by Places in State:</label>
+          <select id="sortPlaces" class="px-4 py-2 border rounded-lg">
+            <option value="none">Select a State First</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Places Grid -->
+      <div
+        id="placeContainer"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        <% places.forEach(place => { %>
+        <div class="bg-white shadow rounded-xl overflow-hidden border">
+          <!-- Image -->
+          <img
+            src="/uploads/places/<%= place.images %>"
+            class="h-48 w-full object-cover"
+          />
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold mb-2"><%= place.title %></h3>
+            <p class="text-sm text-blue-600 font-semibold mb-2">
+              <%= place.state %>
+            </p>
+
+            <p class="text-gray-600 text-sm mb-4">
+              <%= place.description.substring(0, 110) %>...
+            </p>
+
+            <a
+              href="http://localhost:3000/placeDetails/<%= place._id %>"
+              class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              View Details
+            </a>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <%- include("footer") %>
+
+    <!-- Sorting Script -->
+    <script>
+      const allPlaces = <%-JSON.stringify(places)%>;
+
+        const sortState = document.getElementById("sortState");
+        const sortPlaces = document.getElementById("sortPlaces");
+        const placeContainer = document.getElementById("placeContainer");
+
+        // Render cards
+        function renderPlaces(list) {
+          placeContainer.innerHTML = "";
+
+          list.forEach(pl => {
+            placeContainer.innerHTML += `
+              <div class="bg-white shadow rounded-xl overflow-hidden border">
+                <img src="/uploads/places/${pl.images}" class="h-48 w-full object-cover" />
+
+                <div class="p-5">
+                  <h3 class="text-xl font-bold mb-2">${pl.title}</h3>
+                  <p class="text-sm text-blue-600 font-semibold mb-2">${pl.state}</p>
+
+                  <p class="text-gray-600 text-sm mb-4">
+                    ${pl.description.substring(0, 110)}...
+                  </p>
+
+                  <a href="/placeDetails/${pl._id}"
+                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    View Details
+                  </a>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        // On State Change
+        sortState.addEventListener("change", () => {
+          const state = sortState.value;
+
+          if (state === "all") {
+            sortPlaces.innerHTML = `<option value="none">Select a State First</option>`;
+            renderPlaces(allPlaces);
+            return;
+          }
+
+          const filtered = allPlaces.filter(p => p.state === state);
+
+          // Fill place dropdown
+          sortPlaces.innerHTML = `<option value="all">All Places</option>`;
+          filtered.forEach(p => {
+            sortPlaces.innerHTML += `<option value="${p.name}">${p.name}</option>`;
+          });
+
+          renderPlaces(filtered);
+        });
+
+        // On Place Change
+        sortPlaces.addEventListener("change", () => {
+          const selectedPlace = sortPlaces.value;
+          const selectedState = sortState.value;
+
+          if (selectedPlace === "all") {
+            renderPlaces(allPlaces.filter(p => p.state === selectedState));
+          } else {
+            renderPlaces(allPlaces.filter(p => p.name === selectedPlace));
+          }
+        });
+
+        // Initial load
+        renderPlaces(allPlaces);
+    </script>
+  </body>
+</html>

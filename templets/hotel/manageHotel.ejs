@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Hotel - NextTrip</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <div
+      class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-8 mt-10 mb-12"
+    >
+      <h1 class="text-3xl font-bold mb-6 text-blue-700">Add New Hotel</h1>
+
+      <form
+        action="http://localhost:3000/api/hotel/manageHotel"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-6"
+      >
+        <!-- Hotel Name -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Hotel Name</label
+          >
+          <input
+            type="text"
+            name="name"
+            required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Slug -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Slug (URL Name)</label
+          >
+          <input
+            type="text"
+            name="slug"
+            required
+            placeholder="e.g., green-valley-resort"
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Select Place -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Select Place</label
+          >
+          <select
+            name="place"
+            required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select a Place</option>
+            <% places.forEach(place => { %>
+            <option value="<%= place._id %>">
+              <%= place.title %> - <%= place.location %>
+            </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Main Image -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Main Hotel Image</label
+          >
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            required
+            class="w-full p-3 border rounded-lg"
+          />
+        </div>
+
+        <!-- Gallery Images -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Gallery Images (Multiple)</label
+          >
+          <input
+            type="file"
+            name="galleryImages"
+            accept="image/*"
+            multiple
+            class="w-full p-3 border rounded-lg"
+          />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Description</label
+          >
+          <textarea
+            name="description"
+            rows="5"
+            required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- Price Per Night -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Price (₹ per night)</label
+          >
+          <input
+            type="number"
+            name="price"
+            required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Rating -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Rating</label>
+          <input
+            type="number"
+            name="rating"
+            step="0.1"
+            min="0"
+            max="5"
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Amenities -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2"
+            >Amenities</label
+          >
+          <select
+            name="amenities"
+            multiple
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 h-40"
+          >
+            <option value="Free WiFi">Free WiFi</option>
+            <option value="Parking">Parking</option>
+            <option value="Swimming Pool">Swimming Pool</option>
+            <option value="Breakfast Included">Breakfast Included</option>
+            <option value="AC Rooms">AC Rooms</option>
+            <option value="Room Service">Room Service</option>
+            <option value="Gym Access">Gym Access</option>
+          </select>
+          <p class="text-sm text-gray-500 mt-1">
+            Hold CTRL (Windows) or CMD (Mac) to select multiple.
+          </p>
+        </div>
+
+        <!-- Location -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+              >Latitude</label
+            >
+            <input
+              type="number"
+              step="any"
+              name="lat"
+              required
+              class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+              >Longitude</label
+            >
+            <input
+              type="number"
+              step="any"
+              name="lng"
+              required
+              class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Address</label>
+          <textarea
+            name="address"
+            rows="3"
+            required
+            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class="text-right">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 shadow-md"
+          >
+            Create Hotel
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
