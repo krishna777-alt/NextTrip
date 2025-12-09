@@ -4,14 +4,15 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 
 const Package = require("../Models/packageModel");
-const Hotel = require("../Models/hottleModel");
+const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const HotelManager = require("../Models/hotelManagerModel");
+
 // exports.auth = (req,res,next)=>{
 
 // }
 exports.logout = function (req, res) {
   res.clearCookie("jwt");
-  return res.redirect("/api/hotel/login");
+  return res.redirect("/hotel/login");
 };
 exports.auth = function (req, res, next) {
   const token = req.cookies.jwt;
@@ -21,7 +22,7 @@ exports.auth = function (req, res, next) {
     //         status:401,
     //         message:'You are not logged in! Pelase loggin'
     //     });
-    return res.redirect("/api/hotel/login");
+    return res.redirect("/hotel/login");
   }
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -33,14 +34,14 @@ exports.auth = function (req, res, next) {
   }
 };
 exports.isManager = async function (req, res, next) {
-  if (req.agent.role !== "hotel") {
+  if (req.manager.role !== "hotel") {
     return res.status(403).json({
-      message: "Access Denied! Agents only",
+      message: "Access Denied! managers only",
     });
   }
-  const currentAgent = await Hotel.findById(req.agent.id);
+  const currentManager = await Hotel.findById(req.agent.id);
   // console.log(currentAgent);
-  req.agentData = currentAgent;
+  req.managerData = currentManager;
 
   next();
 };
@@ -55,7 +56,7 @@ exports.login = async (req, res) => {
     console.log(req.body);
     if (!username || !password) {
       req.flash("err", "Please provide email and password");
-      return res.redirect("/api/hotel/login");
+      return res.redirect("/hotel/login");
     }
     const manager = await HotelManager.findOne({ username }).select(
       "+password"
@@ -63,14 +64,14 @@ exports.login = async (req, res) => {
     console.log("managerL:" + manager);
     if (!manager) {
       req.flash("err", "Hotel not found!");
-      return res.redirect("/api/hotel/login");
+      return res.redirect("/hotel/login");
     }
 
     const checkPassword = await bcrypt.compare(password, manager.password);
     console.log(checkPassword);
     if (!checkPassword) {
       req.flash("err", "Invalid password or username");
-      return res.redirect("/api/hotel/login");
+      return res.redirect("/hotel/login");
     }
     const token = jwt.sign(
       {
@@ -86,7 +87,7 @@ exports.login = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return res.redirect("/api/hotel/");
+    return res.redirect("/hotel/");
     res.status(201).json({
       manager,
       token,
@@ -122,7 +123,7 @@ exports.register = async (req, res) => {
             successfully account registered    
             `
     );
-    return res.redirect("http://localhost:3000/api/hotel/login");
+    return res.redirect("/hotel/login");
     // res.render('agents/login',{
     //     agent:req.body.fullName,
     //     success:req.flash('Account Successfully Registered!')
@@ -143,6 +144,14 @@ exports.getMangerDashbord = (req, res) => {
 };
 
 exports.getManageHotel = async (req, res) => {
+  const hotel = await Hotel.findOne({ managerId: req.manager.id });
+  const roomType = await Room.findOne({ hotelID: hotel._id });
+  if (hotel) {
+    console.log("gallery:", hotel.galleryImages);
+    console.log(roomType);
+    return res.render("hotel/showHotel", { hotel, roomType });
+  }
+
   const places = await Package.find();
   res.render("hotel/manageHotel", {
     places,
@@ -167,6 +176,7 @@ const upload = multer({ storage, fileFilter });
 exports.uploadHotelImage = upload.fields([
   { name: "image", maxCount: 1 },
   { name: "galleryImages", maxCount: 10 },
+  { name: "roomPhotos", maxCount: 10 },
 ]);
 
 exports.createHotel = async (req, res) => {
@@ -176,49 +186,76 @@ exports.createHotel = async (req, res) => {
     const {
       name,
       slug,
+      state,
       place,
-
       description,
       price,
       rating,
       amenities,
-
-      lat,
-      lng,
       address,
+      roomTypeCode,
+      // roomName,
+      maxOccupancy,
+      sizeSqM,
+
+      adults,
+      children,
+      ac,
+      bedConfiguration,
+      // roomDescription,
+      facilities,
+      facilityCode,
+      category,
     } = req.body;
 
     const image = req.files?.image?.[0]?.filename || null;
-
     const galleryImages = req.files?.galleryImages
       ? req.files.galleryImages.map((file) => file.filename)
       : [];
-
-    // console.log(imageFilename, galleryFilenames);
-    // console.log(image, galleryImages);
-    const hotel = await Hotel.create({
+    const roomPhotos = req.files?.roomPhotos
+      ? req.files.galleryImages.map((file) => file.filename)
+      : [];
+    const hotel = new Hotel({
       name,
       slug,
+      state,
       place,
-      description,
-      price,
       image,
       galleryImages,
+      description,
+      price,
       rating,
-
       amenities,
-      location: {
-        lat,
-        lng,
-      },
       address,
-      managerId: managerId,
+      managerId,
     });
-    console.log("hotel:" + hotel);
-    res
-      .status(201)
-      .json({ message: "success", data: req.body, files: req.files, hotel });
+    await hotel.save();
+    const hotelRoom = new Room({
+      roomTypeCode,
+      maxOccupancy,
+      sizeSqM,
+      adults,
+      children,
+      ac,
+      hotelID: hotel._id,
+      bedConfiguration,
+      roomPhotos,
+    });
+    await hotelRoom.save();
+    const hotelFacility = new HotelFacility({
+      hotelId: hotel._id,
+      facilities,
+      facilityCode,
+      category,
+    });
+    await hotelFacility.save();
+
+    req.flash("success", "Hotel Successfully Created");
+    req.hotel = hotel;
+    console.log(req.hotel);
+    return res.redirect("/hotel/manageHotel");
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.status(500).json({ ErrMessage: err.message });
+    req.flash("error", "Failed to Create Hotel! Please try again");
   }
 };

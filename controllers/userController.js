@@ -5,7 +5,7 @@ const multer = require("multer");
 
 const Package = require("../Models/packageModel");
 const User = require("./../Models/userModels");
-const Hotel = require("../Models/hottleModel");
+const { Hotel, Room } = require("../Models/hotelModel");
 const Contact = require("./../Models/contactModel");
 const { Places, GalleryImage } = require("../Models/placeModel");
 

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const flash = require("connect-flash");
 const Admin = require("./../Models/adminModel");
+const { Hotel } = require("../Models/hotelModel");
 
 //////////////////////////////////////////////////////////////ADMIN AUTH///////////////////////////////
 
@@ -23,8 +24,11 @@ exports.auth = (req, res, next) => {
   }
 };
 exports.isAdmin = async (req, res, next) => {
+  const adminID = await Admin.findById(req.admin.id);
+  console.log("admin:" + req.admin.role);
   if (req.admin.role !== "admin") {
-    return res.status(403).send("Access Denied. Admins only");
+    return res.render("admin/login");
+    // return res.status(403).send("Access Denied. Admins only");
   }
   // console.log('admin ID:'+req.admin.id,'admin role:'+req.admin.role);
   const currentAdmin = await Admin.findById(req.admin.id);
@@ -99,12 +103,15 @@ exports.login = async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-exports.adminHome = (req, res) => {
+exports.adminHome = async (req, res) => {
   try {
     // res.status(200).sendFile(path.join(__dirname,'../templets','admin','home.ejs'));
+    const hotels = await Hotel.find();
+    console.log("hotels:" + hotels);
     return res.render("admin/home", {
       admin: req.adminData,
       successMsg: req.flash("success"),
+      hotels,
     });
   } catch (err) {
     res.status(404).json({

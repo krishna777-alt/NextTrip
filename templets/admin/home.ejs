@@ -23,7 +23,7 @@
           Packages
         </button>
         <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
-          Agents
+          Hotels
         </button>
         <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Users
@@ -157,12 +157,9 @@
         <p class="text-gray-600">Manage travel packages here.</p>
       </section>
 
-      <!-- AGENTS MODULE -->
+      <!-- HOTELS MODULE -->
       <section id="agentsModule" class="hidden p-6">
-        <h2 class="text-2xl font-semibold mb-4">Agents</h2>
-        <p class="text-gray-600">
-          Agent list, reputation scores, bans, warnings.
-        </p>
+        <%- include('hotels') %>
       </section>
 
       <!-- USERS MODULE -->
@@ -221,7 +218,7 @@
         Dashboard: document.querySelector("section.grid"),
         Destinations: document.getElementById("destinationsModule"),
         Packages: document.getElementById("packagesModule"),
-        Agents: document.getElementById("agentsModule"),
+        Hotels: document.getElementById("agentsModule"),
         Users: document.getElementById("usersModule"),
         Bookings: document.getElementById("bookingsModule"),
         Reports: document.getElementById("reportsModule"),

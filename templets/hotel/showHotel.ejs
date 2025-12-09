@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Update Hotel - Admin</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- PAGE CONTAINER -->
+    <div
+      class="max-w-4xl mx-auto mt-10 mb-20 bg-white p-10 rounded-2xl shadow-xl"
+    >
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Update Hotel</h2>
+
+      <!-- UPDATE FORM -->
+      <form
+        action="/admin/hotels/update/<%= hotel._id %>"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-6"
+      >
+        <!-- HOTEL NAME + SLUG -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="font-semibold">Hotel Name</label>
+            <input
+              type="text"
+              name="name"
+              value="<%= hotel.name %>"
+              class="w-full p-3 border rounded-lg mt-1"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="font-semibold">Slug</label>
+            <input
+              type="text"
+              name="slug"
+              value="<%= hotel.slug %>"
+              class="w-full p-3 border rounded-lg mt-1"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- STATE + PLACE -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="font-semibold">State</label>
+            <input
+              type="text"
+              name="state"
+              value="<%= hotel.state %>"
+              class="w-full p-3 border rounded-lg mt-1"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="font-semibold">Place</label>
+            <input
+              type="text"
+              name="place"
+              value="<%= hotel.place %>"
+              class="w-full p-3 border rounded-lg mt-1"
+            />
+          </div>
+        </div>
+
+        <!-- MAIN IMAGE -->
+        <div>
+          <label class="font-semibold">Current Main Image</label>
+          <img
+            src="/uploads/hotels/<%= hotel.image %>"
+            class="w-48 h-32 object-cover mt-2 rounded-lg border shadow"
+          />
+
+          <label class="font-semibold block mt-4">Update Main Image</label>
+          <input
+            type="file"
+            name="image"
+            class="w-full p-3 border rounded-lg mt-1"
+          />
+        </div>
+
+        <!-- GALLERY IMAGES -->
+        <div>
+          <label class="font-semibold">Current Gallery Images</label>
+          <div class="flex gap-3 mt-2 overflow-x-auto pb-2">
+            <% hotel.galleryImages.forEach(g => { %>
+            <img
+              src="/uploads/hotels/<%= g %>"
+              class="w-24 h-20 object-cover rounded-lg border shadow"
+            />
+            <% }) %>
+          </div>
+
+          <label class="font-semibold block mt-4"
+            >Add More Gallery Images</label
+          >
+          <input
+            type="file"
+            name="galleryImages"
+            multiple
+            class="w-full p-3 border rounded-lg mt-1"
+          />
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div>
+          <label class="font-semibold">Description</label>
+          <textarea
+            name="description"
+            class="w-full p-3 border rounded-lg mt-1 h-32"
+            required
+          >
+<%= hotel.description %></textarea
+          >
+        </div>
+
+        <!-- PRICE + RATING -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="font-semibold">Price (₹)</label>
+            <input
+              type="number"
+              name="price"
+              value="<%= hotel.price %>"
+              class="w-full p-3 border rounded-lg mt-1"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="font-semibold">Rating</label>
+            <input
+              type="number"
+              name="rating"
+              min="0"
+              max="5"
+              step="0.1"
+              value="<%= hotel.rating %>"
+              class="w-full p-3 border rounded-lg mt-1"
+            />
+          </div>
+        </div>
+
+        <!-- AMENITIES -->
+        <div>
+          <label class="font-semibold">Amenities (comma separated)</label>
+          <input
+            type="text"
+            name="amenities"
+            value="<%= hotel.amenities.join(', ') %>"
+            class="w-full p-3 border rounded-lg mt-1"
+            placeholder="wifi, pool, parking"
+          />
+        </div>
+
+        <!-- ADDRESS -->
+        <div>
+          <label class="font-semibold">Address</label>
+          <textarea
+            name="address"
+            class="w-full p-3 border rounded-lg mt-1 h-24"
+            required
+          >
+<%= hotel.address %></textarea
+          >
+        </div>
+
+        <!-- UPDATE BUTTON -->
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
+        >
+          Update Hotel
+        </button>
+      </form>
+    
+     <div class="p-6 bg-white shadow-sm mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Edit Room Type</h1>
+    <p class="text-gray-500 mt-1">Update room details for hotel administration</p>
+  </div>
+
+  <div class="max-w-5xl mx-auto">
+
+    <form
+      action="/admin/room-types/update/<%= roomType._id %>"
+      method="POST"
+      class="bg-white shadow-lg rounded-xl p-8 grid grid-cols-1 md:grid-cols-2 gap-6"
+    >
+      <!-- Room Type Code -->
+      <div>
+        <label class="block font-semibold mb-1">Room Type Code *</label>
+        <input
+          type="text"
+          name="roomTypeCode"
+          value="<%= roomType.roomTypeCode %>"
+          required
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <!-- Max Occupancy -->
+      <div>
+        <label class="block font-semibold mb-1">Max Occupancy *</label>
+        <input
+          type="number"
+          name="maxOccupancy"
+          value="<%= roomType.maxOccupancy %>"
+          min="1"
+          required
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Size SqM -->
+      <div>
+        <label class="block font-semibold mb-1">Room Size (SqM)</label>
+        <input
+          type="number"
+          name="sizeSqM"
+          value="<%= roomType.sizeSqM %>"
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Adults -->
+      <div>
+        <label class="block font-semibold mb-1">Adults *</label>
+        <input
+          type="number"
+          name="adults"
+          value="<%= roomType.adults %>"
+          min="1"
+          required
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Children -->
+      <div>
+        <label class="block font-semibold mb-1">Children</label>
+        <input
+          type="number"
+          name="children"
+          value="<%= roomType.children %>"
+          min="0"
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- AC -->
+      <div>
+        <label class="block font-semibold mb-1">AC Type</label>
+        <select
+          name="ac"
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        >
+          <option value="AC" <%= roomType.ac === "AC" ? "selected" : "" %>>
+            AC
+          </option>
+          <option value="Non AC" <%= roomType.ac === "Non AC" ? "selected" : "" %>>
+            Non AC
+          </option>
+        </select>
+      </div>
+
+      <!-- Hotel ID -->
+      
+      <!-- Bed Config -->
+      <div class="md:col-span-2">
+        <label class="block font-semibold mb-1">Bed Configuration</label>
+        <input
+          type="text"
+          name="bedConfiguration"
+          value="<%= roomType.bedConfiguration.join(', ') %>"
+          placeholder="e.g., 1 King Bed, 1 Sofa Bed"
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Room Photos -->
+      <div class="md:col-span-2">
+        <label class="block font-semibold mb-1">Room Photos (URLs)</label>
+        <input
+          type="text"
+          name="roomPhotos"
+          value="<%= roomType.roomPhotos.join(', ') %>"
+          placeholder="Comma separated URLs"
+          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Photo Preview -->
+      <div class="md:col-span-2 mt-4">
+        <p class="font-semibold mb-2">Photo Preview</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <% roomType.roomPhotos.forEach(photo => { %>
+          <img
+            src="/uploads/hotels/<%= photo %>"
+            class="w-full h-32 object-cover rounded-lg shadow"
+          />
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="md:col-span-2 flex justify-end mt-6">
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md"
+        >
+          Update Room Type
+        </button>
+      </div>
+    </form>
+  </div>
+ </div> 
+  </body>
+</html>

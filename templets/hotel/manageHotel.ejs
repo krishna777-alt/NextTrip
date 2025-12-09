@@ -2,211 +2,278 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Hotel - NextTrip</title>
+    <title>Create Hotel</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fa;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1100px;
+        margin: 30px auto;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #222;
+      }
+
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
+        margin-bottom: 25px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        font-size: 15px;
+      }
+
+      textarea {
+        resize: vertical;
+        height: 120px;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        border: none;
+      }
+
+      .btn-primary {
+        background: #2563eb;
+        color: white;
+      }
+
+      .btn-add {
+        background: #16a34a;
+        color: white;
+      }
+
+      .room-box {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: #fafafa;
+      }
+
+      .remove-btn {
+        background: crimson;
+        color: white;
+        border-radius: 6px;
+        padding: 5px 10px;
+        cursor: pointer;
+        border: none;
+        float: right;
+      }
+    </style>
   </head>
 
-  <body class="bg-gray-100">
-    <div
-      class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-8 mt-10 mb-12"
-    >
-      <h1 class="text-3xl font-bold mb-6 text-blue-700">Add New Hotel</h1>
-
+  <body>
+    <div class="container">
+      <h2>Add New Hotel</h2>
+      <% if (success && success.length>0) { %>
+      <div
+        class="toast px-5 py-3 rounded-lg shadow-lg text-white font-medium bg-green-600"
+      >
+        <%= success[0] %>
+      </div>
+      <% } %> <% if (error && success.length>0) { %>
+      <div
+        class="toast px-5 py-3 rounded-lg shadow-lg text-white font-medium bg-green-600"
+      >
+        <%= error[0] %>
+      </div>
+      <% } %>
       <form
-        action="http://localhost:3000/api/hotel/manageHotel"
+        action="http://localhost:3000/hotel/manageHotel"
         method="POST"
         enctype="multipart/form-data"
-        class="space-y-6"
       >
-        <!-- Hotel Name -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Hotel Name</label
-          >
-          <input
-            type="text"
-            name="name"
-            required
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <!-- BASIC HOTEL DETAILS -->
+        <div class="card">
+          <h3>Hotel Information</h3>
 
-        <!-- Slug -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Slug (URL Name)</label
-          >
-          <input
-            type="text"
-            name="slug"
-            required
-            placeholder="e.g., green-valley-resort"
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+          <label>Hotel Name</label>
+          <input type="text" name="name" required />
 
-        <!-- Select Place -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Select Place</label
-          >
-          <select
-            name="place"
-            required
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select a Place</option>
-            <% places.forEach(place => { %>
-            <option value="<%= place._id %>">
-              <%= place.title %> - <%= place.location %>
-            </option>
-            <% }) %>
-          </select>
-        </div>
+          <label>Slug (unique)</label>
+          <input type="text" name="slug" required />
 
-        <!-- Main Image -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Main Hotel Image</label
-          >
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            required
-            class="w-full p-3 border rounded-lg"
-          />
-        </div>
+          <div class="grid-2">
+            <div>
+              <label>State</label>
+              <input type="text" name="state" value="Kerala" />
+            </div>
 
-        <!-- Gallery Images -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Gallery Images (Multiple)</label
-          >
-          <input
-            type="file"
-            name="galleryImages"
-            accept="image/*"
-            multiple
-            class="w-full p-3 border rounded-lg"
-          />
-        </div>
-
-        <!-- Description -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Description</label
-          >
-          <textarea
-            name="description"
-            rows="5"
-            required
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-        </div>
-
-        <!-- Price Per Night -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Price (₹ per night)</label
-          >
-          <input
-            type="number"
-            name="price"
-            required
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <!-- Rating -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Rating</label>
-          <input
-            type="number"
-            name="rating"
-            step="0.1"
-            min="0"
-            max="5"
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <!-- Amenities -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2"
-            >Amenities</label
-          >
-          <select
-            name="amenities"
-            multiple
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 h-40"
-          >
-            <option value="Free WiFi">Free WiFi</option>
-            <option value="Parking">Parking</option>
-            <option value="Swimming Pool">Swimming Pool</option>
-            <option value="Breakfast Included">Breakfast Included</option>
-            <option value="AC Rooms">AC Rooms</option>
-            <option value="Room Service">Room Service</option>
-            <option value="Gym Access">Gym Access</option>
-          </select>
-          <p class="text-sm text-gray-500 mt-1">
-            Hold CTRL (Windows) or CMD (Mac) to select multiple.
-          </p>
-        </div>
-
-        <!-- Location -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2"
-              >Latitude</label
-            >
-            <input
-              type="number"
-              step="any"
-              name="lat"
-              required
-              class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
+            <div>
+              <label>Place</label>
+              <input type="text" name="place" />
+            </div>
           </div>
 
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2"
-              >Longitude</label
-            >
-            <input
-              type="number"
-              step="any"
-              name="lng"
-              required
-              class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
+          <label>Main Image</label>
+          <input type="file" name="image" required />
+
+          <label>Gallery Images (multiple)</label>
+          <input type="file" name="galleryImages" multiple />
+
+          <label>Description</label>
+          <textarea name="description" required></textarea>
+
+          <div class="grid-3">
+            <div>
+              <label>Price (₹)</label>
+              <input type="number" name="price" required />
+            </div>
+            <div>
+              <label>Rating</label>
+              <input
+                type="number"
+                name="rating"
+                min="0"
+                max="5"
+                step="0.1"
+                value="4.0"
+              />
+            </div>
+            <div>
+              <label>Amenities (comma separated)</label>
+              <input
+                type="text"
+                name="amenities"
+                placeholder="wifi, pool, parking"
+              />
+            </div>
           </div>
         </div>
 
-        <!-- Address -->
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Address</label>
-          <textarea
-            name="address"
-            rows="3"
-            required
-            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          ></textarea>
+        <!-- LOCATION -->
+        <div class="card">
+          <!-- <h3>Location</h3>
+
+          <div class="grid-2">
+            <div>
+              <label>Latitude</label>
+              <input type="number" step="any" name="lat" required />
+            </div>
+            <div>
+              <label>Longitude</label>
+              <input type="number" step="any" name="lng" required />
+            </div>
+          </div>  -->
+
+          <label>Address</label>
+          <textarea name="address" required></textarea>
         </div>
 
-        <!-- Submit -->
-        <div class="text-right">
-          <button
-            type="submit"
-            class="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 shadow-md"
-          >
-            Create Hotel
-          </button>
+        <!-- ROOM TYPES -->
+        <div class="card">
+          <h3>Room Types</h3>
+
+          <div id="roomContainer">
+            <label>Room Type Code</label>
+            <input type="text" name="roomTypeCode" required />
+
+            <!-- <label>Name</label>
+            <input type="text" name="roomName" required /> -->
+
+            <label>Max Occupancy</label>
+            <input type="number" name="maxOccupancy" required min="1" />
+
+            <label>Size (SqM)</label>
+            <input type="number" name="sizeSqM" />
+
+            <label>Adults</label>
+            <input type="number" name="adults" required min="1" />
+
+            <label>Children</label>
+            <input type="number" name="children" min="0" />
+
+            <label>AC / NO-AC</label>
+            <select name="ac">
+              <option value="AC">AC</option>
+              <option value="NO-AC">NO-AC</option>
+            </select>
+
+            <label>Bed Configuration (comma separated)</label>
+            <input type="text" name="bedConfiguration" />
+
+            <!-- <label>Description</label>
+            <textarea name="roomDescription"></textarea> -->
+
+            <label>Room Photos</label>
+            <input type="file" name="roomPhotos" multiple />
+          </div>
+
+          <!-- <button type="button" class="btn btn-add" onclick="addRoomType()">
+            + Add Room Type
+          </button> -->
         </div>
+
+        <!-- FACILITIES -->
+        <div class="card">
+          <h3>Hotel Facilities</h3>
+
+          <label>Facilities (comma separated)</label>
+          <input
+            type="text"
+            name="facilities"
+            placeholder="Indoor Pool, Gym, Spa, Restaurant"
+          />
+
+          <label>Facility Code</label>
+          <input type="text" name="facilityCode" placeholder="INDOOR_POOL" />
+
+          <label>Category</label>
+          <select name="category" required>
+            <option>Dining</option>
+            <option>Wellness</option>
+            <option>Recreation</option>
+            <option>Business</option>
+            <option>Service</option>
+            <option>General</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary">Create Hotel</button>
       </form>
     </div>
+
+    <!-- JS FOR ADD ROOM TYPE -->
   </body>
 </html>

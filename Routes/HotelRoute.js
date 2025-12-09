@@ -25,13 +25,14 @@ router.get(
 
 router
   .route("/manageHotel")
-  .get(hotelController.getManageHotel)
+  .get(hotelController.auth, hotelController.getManageHotel)
   .post(
     hotelController.auth,
     hotelController.uploadHotelImage,
     hotelController.createHotel
   );
 
+// router.get("/show", hotelController.showHotel);
 // router
 //   .route("/agentPackage")
 //   .get(agentController.auth, agentController.displayAgentPackage);

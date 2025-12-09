@@ -15,14 +15,30 @@
     <!-- Header -->
     <section
       class="text-center py-20 text-white bg-cover bg-center relative"
-      style="background-image: url('/images/hotel-bg.jpg')"
+      style="
+        background-image: url('/images/julian-timmerman-Fn27DlI8bZ8-unsplash.jpg');
+      "
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-blue-700/50"></div>
+
+      <div class="relative z-10">
+        <h1 class="text-4xl font-bold">Find the Best Hotels</h1>
+        <p class="mt-2 text-lg">Comfortable stays at the best prices</p>
+      </div>
+    </section>
+    <!-- <section
+      class="text-center py-20 text-white bg-cover bg-center relative"
+      style="
+        background-image: url('/images/eva-darron-1QlspiAMBk4-unsplash.jpg');
+      "
     >
       <div class="absolute inset-0 bg-black/50"></div>
       <div class="relative z-10">
         <h1 class="text-4xl font-bold">Find the Best Hotels</h1>
         <p class="mt-2 text-lg">Comfortable stays at the best prices</p>
       </div>
-    </section>
+    </section> -->
 
     <!-- Main Container -->
     <div class="max-w-7xl mx-auto px-6 py-10">
@@ -92,13 +108,13 @@
             <p class="text-gray-700 mb-2 font-medium">
               ₹ <%= hotel.price %> / night
             </p>
-            <p class="text-sm mb-4">
+            <!-- <p class="text-sm mb-4">
               <span
                 class="px-3 py-1 rounded-full text-white <%= hotel.ac ? 'bg-blue-600' : 'bg-gray-600' %>"
               >
                 <%= hotel.ac ? "AC Room" : "Non-AC Room" %>
               </span>
-            </p>
+            </p> -->
 
             <div class="flex gap-3 mt-4">
               <a

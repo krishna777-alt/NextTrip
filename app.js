@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/templets`));
 
 app.use("/admin", adminRoute);
-app.use("/api/hotel", hotelRoute);
+app.use("/hotel", hotelRoute);
 app.use("/", userRoute);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

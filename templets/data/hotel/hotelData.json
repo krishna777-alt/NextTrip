@@ -1,0 +1,777 @@
+[
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e1",
+    "name": "Tea Valley Resort",
+    "slug": "tea-valley-resort-munnar",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Munnar",
+    "image": "/images/hotels/tea-valley-resort.jpg",
+    "galleryImages": ["/images/munnar/tv_1.jpg", "/images/munnar/tv_2.jpg"],
+    "description": "Nestled amidst lush tea plantations, offering breathtaking views and serene ambiance.",
+    "price": 5500,
+    "rating": 4.5,
+    "amenities": ["Free Wi-Fi", "Parking", "Restaurant", "Tea Estate Tour"],
+    "address": "Tea Valley Road, Munnar, Kerala 685612",
+    "managerId": "manager_munnar_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "DLX_KNG",
+        "maxOccupancy": 3,
+        "sizeSqM": 28,
+        "adults": 2,
+        "children": 1,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed"],
+        "roomPhotos": ["/images/munnar/dlx_room.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "DINING",
+        "category": "Dining",
+        "facilities": ["Multi-Cuisine Restaurant", "Coffee Shop"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e2",
+    "name": "Heritage Madurai",
+    "slug": "heritage-madurai-hotel",
+    "role": "hotel",
+    "state": "Tamil Nadu",
+    "place": "Madurai",
+    "image": "/images/hotels/heritage-madurai.jpg",
+    "galleryImages": ["/images/madurai/hm_1.jpg", "/images/madurai/hm_2.jpg"],
+    "description": "A luxury retreat designed in the traditional Chettinad style, close to Meenakshi Temple.",
+    "price": 7800,
+    "rating": 4.2,
+    "amenities": ["Swimming Pool", "Spa", "Free Wi-Fi", "Concierge"],
+    "address": "Melakkal Road, Madurai, Tamil Nadu 625002",
+    "managerId": "manager_madurai_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "PLG_SUT",
+        "maxOccupancy": 4,
+        "sizeSqM": 45,
+        "adults": 2,
+        "children": 2,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed", "1 Sofa Bed"],
+        "roomPhotos": ["/images/madurai/plg_suite.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "WELLNESS",
+        "category": "Wellness",
+        "facilities": ["Ayurvedic Spa", "Fitness Center"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e3",
+    "name": "The Waterfront",
+    "slug": "the-waterfront-kochi",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Kochi",
+    "image": "/images/hotels/waterfront-kochi.jpg",
+    "galleryImages": ["/images/kochi/wf_1.jpg", "/images/kochi/wf_2.jpg"],
+    "description": "Premium hotel with stunning views of the Vembanad Lake and easy access to Fort Kochi.",
+    "price": 6200,
+    "rating": 4.6,
+    "amenities": ["Rooftop Pool", "Bar", "Business Center", "Airport Shuttle"],
+    "address": "Marine Drive, Kochi, Kerala 682011",
+    "managerId": "manager_kochi_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "DBL_STD",
+        "maxOccupancy": 2,
+        "sizeSqM": 25,
+        "adults": 2,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["1 Queen Bed"],
+        "roomPhotos": ["/images/kochi/dbl_std.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "RECREATION",
+        "category": "Recreation",
+        "facilities": ["Outdoor Infinity Pool", "Kids Play Area"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e4",
+    "name": "Thekkady Spice Village",
+    "slug": "thekkady-spice-village",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Thekkady",
+    "image": "/images/hotels/spice-village.jpg",
+    "galleryImages": ["/images/thekkady/sv_1.jpg"],
+    "description": "Eco-friendly resort designed to resemble a local village, near Periyar Wildlife Sanctuary.",
+    "price": 8500,
+    "rating": 4.7,
+    "amenities": ["Organic Farm", "Cooking Classes", "Guided Treks"],
+    "address": "Periyar Tiger Reserve, Thekkady, Kerala 685536",
+    "managerId": "manager_thekkady_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "VLG_COT",
+        "maxOccupancy": 3,
+        "sizeSqM": 35,
+        "adults": 2,
+        "children": 1,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed"],
+        "roomPhotos": ["/images/thekkady/cottage.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "SERVICE",
+        "category": "Service",
+        "facilities": ["24-hour Front Desk", "Laundry Service"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e5",
+    "name": "Hotel Rameswaram Grand",
+    "slug": "hotel-rameswaram-grand",
+    "role": "hotel",
+    "state": "Tamil Nadu",
+    "place": "Rameswaram",
+    "image": "/images/hotels/rameswaram-grand.jpg",
+    "galleryImages": ["/images/rameswaram/rg_1.jpg"],
+    "description": "Modern hotel providing comfort and convenience for pilgrims visiting Ramanathaswamy Temple.",
+    "price": 3200,
+    "rating": 3.8,
+    "amenities": ["Temple View", "Vegetarian Restaurant", "Hot Water"],
+    "address": "Railway Feeder Road, Rameswaram, Tamil Nadu 623526",
+    "managerId": "manager_rameswaram_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "FAM_QUD",
+        "maxOccupancy": 4,
+        "sizeSqM": 30,
+        "adults": 4,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["2 Queen Beds"],
+        "roomPhotos": ["/images/rameswaram/family_quad.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "GENERAL",
+        "category": "General",
+        "facilities": ["Elevator", "Power Backup"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e6",
+    "name": "The Leela Palace Jaipur",
+    "slug": "the-leela-palace-jaipur",
+    "role": "hotel",
+    "state": "Rajasthan",
+    "place": "Jaipur",
+    "image": "/images/hotels/leela-jaipur.jpg",
+    "galleryImages": ["/images/jaipur/lp_1.jpg"],
+    "description": "An exquisite palace hotel blending traditional Rajasthani architecture with modern luxury.",
+    "price": 18000,
+    "rating": 4.9,
+    "amenities": [
+      "Helipad",
+      "Luxury Spa",
+      "Multiple Restaurants",
+      "Private Butler"
+    ],
+    "address": "Maharaja Road, Jaipur, Rajasthan 302028",
+    "managerId": "manager_jaipur_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "RYS_SUT",
+        "maxOccupancy": 4,
+        "sizeSqM": 120,
+        "adults": 2,
+        "children": 2,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed", "1 Rollaway"],
+        "roomPhotos": ["/images/jaipur/royal_suite.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "BUSINESS",
+        "category": "Business",
+        "facilities": ["Conference Halls", "Meeting Rooms"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e7",
+    "name": "Taj Malabar Resort & Spa",
+    "slug": "taj-malabar-kochi",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Kochi",
+    "image": "/images/hotels/taj-malabar-kochi.jpg",
+    "galleryImages": ["/images/kochi/tm_1.jpg"],
+    "description": "Five-star heritage hotel located on Willingdon Island, offering harbor views and a luxurious stay.",
+    "price": 11500,
+    "rating": 4.8,
+    "amenities": ["Jiva Spa", "Harbor View", "Yacht Booking", "Infinity Pool"],
+    "address": "Willingdon Island, Kochi, Kerala 682009",
+    "managerId": "manager_kochi_2",
+    "roomTypes": [
+      {
+        "roomTypeCode": "HBR_VWRM",
+        "maxOccupancy": 3,
+        "sizeSqM": 32,
+        "adults": 2,
+        "children": 1,
+        "ac": "AC",
+        "bedConfiguration": ["1 Queen Bed"],
+        "roomPhotos": ["/images/kochi/harbor_view.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "WELLNESS",
+        "category": "Wellness",
+        "facilities": ["Jiva Spa", "Yoga Sessions"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e8",
+    "name": "Zostel Munnar",
+    "slug": "zostel-munnar-hostel",
+    "role": "hostel",
+    "state": "Kerala",
+    "place": "Munnar",
+    "image": "/images/hotels/zostel-munnar.jpg",
+    "galleryImages": ["/images/munnar/zs_1.jpg"],
+    "description": "Popular backpacker hostel offering dorms and private rooms with stunning mountain views.",
+    "price": 900,
+    "rating": 4.1,
+    "amenities": ["Dorm Beds", "Community Kitchen", "Bonfire Area"],
+    "address": "Chithirapuram, Munnar, Kerala 685565",
+    "managerId": "manager_munnar_2",
+    "roomTypes": [
+      {
+        "roomTypeCode": "DRM_BTH",
+        "maxOccupancy": 6,
+        "sizeSqM": 15,
+        "adults": 6,
+        "children": 0,
+        "ac": "Non-AC",
+        "bedConfiguration": ["6 Bunk Beds"],
+        "roomPhotos": ["/images/munnar/dorm_bed.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "DINING",
+        "category": "Dining",
+        "facilities": ["Shared Kitchen", "Cafe"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7e9",
+    "name": "JC Residency Madurai",
+    "slug": "jc-residency-madurai",
+    "role": "hotel",
+    "state": "Tamil Nadu",
+    "place": "Madurai",
+    "image": "/images/hotels/jc-residency-madurai.jpg",
+    "galleryImages": ["/images/madurai/jcr_1.jpg"],
+    "description": "Mid-range hotel known for its convenient location and excellent service for business and leisure.",
+    "price": 3800,
+    "rating": 4.0,
+    "amenities": ["Banquet Hall", "Travel Desk", "Free Breakfast"],
+    "address": "Race Course Road, Madurai, Tamil Nadu 625002",
+    "managerId": "manager_madurai_2",
+    "roomTypes": [
+      {
+        "roomTypeCode": "STD_DBL",
+        "maxOccupancy": 2,
+        "sizeSqM": 22,
+        "adults": 2,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["1 Double Bed"],
+        "roomPhotos": ["/images/madurai/std_dbl.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "BUSINESS",
+        "category": "Business",
+        "facilities": ["Meeting Rooms"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7ea",
+    "name": "Vivanta by Taj, Panaji",
+    "slug": "vivanta-taj-panaji-goa",
+    "role": "hotel",
+    "state": "Goa",
+    "place": "Panaji",
+    "image": "/images/hotels/vivanta-goa.jpg",
+    "galleryImages": ["/images/goa/vt_1.jpg"],
+    "description": "Chic business and leisure hotel overlooking the Mandovi River, located in the heart of the city.",
+    "price": 9500,
+    "rating": 4.4,
+    "amenities": ["Rooftop Pool", "Casino Access", "24hr Dining"],
+    "address": "D. B. Bandodkar Road, Panaji, Goa 403001",
+    "managerId": "manager_goa_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "PRM_SUT",
+        "maxOccupancy": 3,
+        "sizeSqM": 40,
+        "adults": 2,
+        "children": 1,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed"],
+        "roomPhotos": ["/images/goa/premium_suite.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "RECREATION",
+        "category": "Recreation",
+        "facilities": ["Rooftop Pool", "Bar Lounge"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7eb",
+    "name": "The Fog Resort & Spa",
+    "slug": "the-fog-resort-munnar",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Munnar",
+    "image": "/images/hotels/fog-resort-munnar.jpg",
+    "galleryImages": ["/images/munnar/fog_1.jpg"],
+    "description": "Luxury resort offering spacious cottages, surrounded by mist and forest hills.",
+    "price": 6800,
+    "rating": 4.5,
+    "amenities": ["Indoor Games", "Spa", "Mountain View Rooms"],
+    "address": "Eatty City, Pallivasal, Munnar, Kerala 685612",
+    "managerId": "manager_munnar_3",
+    "roomTypes": [
+      {
+        "roomTypeCode": "HNY_COT",
+        "maxOccupancy": 2,
+        "sizeSqM": 35,
+        "adults": 2,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["1 Queen Bed"],
+        "roomPhotos": ["/images/munnar/honeymoon_cottage.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "WELLNESS",
+        "category": "Wellness",
+        "facilities": ["Spa Treatment Rooms", "Steam Room"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7ec",
+    "name": "Meenakshi Residency",
+    "slug": "meenakshi-residency-madurai",
+    "role": "hotel",
+    "state": "Tamil Nadu",
+    "place": "Madurai",
+    "image": "/images/hotels/meenakshi-residency.jpg",
+    "galleryImages": ["/images/madurai/mr_1.jpg"],
+    "description": "Budget-friendly accommodation right in the heart of Madurai, perfect for temple visitors.",
+    "price": 2100,
+    "rating": 3.5,
+    "amenities": ["Lift", "Car Rental", "24-hour Room Service"],
+    "address": "East Veli Street, Madurai, Tamil Nadu 625001",
+    "managerId": "manager_madurai_3",
+    "roomTypes": [
+      {
+        "roomTypeCode": "ECONO",
+        "maxOccupancy": 2,
+        "sizeSqM": 18,
+        "adults": 2,
+        "children": 0,
+        "ac": "Non-AC",
+        "bedConfiguration": ["1 Double Bed"],
+        "roomPhotos": ["/images/madurai/econo_room.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "GENERAL",
+        "category": "General",
+        "facilities": ["Luggage Storage"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7ed",
+    "name": "The Caper Inn",
+    "slug": "the-caper-inn-kochi",
+    "role": "guesthouse",
+    "state": "Kerala",
+    "place": "Kochi",
+    "image": "/images/hotels/caper-inn-kochi.jpg",
+    "galleryImages": ["/images/kochi/ci_1.jpg"],
+    "description": "Charming guesthouse in Fort Kochi with traditional architecture and a cozy atmosphere.",
+    "price": 2800,
+    "rating": 4.3,
+    "amenities": ["Free Breakfast", "Bicycle Rental", "Library"],
+    "address": "Fort Kochi, Kochi, Kerala 682001",
+    "managerId": "manager_kochi_3",
+    "roomTypes": [
+      {
+        "roomTypeCode": "STD_TPL",
+        "maxOccupancy": 3,
+        "sizeSqM": 24,
+        "adults": 3,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["3 Single Beds"],
+        "roomPhotos": ["/images/kochi/triple_room.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "SERVICE",
+        "category": "Service",
+        "facilities": ["Travel Planning Assistance"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7ee",
+    "name": "Holiday Inn Jaipur City Centre",
+    "slug": "holiday-inn-jaipur-cc",
+    "role": "hotel",
+    "state": "Rajasthan",
+    "place": "Jaipur",
+    "image": "/images/hotels/hi-jaipur.jpg",
+    "galleryImages": ["/images/jaipur/hi_1.jpg"],
+    "description": "A modern, centrally-located hotel perfect for exploring the Pink City and business travel.",
+    "price": 5000,
+    "rating": 4.1,
+    "amenities": ["Rooftop Bar", "Valet Parking", "Meeting Rooms"],
+    "address": "Bais Godam Circle, Jaipur, Rajasthan 302006",
+    "managerId": "manager_jaipur_2",
+    "roomTypes": [
+      {
+        "roomTypeCode": "KNG_SGL",
+        "maxOccupancy": 2,
+        "sizeSqM": 26,
+        "adults": 1,
+        "children": 1,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed"],
+        "roomPhotos": ["/images/jaipur/king_single.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "BUSINESS",
+        "category": "Business",
+        "facilities": ["Executive Lounge", "Business Center"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7ef",
+    "name": "Dunes Holiday Village",
+    "slug": "dunes-holiday-village-goa",
+    "role": "resort",
+    "state": "Goa",
+    "place": "Vagator",
+    "image": "/images/hotels/dunes-goa.jpg",
+    "galleryImages": ["/images/goa/dhv_1.jpg"],
+    "description": "Rustic resort offering beach-side cottages and a laid-back, bohemian atmosphere near Vagator Beach.",
+    "price": 3500,
+    "rating": 3.9,
+    "amenities": ["Beach Access", "Shacks", "Free Breakfast"],
+    "address": "Ozran Beach Road, Vagator, Goa 403509",
+    "managerId": "manager_goa_2",
+    "roomTypes": [
+      {
+        "roomTypeCode": "BCH_COT",
+        "maxOccupancy": 2,
+        "sizeSqM": 20,
+        "adults": 2,
+        "children": 0,
+        "ac": "Non-AC",
+        "bedConfiguration": ["1 Double Bed"],
+        "roomPhotos": ["/images/goa/beach_cottage.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "RECREATION",
+        "category": "Recreation",
+        "facilities": ["Beach Volleyball", "Live Music"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f0",
+    "name": "Sterling Ooty Fern Hill",
+    "slug": "sterling-ooty-fernhill",
+    "role": "resort",
+    "state": "Tamil Nadu",
+    "place": "Ooty",
+    "image": "/images/hotels/sterling-ooty.jpg",
+    "galleryImages": ["/images/ooty/sfh_1.jpg"],
+    "description": "Large resort surrounded by mist-covered hills and a eucalyptus forest, perfect for families.",
+    "price": 4500,
+    "rating": 4.2,
+    "amenities": ["Activity Centre", "Indoor Heated Pool", "Nature Walks"],
+    "address": "Fern Hill, Ooty, Tamil Nadu 643004",
+    "managerId": "manager_ooty_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "FAM_APT",
+        "maxOccupancy": 5,
+        "sizeSqM": 50,
+        "adults": 3,
+        "children": 2,
+        "ac": "Non-AC",
+        "bedConfiguration": ["1 King Bed", "2 Single Beds"],
+        "roomPhotos": ["/images/ooty/family_apt.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "RECREATION",
+        "category": "Recreation",
+        "facilities": ["Indoor Heated Pool", "Billiards Room"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f1",
+    "name": "Grand Hyatt Kochi Bolgatty",
+    "slug": "grand-hyatt-kochi-bolgatty",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Kochi",
+    "image": "/images/hotels/gh-kochi.jpg",
+    "galleryImages": ["/images/kochi/gh_1.jpg"],
+    "description": "Ultra-luxury waterfront hotel on Bolgatty Island, featuring world-class dining and convention center.",
+    "price": 14000,
+    "rating": 4.7,
+    "amenities": ["Multiple Pools", "Marriott Spa", "International Cuisine"],
+    "address": "Bolgatty Island, Kochi, Kerala 682504",
+    "managerId": "manager_kochi_4",
+    "roomTypes": [
+      {
+        "roomTypeCode": "DLX_KNG",
+        "maxOccupancy": 3,
+        "sizeSqM": 38,
+        "adults": 2,
+        "children": 1,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed"],
+        "roomPhotos": ["/images/kochi/gh_dlx.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "DINING",
+        "category": "Dining",
+        "facilities": ["Fine Dining Restaurant", "Bar and Grill"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f2",
+    "name": "The Tamara Kodai",
+    "slug": "the-tamara-kodai",
+    "role": "resort",
+    "state": "Tamil Nadu",
+    "place": "Kodaikanal",
+    "image": "/images/hotels/tamara-kodai.jpg",
+    "galleryImages": ["/images/kodai/tt_1.jpg"],
+    "description": "Historic resort set in a 1940s colonial building, offering luxury in the hills of Kodaikanal.",
+    "price": 10500,
+    "rating": 4.6,
+    "amenities": ["Trekking Trails", "Library", "Spa"],
+    "address": "La Salette Road, Kodaikanal, Tamil Nadu 624101",
+    "managerId": "manager_kodai_1",
+    "roomTypes": [
+      {
+        "roomTypeCode": "HMT_SUT",
+        "maxOccupancy": 4,
+        "sizeSqM": 60,
+        "adults": 2,
+        "children": 2,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed", "Sofa Bed"],
+        "roomPhotos": ["/images/kodai/heritage_suite.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "WELLNESS",
+        "category": "Wellness",
+        "facilities": ["Treatment Rooms", "Gym"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f3",
+    "name": "Regenta Central Jal Mahal",
+    "slug": "regenta-jaipur",
+    "role": "hotel",
+    "state": "Rajasthan",
+    "place": "Jaipur",
+    "image": "/images/hotels/regenta-jaipur.jpg",
+    "galleryImages": ["/images/jaipur/rcjm_1.jpg"],
+    "description": "Comfortable and convenient hotel with great views of the city, near major attractions.",
+    "price": 4200,
+    "rating": 4.0,
+    "amenities": ["Rooftop Restaurant", "Pool", "Free Parking"],
+    "address": "Amer Road, Jaipur, Rajasthan 302002",
+    "managerId": "manager_jaipur_3",
+    "roomTypes": [
+      {
+        "roomTypeCode": "TWN_STD",
+        "maxOccupancy": 2,
+        "sizeSqM": 24,
+        "adults": 2,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["2 Twin Beds"],
+        "roomPhotos": ["/images/jaipur/twin_std.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "DINING",
+        "category": "Dining",
+        "facilities": ["All-Day Dining Restaurant"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f4",
+    "name": "Mandarin Hotel",
+    "slug": "mandarin-hotel-madurai",
+    "role": "hotel",
+    "state": "Tamil Nadu",
+    "place": "Madurai",
+    "image": "/images/hotels/mandarin-madurai.jpg",
+    "galleryImages": ["/images/madurai/mh_1.jpg"],
+    "description": "A well-located hotel offering reliable services and clean rooms near the railway station.",
+    "price": 2700,
+    "rating": 3.6,
+    "amenities": ["Travel Desk", "In-house Laundry", "A/C Rooms"],
+    "address": "West Masi Street, Madurai, Tamil Nadu 625001",
+    "managerId": "manager_madurai_4",
+    "roomTypes": [
+      {
+        "roomTypeCode": "DLX_TPL",
+        "maxOccupancy": 3,
+        "sizeSqM": 28,
+        "adults": 3,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["1 Double Bed", "1 Single Bed"],
+        "roomPhotos": ["/images/madurai/dlx_tpl.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "SERVICE",
+        "category": "Service",
+        "facilities": ["Doctor on Call"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f5",
+    "name": "The Zuri White Sands Resort",
+    "slug": "zuri-white-sands-goa",
+    "role": "resort",
+    "state": "Goa",
+    "place": "Varca",
+    "image": "/images/hotels/zuri-goa.jpg",
+    "galleryImages": ["/images/goa/zws_1.jpg"],
+    "description": "Five-star beach resort located directly on the pristine sands of Varca Beach.",
+    "price": 12500,
+    "rating": 4.5,
+    "amenities": ["Private Beach", "Casino", "Kid's Club", "6 Dining Options"],
+    "address": "Varca Beach, Goa 403721",
+    "managerId": "manager_goa_3",
+    "roomTypes": [
+      {
+        "roomTypeCode": "RESORT_DBL",
+        "maxOccupancy": 2,
+        "sizeSqM": 30,
+        "adults": 2,
+        "children": 0,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed"],
+        "roomPhotos": ["/images/goa/resort_dbl.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "RECREATION",
+        "category": "Recreation",
+        "facilities": ["Outdoor Pool", "Water Sports"]
+      }
+    ]
+  },
+  {
+    "_id": "60a5e8c1b3f7e2a9b4d8c7f6",
+    "name": "Grand View Inn",
+    "slug": "grand-view-inn-munnar",
+    "role": "hotel",
+    "state": "Kerala",
+    "place": "Munnar",
+    "image": "/images/hotels/grand-view-munnar.jpg",
+    "galleryImages": ["/images/munnar/gvi_1.jpg"],
+    "description": "Affordable hotel with large windows offering panoramic views of the hills and valleys.",
+    "price": 3000,
+    "rating": 3.9,
+    "amenities": ["Balcony", "Free Parking", "Heated Water"],
+    "address": "Pothamedu, Munnar, Kerala 685612",
+    "managerId": "manager_munnar_4",
+    "roomTypes": [
+      {
+        "roomTypeCode": "STD_FAM",
+        "maxOccupancy": 4,
+        "sizeSqM": 32,
+        "adults": 2,
+        "children": 2,
+        "ac": "AC",
+        "bedConfiguration": ["1 King Bed", "Bunk Bed"],
+        "roomPhotos": ["/images/munnar/std_fam.jpg"]
+      }
+    ],
+    "hotelFacilities": [
+      {
+        "facilityCode": "GENERAL",
+        "category": "General",
+        "facilities": ["Terrace Seating"]
+      }
+    ]
+  }
+]

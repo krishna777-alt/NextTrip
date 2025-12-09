@@ -71,8 +71,108 @@ const bookingSchema = new mongoose.Schema(
   }
 );
 
+// Payment.js
+const mongoose = require("mongoose");
+
+const paymentSchema = new mongoose.Schema(
+  {
+    // --- RELATIONSHIPS & IDENTIFIERS ---
+    bookingId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Booking",
+      required: true,
+      unique: true, // A payment transaction is uniquely tied to a single booking
+      index: true,
+    },
+    userId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: false, // If booking was made by a guest
+      index: true,
+    },
+    // ID from the external payment gateway (e.g., Stripe, PayPal, Adyen)
+    gatewayTransactionId: {
+      type: String,
+      required: [true, "Transaction ID from the gateway is required."],
+      unique: true,
+      index: true,
+    },
+
+    // --- FINANCIAL DETAILS ---
+    amount: {
+      type: Number,
+      required: true,
+      min: 0.01,
+    },
+    currency: {
+      type: String,
+      required: true,
+      default: "USD",
+      enum: ["USD", "EUR", "INR", "GBP", "AUD"],
+    },
+    paymentMethod: {
+      type: String,
+      enum: [
+        "CreditCard",
+        "DebitCard",
+        "PayPal",
+        "BankTransfer",
+        "Wallet",
+        "Other",
+      ],
+      required: true,
+    },
+
+    // --- CARD DATA (Non-PCI Sensitive) ---
+    // Tokenized data is stored in the gateway's secure vault, we only store references.
+    cardBrand: String, // e.g., 'Visa', 'MasterCard'
+    cardLast4: String, // Last four digits for display purposes (e.g., '4242')
+    cardTokenReference: String, // The token received from the gateway to process refunds/future charges
+
+    // --- STATUS AND HISTORY ---
+    status: {
+      type: String,
+      enum: [
+        "CAPTURED",
+        "AUTHORIZED",
+        "PENDING",
+        "FAILED",
+        "REFUNDED",
+        "VOIDED",
+      ],
+      default: "PENDING",
+      required: true,
+    },
+    gatewayResponseCode: String, // The specific code returned by the payment processor (e.g., 20000)
+    gatewayResponseMessage: String, // The message accompanying the response code
+
+    // --- REFUND TRACKING ---
+    isRefunded: {
+      type: Boolean,
+      default: false,
+    },
+    refundAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    // --- AUDIT ---
+    processedAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    timestamps: true, // Adds createdAt and updatedAt
+  }
+);
+
+// Index for quick lookups by status or gateway ID
+paymentSchema.index({ status: 1, processedAt: -1 });
+
+const Payment = mongoose.model("Payment", paymentSchema);
 // Compound Index for retrieving bookings quickly
 bookingSchema.index({ hotelId: 1, checkInDate: 1 });
 
 const Booking = mongoose.model("Booking", bookingSchema);
-module.exports = Booking;
+module.exports = { Booking, Payment };

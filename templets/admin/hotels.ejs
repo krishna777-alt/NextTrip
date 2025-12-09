@@ -1,0 +1,79 @@
+<!-- manage-hotels.ejs -->
+<div class="p-8">
+  <h1 class="text-2xl font-semibold text-gray-800 mb-1">Manage Hotels</h1>
+  <p class="text-gray-500 mb-6">Approve or reject newly registered hotels.</p>
+
+  <!-- Table Container -->
+  <div
+    class="bg-white shadow rounded-xl overflow-hidden border border-gray-200"
+  >
+    <table class="min-w-full">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+            Image
+          </th>
+          <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+            Hotel Name
+          </th>
+          <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+            Rating
+          </th>
+          <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">
+            Actions
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200">
+        <% hotels.forEach(hotel => { %>
+        <tr class="hover:bg-gray-50 transition">
+          <!-- HOTEL IMAGE -->
+          <td class="px-6 py-4">
+            <img
+              src="/uploads/hotels/<%= hotel.image %>"
+              alt="hotel-img"
+              class="w-20 h-20 object-cover rounded-lg"
+            />
+          </td>
+
+          <!-- HOTEL NAME -->
+          <td class="px-6 py-4 text-gray-800 font-medium"><%= hotel.name %></td>
+
+          <!-- RATING -->
+          <td class="px-6 py-4 text-yellow-600 font-semibold">
+            ⭐ <%= hotel.rating %>
+          </td>
+
+          <!-- ACTION BUTTONS -->
+          <td class="px-6 py-4 flex items-center justify-center gap-3">
+            <!-- VIEW -->
+            <a
+              href="/admin/hotel/<%= hotel._id %>"
+              class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow"
+            >
+              View
+            </a>
+
+            <!-- ACCEPT -->
+            <a
+              href="/admin/hotel/accept/<%= hotel._id %>"
+              class="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg shadow"
+            >
+              Accept
+            </a>
+
+            <!-- REJECT -->
+            <a
+              href="/admin/hotel/reject/<%= hotel._id %>"
+              class="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg shadow"
+            >
+              Reject
+            </a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
