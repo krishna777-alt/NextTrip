@@ -5,8 +5,9 @@ const multer = require("multer");
 
 const Package = require("../Models/packageModel");
 const User = require("./../Models/userModels");
-const { Hotel, Room } = require("../Models/hotelModel");
 const Contact = require("./../Models/contactModel");
+const HotelReview = require("./../Models/hotelReviewModel");
+const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const { Places, GalleryImage } = require("../Models/placeModel");
 
 exports.displayLogin = async (req, res) => {
@@ -88,8 +89,8 @@ exports.signup = async function (req, res) {
 };
 exports.home = async function (req, res) {
   const user = req.user || false;
-  const featuredPackages = await Package.find().limit(2);
-  res.render("user/home", { user, featuredPackages });
+  const popularPlace = await Places.find().limit(3);
+  res.render("user/home", { user, popularPlace });
 };
 
 // exports.testimonials = function (req, res) {};
@@ -104,13 +105,12 @@ exports.displayPlaces = async (req, res) => {
 exports.displayPlaceDetails = async (req, res) => {
   const user = req.user;
   const id = req.params.id;
-  console.log(id);
   const states = ["kerala", "tamilnadu", "karnadaka", "gova"];
   const place = await Places.findById(id);
   const galleryImages = await GalleryImage.findOne({ placeId: place._id });
 
   const gimg = galleryImages.imageUrl;
-  const hotels = await Hotel.find();
+  const hotels = await Hotel.find({ isApproved: true, state: place.state });
   res.status(200).render("user/place-details", {
     user,
     states,
@@ -122,11 +122,15 @@ exports.displayPlaceDetails = async (req, res) => {
 
 exports.diplayHotel = async (req, res) => {
   const user = req.user;
-  const hotels = await Hotel.find();
-  console.log(hotels);
+  const hotels = await Hotel.find({ isApproved: true });
+  const room = await Room.find();
+
+  const acRooms = room.map((e) => e.ac);
+  // console.log(acRooms);
   res.status(200).render("user/hotel", {
     hotels,
     user,
+    acRooms,
   });
 };
 
@@ -163,4 +167,31 @@ exports.contactData = async (req, res) => {
     req.flash("error", "Something went wrong!");
     return res.redirect("/contact");
   }
+};
+
+exports.displayHotelDetails = async (req, res) => {
+  const hotelID = req.params.id;
+  const user = req.user;
+  console.log(user);
+  const hotel = await Hotel.findById(hotelID);
+  const facilityDoc = await HotelFacility.findOne({ hotelId: hotelID });
+  const room = await Room.find({ hotelID });
+  const facilities = facilityDoc ? facilityDoc.facilities : [];
+
+  console.log("FACILITIES ARRAY:", facilities);
+
+  res.render("user/hotelDetails", { hotel, facilities, room, user });
+};
+
+exports.displayHotelReview = async (req, res) => {
+  const hotelID = req.params.id;
+  console.log("paramID:" + hotelID);
+  const reviews = await HotelReview.find({ hotelID: hotelID });
+  console.log(reviews);
+  res.render("user/hotelReview", { reviews });
+};
+exports.createHotelReview = (req, res) => {
+  // const hotelID =
+  // const review = new HotelReview({
+  // })
 };

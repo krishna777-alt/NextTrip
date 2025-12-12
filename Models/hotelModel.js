@@ -18,7 +18,7 @@ const hotelSchema = new mongoose.Schema(
     },
     state: {
       type: String,
-      default: "Kerala",
+      default: "kerala",
     },
     place: {
       type: String,
@@ -60,6 +60,14 @@ const hotelSchema = new mongoose.Schema(
     address: {
       type: String,
       required: true,
+    },
+    totalRooms: {
+      type: Number,
+      default: 80,
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
     },
     managerId: {
       type: mongoose.Schema.Types.ObjectId,

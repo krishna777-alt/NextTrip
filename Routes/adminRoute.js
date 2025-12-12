@@ -35,4 +35,8 @@ router.post(
   placeController.uploadPlaceImages,
   placeController.createPlaces
 );
+
+router.get("/accepted/:id", adminController.hotelAcceptedByAdmin);
+
+router.get("/hotelView/:id", adminController.hotelViewSection);
 module.exports = router;

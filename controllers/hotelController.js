@@ -14,25 +14,7 @@ exports.logout = function (req, res) {
   res.clearCookie("jwt");
   return res.redirect("/hotel/login");
 };
-exports.auth = function (req, res, next) {
-  const token = req.cookies.jwt;
-  // console.log(token);
-  if (!token) {
-    //    return res.status(401).json({
-    //         status:401,
-    //         message:'You are not logged in! Pelase loggin'
-    //     });
-    return res.redirect("/hotel/login");
-  }
-  try {
-    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    // console.log(decode);
-    req.manager = decode;
-    next();
-  } catch (err) {
-    return res.status(403).json({ message: "Invalid Token!" + err });
-  }
-};
+
 exports.isManager = async function (req, res, next) {
   if (req.manager.role !== "hotel") {
     return res.status(403).json({
@@ -108,14 +90,14 @@ exports.register = async (req, res) => {
       res.send("error");
     }
     const { name, email, username, password } = req.body;
-    const agent = new HotelManager({
+    const manager = new HotelManager({
       name,
       email,
       username,
       password,
     });
 
-    await agent.save();
+    await manager.save();
 
     req.flash(
       "success",
@@ -137,16 +119,39 @@ exports.register = async (req, res) => {
     });
   }
 };
-
+exports.auth = function (req, res, next) {
+  const token = req.cookies.jwt;
+  // console.log(token);
+  if (!token) {
+    //    return res.status(401).json({
+    //         status:401,
+    //         message:'You are not logged in! Pelase loggin'
+    //     });
+    return res.redirect("/hotel/login");
+  }
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    console.log("Decode" + decode.id);
+    req.manager = decode;
+    // console.log(req.manager);
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid Token!" + err });
+  }
+};
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.getMangerDashbord = (req, res) => {
-  res.render("hotel/home");
+exports.getMangerDashbord = async (req, res) => {
+  console.log("m:" + req.manager.id);
+  const manager = (await HotelManager.findById(req.manager.id)) || false;
+  console.log(manager);
+  res.render("hotel/home", { manager });
 };
 
 exports.getManageHotel = async (req, res) => {
   const hotel = await Hotel.findOne({ managerId: req.manager.id });
-  const roomType = await Room.findOne({ hotelID: hotel._id });
+  // console.log("manager:" + req.manager.id);
   if (hotel) {
+    const roomType = await Room.findOne({ hotelID: hotel._id });
     console.log("gallery:", hotel.galleryImages);
     console.log(roomType);
     return res.render("hotel/showHotel", { hotel, roomType });
@@ -183,7 +188,7 @@ exports.createHotel = async (req, res) => {
   try {
     const managerId = req.manager.id;
 
-    const {
+    let {
       name,
       slug,
       state,
@@ -194,7 +199,7 @@ exports.createHotel = async (req, res) => {
       amenities,
       address,
       roomTypeCode,
-      // roomName,
+      totalRooms,
       maxOccupancy,
       sizeSqM,
 
@@ -207,6 +212,8 @@ exports.createHotel = async (req, res) => {
       facilityCode,
       category,
     } = req.body;
+    state = state?.trim().toLowerCase();
+    place = place?.trim().toLowerCase();
 
     const image = req.files?.image?.[0]?.filename || null;
     const galleryImages = req.files?.galleryImages
@@ -227,6 +234,7 @@ exports.createHotel = async (req, res) => {
       rating,
       amenities,
       address,
+      totalRooms,
       managerId,
     });
     await hotel.save();

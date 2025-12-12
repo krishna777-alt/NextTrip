@@ -1,0 +1,287 @@
+<%- include("navBar") %>
+    <title><%= hotel.name %> | Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      .fade-card {
+        transition: all 0.2s ease;
+      }
+      .fade-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0px 8px 22px rgba(0, 0, 0, 0.08);
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Hero Banner -->
+      <section
+      class="text-center py-20 text-white bg-cover bg-center relative"
+      style="
+        background-image: url('/images/hotelDetails-header.jpg');
+      "
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-blue-700/50"></div>
+
+      <div class="relative z-10">
+        <h1 class="text-4xl font-bold"><%= hotel.name%></h1>
+        <!-- <p class="mt-2 text-lg">Find the best tourist places across India</p> -->
+      </div>
+    </section>
+   
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto mt-6 px-4">
+      <p class="text-gray-600">
+        Home > Rooms >
+        <span class="text-indigo-600"><%= hotel.name %></span>
+      </p>
+    </div>
+
+    <!-- Main Layout (FIXED GRID) -->
+    <div
+      class="max-w-7xl mx-auto mt-10 px-4 grid grid-cols-1 lg:grid-cols-3 gap-10"
+    >
+      <!-- LEFT CONTENT (Rooms + Details + Rules + Map) -->
+      <div class="lg:col-span-2 space-y-10">
+        <!-- Top Image Section -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-1 space-y-4">
+            <% hotel.galleryImages.slice(0,4).forEach(img => { %>
+            <div
+              class="h-32 rounded-xl shadow bg-white overflow-hidden fade-card"
+            >
+              <img
+                src="/uploads/hotels/<%= img %>"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <% }) %>
+          </div>
+
+          <div
+            class="col-span-2 h-72 rounded-xl shadow overflow-hidden fade-card"
+          >
+            <img
+              src="/uploads/hotels/<%= hotel.image %>"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        <!-- Main Room Info -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border fade-card">
+          <div class="flex justify-between items-start flex-wrap">
+            <div>
+              <h2 class="text-2xl font-bold"><%= hotel.name %></h2>
+              <p class="text-sm text-gray-500 mt-2">
+                <%= hotel.address %>, <%= hotel.state %>
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 mt-3 lg:mt-0">
+              <span class="text-amber-500 text-xl">★</span>
+              <span class="font-semibold"><%= hotel.rating.toFixed(1) %></span>
+              <span class="text-gray-500">(245 Reviews)</span>
+            </div>
+          </div>
+
+          <div class="mt-6 flex items-center gap-3">
+            <p class="text-3xl font-bold text-indigo-600">
+              ₹<%= hotel.price %>
+            </p>
+            <span class="text-gray-500">/ night</span>
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-6 text-gray-600 text-sm">
+            <div class="flex items-center gap-2">🛏 <span>1 Bed</span></div>
+            <div class="flex items-center gap-2">🚿 <span>1 Bath</span></div>
+            <div class="flex items-center gap-2">📏 <span>300 sqft</span></div>
+            <div class="flex items-center gap-2">👥 <span>2 Guests</span></div>
+          </div>
+
+          <div class="mt-7 flex gap-4">
+            <a
+              href="/hotel/<%= hotel.slug %>/book"
+              class="bg-indigo-600 text-white px-6 py-3 rounded-xl shadow hover:bg-indigo-700 fade-card"
+            >
+              Book Now
+            </a>
+
+            <a
+              href="/hotels"
+              class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-300 fade-card"
+            >
+              Back
+            </a>
+          </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border fade-card">
+          <h3 class="text-xl font-semibold">Overview</h3>
+          <p class="mt-3 text-gray-700 leading-relaxed">
+            <%= hotel.description %>
+          </p>
+        </div>
+
+        <!-- Amenities -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border fade-card">
+          <h3 class="text-xl font-semibold">Room Amenities</h3>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5">
+            <% hotel.amenities.forEach(a => { %>
+            <div
+              class="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border fade-card"
+            >
+              <span class="text-indigo-600">✔</span>
+              <span><%= a %></span>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Booking Rules -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border fade-card">
+          <h3 class="text-xl font-semibold">Booking Rules</h3>
+
+          <div class="mt-6 grid grid-cols-2 gap-10">
+            <div>
+              <h4 class="font-medium mb-3">Check In</h4>
+              <ul class="space-y-2 text-gray-600">
+                <li>✔ ID required</li>
+                <li>✔ Standard check-in timing</li>
+                <li>✔ Early check-in on request</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="font-medium mb-3">Check Out</h4>
+              <ul class="space-y-2 text-gray-600">
+                <li>✔ Standard check-out time</li>
+                <li>✔ Late check-out (charges apply)</li>
+                <li>✔ Baggage storage available</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Map -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border fade-card">
+          <h3 class="text-lg font-semibold">Location</h3>
+
+          <div class="mt-5">
+            <iframe
+              height="330"
+              width="100%"
+              class="rounded-xl border"
+              src="https://www.google.com/maps?q=<%= encodeURIComponent(hotel.address) %>&output=embed"
+            >
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: STICKY BOOKING FORM (FIXED!) -->
+      <div class="lg:col-span-1">
+        <div
+          class="bg-white p-6 rounded-xl shadow-sm border sticky top-10 fade-card h-fit"
+        >
+          <h3 class="text-xl font-semibold mb-5">Book Room</h3>
+
+          <form
+            action="/hotel/<%= hotel.slug %>/book"
+            method="POST"
+            class="space-y-5"
+          >
+            <div>
+              <label class="font-medium">Your Name</label>
+              <input
+                type="text"
+                name="name"
+                required
+                class="w-full p-3 mt-2 border rounded-lg focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Phone Number</label>
+              <input
+                type="text"
+                name="phone"
+                required
+                class="w-full p-3 mt-2 border rounded-lg focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Check-in Date</label>
+              <input
+                type="date"
+                name="checkIn"
+                class="w-full p-3 mt-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Check-out Date</label>
+              <input
+                type="date"
+                name="checkOut"
+                class="w-full p-3 mt-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Adults</label>
+              <select name="adults" class="w-full p-3 mt-2 border rounded-lg">
+                <% for(let i=1; i<=5; i++){ %>
+                <option><%= i %></option>
+                <% } %>
+              </select>
+            </div>
+
+            <div>
+              <label class="font-medium">Children</label>
+              <select name="children" class="w-full p-3 mt-2 border rounded-lg">
+                <% for(let i=0; i<=5; i++){ %>
+                <option><%= i %></option>
+                <% } %>
+              </select>
+            </div>
+
+            <div>
+              <label class="font-medium">Room Type</label>
+              <select
+                name="roomTypeCode"
+                class="w-full p-3 mt-2 border rounded-lg"
+              >
+                <% room.forEach(rt => { %>
+                <option value="<%= rt.roomTypeCode %>">
+                  <%= rt.roomTypeCode %>
+                </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div>
+              <label class="font-medium">Number of Rooms</label>
+              <select name="rooms" class="w-full p-3 mt-2 border rounded-lg">
+                <% for(let i=1; i<=5; i++){ %>
+                <option><%= i %></option>
+                <% } %>
+              </select>
+            </div>
+
+            <button
+              class="w-full bg-indigo-600 text-white py-3 rounded-xl shadow hover:bg-indigo-700 text-lg"
+            >
+              Book Now
+            </button>
+          </form>
+        </div>
+      </div>
+      
+    </div>
+ <%- include("footer") %>

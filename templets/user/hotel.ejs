@@ -15,9 +15,7 @@
     <!-- Header -->
     <section
       class="text-center py-20 text-white bg-cover bg-center relative"
-      style="
-        background-image: url('/images/julian-timmerman-Fn27DlI8bZ8-unsplash.jpg');
-      "
+      style="background-image: url('/images/hotel-room-1447201_1280.jpg')"
     >
       <!-- Overlay -->
       <div class="absolute inset-0 bg-blue-700/50"></div>
@@ -96,7 +94,7 @@
         <% hotels.forEach(hotel => { %>
         <div class="bg-white border rounded-xl shadow overflow-hidden">
           <img
-            src="/uploads/hotels/<%= hotel.image %>"
+            src="/uploads/hotels/<%= hotel.images ? hotel.images[0] : hotel.image %>"
             class="h-48 w-full object-cover"
           />
 
@@ -108,13 +106,13 @@
             <p class="text-gray-700 mb-2 font-medium">
               ₹ <%= hotel.price %> / night
             </p>
-            <!-- <p class="text-sm mb-4">
+            <p class="text-sm mb-4">
               <span
-                class="px-3 py-1 rounded-full text-white <%= hotel.ac ? 'bg-blue-600' : 'bg-gray-600' %>"
+                class="px-3 py-1 rounded-full text-white <%= acRooms ? 'bg-blue-600' : 'bg-gray-600' %>"
               >
-                <%= hotel.ac ? "AC Room" : "Non-AC Room" %>
+                <%= acRooms ? "AC Room" : "Non-AC Room" %>
               </span>
-            </p> -->
+            </p>
 
             <div class="flex gap-3 mt-4">
               <a
@@ -151,15 +149,20 @@
       function renderHotels(list) {
         container.innerHTML = "";
 
+        if (list.length === 0) {
+          container.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No hotels match your filters</p>';
+          return;
+        }
+
         list.forEach((h) => {
           container.innerHTML += `
             <div class="bg-white border rounded-xl shadow overflow-hidden">
-              <img src="/uploads/hotels/${h.images[0]}" class="h-48 w-full object-cover" />
+              <img src="/uploads/hotels/${h.images ? h.images[0] : h.image}" class="h-48 w-full object-cover" />
 
               <div class="p-5">
                 <h3 class="text-xl font-bold">${h.name}</h3>
-                <p class="text-yellow-500 font-semibold">⭐ ${h.rating}/5</p>
-                <p class="text-gray-700 font-medium">₹ ${h.price} / night</p>
+                <p class="text-yellow-500 font-semibold mb-1">⭐ ${h.rating}/5</p>
+                <p class="text-gray-700 mb-2 font-medium">₹ ${h.price} / night</p>
 
                 <p class="text-sm mb-4">
                   <span class="px-3 py-1 rounded-full text-white ${
@@ -173,7 +176,7 @@
                   <a href="/bookHotel/${h._id}" class="w-1/2 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
                     Book Now
                   </a>
-                  <a href="/hotelDetails/${h._id}" class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50">
+                  <a href="/displayHotelDetails/${h._id}" class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50">
                     Details
                   </a>
                 </div>
@@ -187,8 +190,8 @@
         const rating = filterRating.value;
         const price = filterPrice.value;
         const ac = filterAC.value;
-
-        let filtered = allHotels;
+        // console.log("AC:"+ac);
+        let filtered = allHotels.slice();
 
         // Rating filter
         if (rating !== "all") {
@@ -207,6 +210,11 @@
 
         renderHotels(filtered);
       }
+
+      // Initialize filters on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        applyFilters();
+      });
 
       filterRating.addEventListener("change", applyFilters);
       filterPrice.addEventListener("change", applyFilters);

@@ -1,0 +1,162 @@
+<!-- Reviews Section -->
+<div class="w-full mt-10">
+  <div class="max-w-5xl mx-auto bg-white rounded-xl shadow p-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-semibold text-gray-800">Reviews</h2>
+
+      <!-- Add Review Button -->
+      <button
+        id="openReviewForm"
+        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
+      >
+        Add Your Review
+      </button>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="space-y-6">
+      <% reviews.slice(0, 4).forEach(review => { %>
+      <div class="flex gap-4 p-4 border rounded-lg hover:shadow-sm transition">
+        <!-- Profile -->
+        <img
+          src="<%= review.profilePic || '/img/default-user.png' %>"
+          class="w-12 h-12 rounded-full object-cover"
+          alt="Profile"
+        />
+
+        <!-- Content -->
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-medium text-gray-700">
+              <%= review.name %>
+            </h3>
+            <span class="text-sm text-gray-500"><%= review.date %></span>
+          </div>
+
+          <p class="text-gray-600 mt-1"><%= review.text %></p>
+
+          <!-- Likes -->
+          <div class="mt-2 flex items-center gap-1 text-gray-500">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <span><%= review.likes %></span>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- View More -->
+    <% if (reviews.length > 4) { %>
+    <div class="text-center mt-4">
+      <a
+        href="#"
+        id="viewMoreReviews"
+        class="text-indigo-600 hover:text-indigo-800"
+      >
+        View More Reviews
+      </a>
+    </div>
+    <% } %>
+
+    <!-- Hidden Full Review List -->
+    <div id="allReviews" class="hidden mt-6 space-y-6">
+      <% reviews.slice(4).forEach(review => { %>
+      <div class="flex gap-4 p-4 border rounded-lg bg-gray-50">
+        <img
+          src="<%= review.profilePic || '/img/default-user.png' %>"
+          class="w-12 h-12 rounded-full object-cover"
+          alt="Profile"
+        />
+
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-medium text-gray-700">
+              <%= review.name %>
+            </h3>
+            <span class="text-sm text-gray-500"><%= review.date %></span>
+          </div>
+          <p class="text-gray-600 mt-1"><%= review.text %></p>
+          <div class="mt-2 flex items-center gap-1 text-gray-500">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <span><%= review.likes %></span>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- Review Form -->
+    <form
+      action="/hotel/<%= hotel._id %>/review"
+      method="POST"
+      id="reviewForm"
+      class="hidden mt-8 border rounded-xl p-6 bg-gray-50"
+    >
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">
+        Write your review
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 mb-1">Your Name</label>
+          <input
+            type="text"
+            name="name"
+            class="w-full p-3 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-700 mb-1"
+            >Profile Image URL (optional)</label
+          >
+          <input
+            type="text"
+            name="profilePic"
+            class="w-full p-3 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-gray-700 mb-1">Your Review</label>
+        <textarea
+          name="reviewText"
+          rows="4"
+          class="w-full p-3 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+          required
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="mt-4 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+      >
+        Submit Review
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- JS for show/hide -->
+<script>
+  const openBtn = document.getElementById("openReviewForm");
+  const form = document.getElementById("reviewForm");
+  const viewMoreBtn = document.getElementById("viewMoreReviews");
+  const allReviews = document.getElementById("allReviews");
+
+  if (openBtn) {
+    openBtn.onclick = () => form.classList.toggle("hidden");
+  }
+
+  if (viewMoreBtn) {
+    viewMoreBtn.onclick = () => {
+      allReviews.classList.toggle("hidden");
+      viewMoreBtn.textContent = allReviews.classList.contains("hidden")
+        ? "View More Reviews"
+        : "View Less";
+    };
+  }
+</script>

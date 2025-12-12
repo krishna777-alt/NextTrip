@@ -48,6 +48,7 @@ exports.createPlaces = async (req, res) => {
         lng: req.body.long,
       },
       days: req.body.days,
+      state: req.body.state?.trim().toLowerCase(),
       nights: req.body.nights,
       includes: req.body.includes,
       excludes: req.body.excludes,

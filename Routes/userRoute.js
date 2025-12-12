@@ -35,4 +35,12 @@ router
   .route("/contact")
   .get(userController.auth, userController.displayContactPage)
   .post(userController.auth, userController.contactData);
+
+router.get(
+  "/displayHotelDetails/:id",
+  userController.auth,
+  userController.displayHotelDetails
+);
+
+router.route("/hotelReview/:id").get(userController.displayHotelReview);
 module.exports = router;

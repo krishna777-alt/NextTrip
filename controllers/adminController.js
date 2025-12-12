@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const flash = require("connect-flash");
 const Admin = require("./../Models/adminModel");
-const { Hotel } = require("../Models/hotelModel");
+const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
+const { render } = require("../app");
 
 //////////////////////////////////////////////////////////////ADMIN AUTH///////////////////////////////
 
@@ -106,7 +107,7 @@ exports.login = async (req, res) => {
 exports.adminHome = async (req, res) => {
   try {
     // res.status(200).sendFile(path.join(__dirname,'../templets','admin','home.ejs'));
-    const hotels = await Hotel.find();
+    const hotels = await Hotel.find({ isApproved: false });
     console.log("hotels:" + hotels);
     return res.render("admin/home", {
       admin: req.adminData,
@@ -118,6 +119,15 @@ exports.adminHome = async (req, res) => {
       message: "Failed " + err,
     });
   }
+};
+
+exports.hotelAcceptedByAdmin = async (req, res) => {
+  const acceptedHotelID = req.params.id;
+  const hotel = await Hotel.findByIdAndUpdate(acceptedHotelID, {
+    isApproved: true,
+  });
+  console.log("Accepted:id" + hotel);
+  res.redirect("/admin");
 };
 
 exports.getManageAdmin2 = (req, res) => {
@@ -196,6 +206,16 @@ exports.createAdmin = async (req, res) => {
       message: err.message,
     });
   }
+};
+
+exports.hotelViewSection = async (req, res) => {
+  const hotelID = req.params.id;
+  console.log(hotelID);
+  const hotel = (await Hotel.findById(hotelID)) || false;
+  const room = await Room.findOne({ hotelID });
+  const facilities = await HotelFacility.findOne({ hotelId: hotelID });
+  // console.log(roomType);
+  res.render("admin/hotelView", { hotel, room, facilities });
 };
 
 exports.updateAdmin = async (req, res) => {
