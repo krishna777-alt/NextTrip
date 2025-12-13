@@ -42,5 +42,11 @@ router.get(
   userController.displayHotelDetails
 );
 
-router.route("/hotelReview/:id").get(userController.displayHotelReview);
+router
+  .route("/hotelReview/:id")
+  // .get(userController.displayHotelReview)
+  .post(userController.auth, userController.createHotelReview);
+
+router.get("/account", userController.auth, userController.displayUserAccount);
+
 module.exports = router;

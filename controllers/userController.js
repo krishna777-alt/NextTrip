@@ -64,7 +64,8 @@ exports.login = async (req, res) => {
       secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    return res.render("user/home", { user });
+    const popularPlace = (await Places.find().limit(3)) || null;
+    return res.render("user/home", { user, popularPlace });
     // res.status(201).json({ message: "success", user, token });
   } catch (err) {
     console.log(err);
@@ -170,28 +171,50 @@ exports.contactData = async (req, res) => {
 };
 
 exports.displayHotelDetails = async (req, res) => {
-  const hotelID = req.params.id;
-  const user = req.user;
-  console.log(user);
-  const hotel = await Hotel.findById(hotelID);
-  const facilityDoc = await HotelFacility.findOne({ hotelId: hotelID });
-  const room = await Room.find({ hotelID });
-  const facilities = facilityDoc ? facilityDoc.facilities : [];
+  try {
+    const hotelID = req.params.id;
+    const user = req.user;
+    console.log(user);
+    const hotel = await Hotel.findById(hotelID);
+    const facilityDoc = await HotelFacility.findOne({ hotelId: hotelID });
+    const room = await Room.find({ hotelID });
+    const facilities = facilityDoc ? facilityDoc.facilities : [];
 
-  console.log("FACILITIES ARRAY:", facilities);
+    const reviews = await HotelReview.find({ hotelID }).populate(
+      "userID",
+      "name avatar"
+    );
+    console.log("Reviews:" + reviews);
+    // console.log("FACILITIES ARRAY:", facilities);
 
-  res.render("user/hotelDetails", { hotel, facilities, room, user });
+    res.render("user/hotelDetails", { hotel, facilities, room, user, reviews });
+  } catch (err) {
+    res.status(500).json({ "ERROR:": err });
+  }
 };
 
-exports.displayHotelReview = async (req, res) => {
-  const hotelID = req.params.id;
-  console.log("paramID:" + hotelID);
-  const reviews = await HotelReview.find({ hotelID: hotelID });
-  console.log(reviews);
-  res.render("user/hotelReview", { reviews });
+exports.createHotelReview = async (req, res) => {
+  try {
+    const hotelID = req.params.id;
+    const userID = req.user.id;
+    console.log("BOdy:" + userID);
+    const review = new HotelReview({
+      message: req.body.reviewText,
+      rating: req.body.rating,
+      userID,
+      hotelID,
+    });
+    console.log("userID:" + userID);
+    await review.save();
+    res.status(200).json({ message: "success", review });
+  } catch (err) {
+    res.status(500).json({ ERROR: err.message });
+  }
 };
-exports.createHotelReview = (req, res) => {
-  // const hotelID =
-  // const review = new HotelReview({
-  // })
+
+exports.displayUserAccount = async (req, res) => {
+  const userID = req.user.id;
+  const user = await User.findById({ _id: userID });
+  // console.log("USER:" + user);
+  res.render("user/account", { user });
 };

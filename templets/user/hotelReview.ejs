@@ -20,7 +20,7 @@
       <div class="flex gap-4 p-4 border rounded-lg hover:shadow-sm transition">
         <!-- Profile -->
         <img
-          src="<%= review.profilePic || '/img/default-user.png' %>"
+          src="/images/profile.png"
           class="w-12 h-12 rounded-full object-cover"
           alt="Profile"
         />
@@ -29,17 +29,17 @@
         <div class="flex-1">
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-medium text-gray-700">
-              <%= review.name %>
+              <%= review.userID?.name %>
             </h3>
             <span class="text-sm text-gray-500"><%= review.date %></span>
           </div>
 
-          <p class="text-gray-600 mt-1"><%= review.text %></p>
+          <p class="text-gray-600 mt-1"><%= review.message %></p>
 
           <!-- Likes -->
           <div class="mt-2 flex items-center gap-1 text-gray-500">
             <i class="fa-regular fa-thumbs-up"></i>
-            <span><%= review.likes %></span>
+            <span>Rating: <%= review.rating %></span>
           </div>
         </div>
       </div>
@@ -64,7 +64,7 @@
       <% reviews.slice(4).forEach(review => { %>
       <div class="flex gap-4 p-4 border rounded-lg bg-gray-50">
         <img
-          src="<%= review.profilePic || '/img/default-user.png' %>"
+          src="/images/profile.png"
           class="w-12 h-12 rounded-full object-cover"
           alt="Profile"
         />
@@ -72,11 +72,11 @@
         <div class="flex-1">
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-medium text-gray-700">
-              <%= review.name %>
+              <%= review.userID?.name %>
             </h3>
             <span class="text-sm text-gray-500"><%= review.date %></span>
           </div>
-          <p class="text-gray-600 mt-1"><%= review.text %></p>
+          <p class="text-gray-600 mt-1"><%= review.message %></p>
           <div class="mt-2 flex items-center gap-1 text-gray-500">
             <i class="fa-regular fa-thumbs-up"></i>
             <span><%= review.likes %></span>
@@ -88,7 +88,7 @@
 
     <!-- Review Form -->
     <form
-      action="/hotel/<%= hotel._id %>/review"
+      action="http://localhost:3000/hotelReview/<%= hotel._id %>"
       method="POST"
       id="reviewForm"
       class="hidden mt-8 border rounded-xl p-6 bg-gray-50"
@@ -98,7 +98,7 @@
       </h3>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+        <!-- <div>
           <label class="block text-gray-700 mb-1">Your Name</label>
           <input
             type="text"
@@ -106,15 +106,13 @@
             class="w-full p-3 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
             required
           />
-        </div>
+        </div> -->
 
         <div>
-          <label class="block text-gray-700 mb-1"
-            >Profile Image URL (optional)</label
-          >
+          <label class="block text-gray-700 mb-1">Rate</label>
           <input
             type="text"
-            name="profilePic"
+            name="rating"
             class="w-full p-3 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>

@@ -1,0 +1,202 @@
+
+<%- include("navBar") %>
+    <title>User Account | NextTrip</title>
+   
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+      .sidebar-link {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 12px 16px;
+        border-radius: 10px;
+        color: white;
+        transition: all 0.2s ease;
+      }
+      .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .sidebar-link.active {
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      .content-section {
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100">
+    <div class="flex min-h-screen">
+      <!-- SIDEBAR -->
+      <aside class="w-72 bg-gradient-to-b from-slate-900 to-slate-800 p-6">
+        <h1 class="text-2xl font-bold text-white mb-8">NextTrip</h1>
+
+        <div class="flex items-center gap-3 mb-8">
+          <% if(user){%>
+          <img src="/images/profile.png" class="w-12 h-12 rounded-full" />
+          <%} else{%>
+             <img src="/uploads/userProfiles/<%= user.avatar %>" class="w-12 h-12 rounded-full" />
+            <%}%>
+          <div>
+            <p class="text-white font-semibold"><%= user.name%></p>
+            <p class="text-gray-400 text-sm">john@email.com</p>
+          </div>
+        </div>
+
+        <nav class="space-y-2">
+          <button class="sidebar-link active" data-target="dashboard">
+            Dashboard
+          </button>
+          <button class="sidebar-link" data-target="profile">My Profile</button>
+          <button class="sidebar-link" data-target="bookings">Bookings</button>
+          <button class="sidebar-link" data-target="wishlist">Wishlist</button>
+          <button class="sidebar-link" data-target="payments">Payments</button>
+          <button class="sidebar-link" data-target="settings">Settings</button>
+          <a href="/logout" class="sidebar-link text-red-400 mt-6">Logout</a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="flex-1 p-8">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="content-section">
+          <div class="flex justify-between mb-6">
+            <h2 class="text-2xl font-bold">Account Overview</h2>
+            <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg">
+              Edit Profile
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-xl shadow">
+              <p class="text-gray-500">Total Bookings</p>
+              <p class="text-3xl font-bold text-indigo-600">12</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow">
+              <p class="text-gray-500">Upcoming Trips</p>
+              <p class="text-3xl font-bold text-green-500">3</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow">
+              <p class="text-gray-500">Wishlist</p>
+              <p class="text-3xl font-bold text-pink-500">7</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow">
+            <h3 class="font-semibold mb-4">Recent Bookings</h3>
+            <div class="border p-4 rounded-lg mb-3 flex justify-between">
+              <div>
+                <p class="font-medium">Mandarin Hotel</p>
+                <p class="text-sm text-gray-500">12 Aug 2025 – 15 Aug 2025</p>
+              </div>
+              <span
+                class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm"
+                >Confirmed</span
+              >
+            </div>
+            <div class="border p-4 rounded-lg flex justify-between">
+              <div>
+                <p class="font-medium">Grand View Inn</p>
+                <p class="text-sm text-gray-500">02 Sep 2025 – 04 Sep 2025</p>
+              </div>
+              <span
+                class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm"
+                >Pending</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section id="profile" class="content-section hidden">
+          <div class="bg-white p-6 rounded-xl shadow">
+            <h3 class="text-xl font-semibold mb-4">Profile Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="text-gray-500">Full Name</label>
+                <p class="font-medium">John Doe</p>
+              </div>
+              <div>
+                <label class="text-gray-500">Email</label>
+                <p class="font-medium">john@email.com</p>
+              </div>
+              <div>
+                <label class="text-gray-500">Phone</label>
+                <p class="font-medium">+91 98765 43210</p>
+              </div>
+              <div>
+                <label class="text-gray-500">Location</label>
+                <p class="font-medium">Kerala, India</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BOOKINGS -->
+        <section id="bookings" class="content-section hidden">
+          <div class="bg-white p-6 rounded-xl shadow">
+            <h3 class="text-xl font-semibold mb-4">My Bookings</h3>
+            <p class="text-gray-500">All your hotel bookings appear here.</p>
+          </div>
+        </section>
+
+        <!-- WISHLIST -->
+        <section id="wishlist" class="content-section hidden">
+          <div class="bg-white p-6 rounded-xl shadow">
+            <h3 class="text-xl font-semibold mb-4">Wishlist</h3>
+            <p class="text-gray-500">Saved hotels and destinations.</p>
+          </div>
+        </section>
+
+        <!-- PAYMENTS -->
+        <section id="payments" class="content-section hidden">
+          <div class="bg-white p-6 rounded-xl shadow">
+            <h3 class="text-xl font-semibold mb-4">Payment History</h3>
+            <p class="text-gray-500">Your transaction records.</p>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="settings" class="content-section hidden">
+          <div class="bg-white p-6 rounded-xl shadow">
+            <h3 class="text-xl font-semibold mb-4">Account Settings</h3>
+            <p class="text-gray-500">
+              Change password, preferences, and security.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+      const links = document.querySelectorAll(".sidebar-link[data-target]");
+      const sections = document.querySelectorAll(".content-section");
+
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          links.forEach((l) => l.classList.remove("active"));
+          sections.forEach((s) => s.classList.add("hidden"));
+
+          link.classList.add("active");
+          document
+            .getElementById(link.dataset.target)
+            .classList.remove("hidden");
+        });
+      });
+    </script>
+  </body>
+<%- include("footer") %>
