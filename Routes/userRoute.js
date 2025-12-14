@@ -49,4 +49,5 @@ router
 
 router.get("/account", userController.auth, userController.displayUserAccount);
 
+router.get("/search", userController.auth, userController.search);
 module.exports = router;

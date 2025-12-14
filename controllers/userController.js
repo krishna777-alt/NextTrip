@@ -94,6 +94,36 @@ exports.home = async function (req, res) {
   res.render("user/home", { user, popularPlace });
 };
 
+exports.search = async function async(req, res) {
+  try {
+    const user = req.user || false;
+    const query = req.query.q?.trim().toLowerCase();
+    if (!query) return res.redirect("/");
+
+    const hotels = await Hotel.find({
+      isApproved: true,
+      $or: [
+        { place: { $regex: query, $options: "i" } },
+        { state: { $regex: query, $options: "i" } },
+        { name: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    const places = await Places.find({
+      $or: [
+        { place: { $regex: query, $options: "i" } },
+        { state: { $regex: query, $options: "i" } },
+        { title: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    console.log("q:" + query);
+    res.render("user/searchResult", { hotels, places, query, user });
+    // res.status(200).json({ message: "success", query, hotels, places });
+  } catch (err) {
+    res.status(500).json({ message: "faled!", Error: err.message });
+  }
+};
 // exports.testimonials = function (req, res) {};
 
 exports.displayPlaces = async (req, res) => {

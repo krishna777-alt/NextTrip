@@ -1,0 +1,122 @@
+<%- include("navBar")%>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<section class="max-w-7xl mx-auto px-4 py-10">
+  <!-- Search Header -->
+  <div class="mb-10">
+    <h2 class="text-2xl font-bold text-gray-800">
+      Search results for "<span class="text-indigo-600"><%= query %></span>"
+    </h2>
+    <p class="text-gray-500 mt-1">
+      Found <%= hotels.length %> hotels and <%= places.length %> places
+    </p>
+  </div>
+
+  <!-- ================= PLACES GRID ================= -->
+  <% if (places && places.length > 0) { %>
+  <div class="mb-14">
+    <h3 class="text-xl font-semibold text-gray-800 mb-6">📍 Places</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% places.forEach(place => { %>
+      <div
+        class="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-md transition"
+      >
+        <img
+          src="/uploads/places/<%= place.images %>"
+          alt="<%= place.title %>"
+          class="h-52 w-full object-cover"
+        />
+
+        <div class="p-5">
+          <h4 class="text-lg font-semibold capitalize"><%= place.title %></h4>
+
+          <p class="text-sm text-gray-500 mt-1 capitalize">
+            <%= place.state %>
+          </p>
+
+          <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+            <%= place.description %>
+          </p>
+
+          <div class="flex justify-between items-center mt-5">
+            <span class="text-indigo-600 font-semibold">
+              ₹<%= place.price %>
+            </span>
+
+            <a
+              href="/placeDetails/<%= place._id %>"
+              class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+            >
+              View Details
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- ================= HOTELS GRID ================= -->
+  <% if (hotels && hotels.length > 0) { %>
+  <div>
+    <h3 class="text-xl font-semibold text-gray-800 mb-6">🏨 Hotels</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% hotels.forEach(hotel => { %>
+      <div
+        class="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-md transition"
+      >
+        <img
+          src="/uploads/hotels/<%= hotel.image %>"
+          alt="<%= hotel.name %>"
+          class="h-52 w-full object-cover"
+        />
+
+        <div class="p-5">
+          <div class="flex justify-between items-start">
+            <h4 class="text-lg font-semibold"><%= hotel.name %></h4>
+
+            <div class="flex items-center gap-1 text-sm text-amber-500">
+              ★
+              <span class="text-gray-700 font-medium"><%= hotel.rating %></span>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-500 mt-1">
+            <%= hotel.place %>, <%= hotel.state %>
+          </p>
+
+          <p class="text-gray-600 text-sm mt-3 line-clamp-2">
+            <%= hotel.description %>
+          </p>
+
+          <div class="flex justify-between items-center mt-5">
+            <span class="text-indigo-600 font-semibold">
+              ₹<%= hotel.price %> / night
+            </span>
+
+            <a
+              href="/displayHotelDetails/<%= hotel._id %>"
+              class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+            >
+              View Hotel
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- ================= EMPTY STATE ================= -->
+  <% if ((!hotels || hotels.length === 0) && (!places || places.length === 0)) {
+  %>
+  <div class="text-center py-20">
+    <p class="text-gray-500 text-lg">No results found for "<%= query %>"</p>
+  </div>
+  <% } %>
+</section>
+
+<%- include("footer")%>
