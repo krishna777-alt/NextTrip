@@ -1,104 +1,143 @@
-<!-- Mobile Toggle Button -->
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<button
-  id="sidebarToggle"
-  class="md:hidden p-3 m-3 bg-gray-900 text-white rounded-lg"
->
-  ☰
-</button>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Navbar</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  </head>
 
-<!-- Sidebar -->
-<aside
-  id="agentSidebar"
-  class="fixed md:static left-0 top-0 w-64 bg-gray-900 text-white min-h-screen p-5 transform -translate-x-full md:translate-x-0 transition-all duration-300 z-50"
->
-  <h2 class="text-3xl font-bold mb-8 tracking-wide">Manager Panel</h2>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <header class="bg-white shadow sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+          <!-- Left: Logo -->
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-indigo-600 text-xl"></i>
+            <span class="text-xl font-bold text-gray-800">NextTrip</span>
+          </div>
 
-  <nav class="space-y-2">
-    <a
-      href="http://localhost:3000/hotel/"
-      class="nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
-    >
-      <i class="fa-solid fa-chart-line"></i>
-      <span>Dashboard</span>
-    </a>
+          <!-- Center: Nav Links -->
+          <nav
+            class="hidden md:flex items-center gap-8 text-gray-600 font-medium"
+          >
+            <a href="/hotel/" class="hover:text-indigo-600 transition"
+              >ManagerDashboard</a
+            >
+            <a
+              href="/hotel/manageHotel"
+              class="hover:text-indigo-600 transition"
+              >Hotel</a
+            >
+            <a href="/hotel/rooms" class="hover:text-indigo-600 transition"
+              >Room</a
+            >
+            <a href="/packages" class="hover:text-indigo-600 transition"
+              >Packages</a
+            >
+            <a href="/bookings" class="hover:text-indigo-600 transition">
+              Bookings</a
+            >
+            <a href="/bookings" class="hover:text-indigo-600 transition">
+              Earnings</a
+            >
+          </nav>
 
-    <a
-      href="http://localhost:3000/hotel/manageHotel"
-      class="nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
-    >
-      <i class="fa-solid fa-plus-circle"></i>
-      <span>Hotel</span>
-    </a>
+          <!-- Right: User Menu -->
+          <div class="relative">
+            <button
+              id="userMenuBtn"
+              class="flex items-center gap-3 focus:outline-none"
+            >
+              <img
+                src="https://i.pravatar.cc/40"
+                class="w-9 h-9 rounded-full border"
+                alt="User"
+              />
+              <span class="hidden md:block font-medium text-gray-700">
+                John Doe
+              </span>
+              <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+            </button>
 
-    <a
-      href="http://localhost:3000/api/v1/agent/agentPackage"
-      class="nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
-    >
-      <i class="fa-solid fa-suitcase-rolling"></i>
-      <span>My Packages</span>
-    </a>
+            <!-- Dropdown -->
+            <div
+              id="userDropdown"
+              class="hidden absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border overflow-hidden"
+            >
+              <a
+                href="/account"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100"
+              >
+                <i class="fa-solid fa-user"></i> My Account
+              </a>
 
-    <a
-      href="/agent/bookings"
-      class="nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
-    >
-      <i class="fa-solid fa-ticket"></i>
-      <span>Bookings</span>
-    </a>
+              <a
+                href="/wishlist"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100"
+              >
+                <i class="fa-solid fa-heart"></i> Wishlist
+              </a>
 
-    <a
-      href="/agent/earnings"
-      class="nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
-    >
-      <i class="fa-solid fa-wallet"></i>
-      <span>Earnings</span>
-    </a>
+              <a
+                href="/settings"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100"
+              >
+                <i class="fa-solid fa-gear"></i> Settings
+              </a>
 
-    <a
-      href="http://localhost:3000/api/v1/agent/profile"
-      class="nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
-    >
-      <i class="fa-solid fa-user"></i>
-      <span>Profile</span>
-    </a>
-    <% if(manager){%>
-    <a
-      href="http://localhost:3000/hotel/logout"
-      class="block p-3 rounded-lg bg-red-600 hover:bg-red-700 mt-6 text-center"
-    >
-      Logout
-    </a>
-    <%} else{%>
-    <a
-      href="http://localhost:3000/hotel/login"
-      class="block p-3 rounded-lg bg-red-600 hover:bg-red-700 mt-6 text-center"
-    >
-      Login
-    </a>
-    <%}%>
-  </nav>
-</aside>
+              <hr />
 
-<!-- JavaScript -->
-<script>
-  const sidebar = document.getElementById("agentSidebar");
-  const toggleBtn = document.getElementById("sidebarToggle");
+              <a
+                href="/logout"
+                class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50"
+              >
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+              </a>
+            </div>
+          </div>
 
-  toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("-translate-x-full");
-  });
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="md:hidden text-gray-600">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
 
-  // Highlight active page
-  const currentPath = window.location.pathname;
-  document.querySelectorAll(".nav-item").forEach((item) => {
-    if (item.getAttribute("href") === currentPath) {
-      item.classList.add("bg-gray-700");
-    }
-  });
-</script>
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+        <nav class="flex flex-col p-4 space-y-3 text-gray-700">
+          <a href="/" class="hover:text-indigo-600">Home</a>
+          <a href="/hotels" class="hover:text-indigo-600">Hotels</a>
+          <a href="/packages" class="hover:text-indigo-600">Packages</a>
+          <a href="/bookings" class="hover:text-indigo-600">My Bookings</a>
+        </nav>
+      </div>
+    </header>
 
-<!-- FontAwesome Icons -->
-<!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- JS -->
+    <script>
+      const userBtn = document.getElementById("userMenuBtn");
+      const userDropdown = document.getElementById("userDropdown");
+      const mobileBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+      userBtn.addEventListener("click", () => {
+        userDropdown.classList.toggle("hidden");
+      });
+
+      mobileBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!userBtn.contains(e.target)) {
+          userDropdown.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>

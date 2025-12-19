@@ -38,6 +38,12 @@ const placeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    place: {
+      type: String,
+      default: function () {
+        return this.title?.toLowerCase();
+      },
+    },
     state: {
       type: String,
     },

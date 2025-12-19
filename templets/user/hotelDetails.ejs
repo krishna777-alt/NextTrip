@@ -103,10 +103,10 @@
 
           <div class="mt-7 flex gap-4">
             <a
-              href="/hotel/<%= hotel.slug %>/book"
+              href="/hotelRooms/<%= hotel._id %>"
               class="bg-indigo-600 text-white px-6 py-3 rounded-xl shadow hover:bg-indigo-700 fade-card"
             >
-              Book Now
+              Check out rooms
             </a>
 
             <a
@@ -181,108 +181,52 @@
             </iframe>
           </div>
         </div>
-        <%- include("hotelReview", {reviews}) %>
-      </div>
-      <!-- RIGHT SIDE: STICKY BOOKING FORM (FIXED!) -->
-      <div class="lg:col-span-1">
-        <div
-          class="bg-white p-6 rounded-xl shadow-sm border sticky top-10 fade-card h-fit"
-        >
-          <h3 class="text-xl font-semibold mb-5">Book Room</h3>
-
-          <form
-            action="/hotel/<%= hotel.slug %>/book"
-            method="POST"
-            class="space-y-5"
-          >
-            <div>
-              <label class="font-medium">Your Name</label>
-              <input
-                type="text"
-                name="name"
-                required
-                class="w-full p-3 mt-2 border rounded-lg focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label class="font-medium">Phone Number</label>
-              <input
-                type="text"
-                name="phone"
-                required
-                class="w-full p-3 mt-2 border rounded-lg focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label class="font-medium">Check-in Date</label>
-              <input
-                type="date"
-                name="checkIn"
-                class="w-full p-3 mt-2 border rounded-lg"
-              />
-            </div>
-
-            <div>
-              <label class="font-medium">Check-out Date</label>
-              <input
-                type="date"
-                name="checkOut"
-                class="w-full p-3 mt-2 border rounded-lg"
-              />
-            </div>
-
-            <div>
-              <label class="font-medium">Adults</label>
-              <select name="adults" class="w-full p-3 mt-2 border rounded-lg">
-                <% for(let i=1; i<=5; i++){ %>
-                <option><%= i %></option>
-                <% } %>
-              </select>
-            </div>
-
-            <div>
-              <label class="font-medium">Children</label>
-              <select name="children" class="w-full p-3 mt-2 border rounded-lg">
-                <% for(let i=0; i<=5; i++){ %>
-                <option><%= i %></option>
-                <% } %>
-              </select>
-            </div>
-
-            <div>
-              <label class="font-medium">Room Type</label>
-              <select
-                name="roomTypeCode"
-                class="w-full p-3 mt-2 border rounded-lg"
-              >
-                <% room.forEach(rt => { %>
-                <option value="<%= rt.roomTypeCode %>">
-                  <%= rt.roomTypeCode %>
-                </option>
-                <% }) %>
-              </select>
-            </div>
-
-            <div>
-              <label class="font-medium">Number of Rooms</label>
-              <select name="rooms" class="w-full p-3 mt-2 border rounded-lg">
-                <% for(let i=1; i<=5; i++){ %>
-                <option><%= i %></option>
-                <% } %>
-              </select>
-            </div>
-
-            <button
-              class="w-full bg-indigo-600 text-white py-3 rounded-xl shadow hover:bg-indigo-700 text-lg"
-            >
-              Book Now
-            </button>
-          </form>
-        </div>
         
       </div>
-      
+      <!-- RIGHT SIDE: STICKY BOOKING FORM (FIXED!) -->
+     <div class="lg:col-span-1">
+  <div class="sticky top-24 space-y-6">
+
+    <!-- ROOM AVAILABILITY -->
+    <div class="bg-white rounded-xl shadow-sm border p-5">
+      <h3 class="text-base font-semibold mb-4">Room Availability</h3>
+
+      <!-- LEGEND -->
+      <div class="flex gap-4 text-xs text-gray-600 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+          Available
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-gray-900"></span>
+          Booked
+        </div>
+      </div>
+
+      <!-- ROOMS GRID -->
+      <div class="grid grid-cols-6 gap-2 max-h-56 overflow-y-auto pr-1">
+        <% room.forEach(r => { %>
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium
+            <%= r.isBooked
+              ? 'bg-gray-900 text-white cursor-not-allowed opacity-80'
+              : 'bg-blue-500 text-white hover:scale-110 transition cursor-pointer' %>"
+            title="Room <%= r.roomNum %>"
+          >
+            <%= r.roomNum %>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+
+      <!-- SINGLE REVIEW -->
+    
+    </div>
+
+    <%- include("hotelReview", {reviews}) %>
+  </div>
+  </div>
+  
     </div>
  <%- include("footer") %>

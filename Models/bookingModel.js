@@ -28,43 +28,53 @@ const bookingSchema = new mongoose.Schema(
     },
 
     // --- BOOKING DETAILS ---
+    name: {
+      type: String,
+      default: "",
+    },
+    phone: Number,
+
     roomTypeCode: { type: String, required: true }, // The room type booked (e.g., 'KNG_DLX')
     checkInDate: { type: Date, required: true },
     checkOutDate: { type: Date, required: true },
 
     // --- GUEST & OCCUPANCY ---
-    leadGuest: guestSchema,
+    // leadGuest: guestSchema,
     adults: { type: Number, required: true, min: 1 },
     children: { type: Number, default: 0, min: 0 },
 
     // --- PRICE & STATUS ---
-    totalAmount: { type: Number, required: true, min: 0 },
-    currency: { type: String, default: "USD" },
-    status: {
-      type: String,
-      enum: [
-        "CONFIRMED",
-        "PENDING_PAYMENT",
-        "CANCELED",
-        "CHECKED_IN",
-        "CHECKED_OUT",
-      ],
-      default: "PENDING_PAYMENT",
-      required: true,
+    totalAmount: { type: Number, default: 0, min: 0 },
+    currency: { type: String, default: "INR" },
+    roomNum: {
+      type: Number,
+      default: 0,
     },
+    // status: {
+    //   type: String,
+    //   enum: [
+    //     "CONFIRMED",
+    //     "PENDING_PAYMENT",
+    //     "CANCELED",
+    //     "CHECKED_IN",
+    //     "CHECKED_OUT",
+    //   ],
+    //   default: "PENDING_PAYMENT",
+    //   required: true,
+    // },
 
     // --- AUDIT & TIMESTAMPS ---
-    bookingConfirmationCode: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    paymentId: {
-      // Reference to a separate Payment Transaction document
-      type: mongoose.Schema.ObjectId,
-      ref: "Payment",
-      required: false,
-    },
+    // bookingConfirmationCode: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
+    // paymentId: {
+    //   // Reference to a separate Payment Transaction document
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: "Payment",
+    //   required: false,
+    // },
   },
   {
     timestamps: true, // Tracks booking creation time
@@ -72,7 +82,6 @@ const bookingSchema = new mongoose.Schema(
 );
 
 // Payment.js
-const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
@@ -91,13 +100,20 @@ const paymentSchema = new mongoose.Schema(
       index: true,
     },
     // ID from the external payment gateway (e.g., Stripe, PayPal, Adyen)
-    gatewayTransactionId: {
+    guestName: String,
+    email: String,
+    phone: Number,
+    specialRequest: {
       type: String,
-      required: [true, "Transaction ID from the gateway is required."],
-      unique: true,
-      index: true,
+      default: "No specialRequest",
     },
-
+    roomType: String,
+    price: Number,
+    cardName: String,
+    cardNumber: Number,
+    expMonth: Number,
+    expYear: Number,
+    cvc: Number,
     // --- FINANCIAL DETAILS ---
     amount: {
       type: Number,
@@ -107,7 +123,7 @@ const paymentSchema = new mongoose.Schema(
     currency: {
       type: String,
       required: true,
-      default: "USD",
+      default: "INR",
       enum: ["USD", "EUR", "INR", "GBP", "AUD"],
     },
     paymentMethod: {
@@ -120,7 +136,7 @@ const paymentSchema = new mongoose.Schema(
         "Wallet",
         "Other",
       ],
-      required: true,
+      default: "CreditCard",
     },
 
     // --- CARD DATA (Non-PCI Sensitive) ---
@@ -141,7 +157,6 @@ const paymentSchema = new mongoose.Schema(
         "VOIDED",
       ],
       default: "PENDING",
-      required: true,
     },
     gatewayResponseCode: String, // The specific code returned by the payment processor (e.g., 20000)
     gatewayResponseMessage: String, // The message accompanying the response code

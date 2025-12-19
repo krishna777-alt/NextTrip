@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const adminRoute = require("./Routes/adminRoute");
 const hotelRoute = require("./Routes/HotelRoute");
 const userRoute = require("./Routes/userRoute");
+const methodOverride = require("method-override");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
+app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "templets")));
 app.use("/uploads", express.static("uploads"));
 app.use("/images", express.static("images"));

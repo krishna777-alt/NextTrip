@@ -50,4 +50,24 @@ router
 router.get("/account", userController.auth, userController.displayUserAccount);
 
 router.get("/search", userController.auth, userController.search);
+
+router.get("/package", userController.auth, userController.displayPackages);
+
+router.get(
+  "/hotelRooms/displayRooms/:id",
+  userController.auth,
+  userController.displayRoomDetails
+);
+
+router.get(
+  "/hotelRooms/:id",
+  userController.auth,
+  userController.displayCurrentHotelRoomDetails
+);
+// router.get("/booking/:id", userController.auth, userController.getBooking);
+
+router.post("/bookingRoom", userController.auth, userController.createBooking);
+
+router.post("/payment", userController.auth, userController.payment);
+
 module.exports = router;

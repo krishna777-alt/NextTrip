@@ -1,0 +1,223 @@
+<%- include("navBar")%>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<body class="bg-gray-50 text-gray-800">
+  <form
+    action="http://localhost:3000/payment"
+    method="POST"
+    class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10"
+  >
+    <!-- ===== HIDDEN BACKEND DATA ===== -->
+
+    <input type="hidden" name="bookingId" value="<%= booking._id %>" />
+    <input type="hidden" name="roomType" value="<%= hotel.roomTypeCode %>" />
+    <input type="hidden" name="price" value="<%= hotel.price %>" />
+    <input type="hidden" name="nights" value="1" />
+
+    <!-- LEFT SIDE -->
+    <div class="lg:col-span-2 space-y-8">
+      <!-- HOTEL SUMMARY -->
+      <div class="bg-white border rounded-2xl p-6 shadow-sm">
+        <div class="flex gap-5 items-center">
+          <img
+            src="/uploads/hotels/<%= hotel.mainImage %>"
+            class="w-28 h-24 rounded-xl object-cover"
+          />
+
+          <div class="flex-1">
+            <h2 class="text-xl font-semibold"><%= hotel.name %></h2>
+            <p class="text-sm text-gray-500 mt-1">📍 <%= hotel.address %></p>
+            <p class="text-sm text-gray-500 mt-1">
+              ⭐ <%= hotel.rating %> ·
+              <span class="text-indigo-600">Excellent</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROOM DETAILS -->
+      <div class="bg-white border rounded-2xl p-6 shadow-sm">
+        <h3 class="font-semibold text-lg mb-4">Your Room</h3>
+
+        <ul class="space-y-3 text-sm text-gray-700">
+          <li>✔ <strong><%= hotel.roomTypeCode %></strong></li>
+          <li>✔ <%= hotel.bedConfiguration.join(", ") %></li>
+          <li class="text-green-600 font-medium">
+            ✔ Free cancellation till 24 hrs
+          </li>
+          <li class="text-green-600 font-medium">✔ No prepayment needed</li>
+        </ul>
+      </div>
+
+      <!-- PRICE BREAKDOWN -->
+      <div class="bg-white border rounded-2xl p-6 shadow-sm">
+        <h3 class="font-semibold text-lg mb-4">Price Breakdown</h3>
+
+        <div class="space-y-3 text-sm">
+          <div class="flex justify-between">
+            <span>₹<%= hotel.price %> × 1 night</span>
+            <span>₹<%= hotel.price %></span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Taxes & fees</span>
+            <span>₹0</span>
+          </div>
+
+          <hr class="my-2" />
+
+          <div class="flex justify-between font-semibold text-lg">
+            <span>Total</span>
+            <span>₹<%= hotel.price %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GUEST DETAILS -->
+      <div class="bg-white border rounded-2xl p-6 shadow-sm">
+        <h3 class="font-semibold text-lg mb-4">Guest Details</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            name="guestName"
+            required
+            class="border rounded-xl px-4 py-3 text-sm"
+            placeholder="Full Name"
+          />
+
+          <input
+            name="email"
+            type="email"
+            required
+            class="border rounded-xl px-4 py-3 text-sm"
+            placeholder="Email Address"
+          />
+
+          <input
+            name="phone"
+            type="tel"
+            required
+            class="border rounded-xl px-4 py-3 text-sm md:col-span-2"
+            placeholder="Phone Number"
+          />
+
+          <textarea
+            name="specialRequest"
+            rows="3"
+            class="border rounded-xl px-4 py-3 text-sm md:col-span-2"
+            placeholder="Special requests (optional)"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="bg-white border rounded-2xl p-6 shadow-sm">
+        <h3 class="font-semibold text-lg mb-6">Payment Details</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- CARD PREVIEW (VISUAL ONLY) -->
+          <div class="relative">
+            <div
+              class="w-full h-52 rounded-2xl bg-gradient-to-br from-pink-500 to-red-500 text-white p-6 shadow-lg"
+            >
+              <div class="flex justify-between items-start">
+                <span class="text-lg font-semibold">VISA</span>
+                <span class="text-sm">••••</span>
+              </div>
+
+              <div class="mt-10 text-lg tracking-widest">
+                4256 7890 5678 4532
+              </div>
+
+              <div class="flex justify-between mt-8 text-sm">
+                <span>John Smith</span>
+                <span>09/27</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD FORM -->
+          <div class="space-y-4">
+            <input
+              name="cardName"
+              class="border rounded-xl px-4 py-3 w-full text-sm"
+              placeholder="Cardholder Name"
+            />
+
+            <input
+              name="cardNumber"
+              class="border rounded-xl px-4 py-3 w-full text-sm"
+              placeholder="Card Number"
+            />
+
+            <div class="grid grid-cols-3 gap-3">
+              <input
+                name="expMonth"
+                class="border rounded-xl px-4 py-3 text-sm"
+                placeholder="MM"
+              />
+              <input
+                name="expYear"
+                class="border rounded-xl px-4 py-3 text-sm"
+                placeholder="YY"
+              />
+              <input
+                name="cvc"
+                class="border rounded-xl px-4 py-3 text-sm"
+                placeholder="CVC"
+              />
+            </div>
+
+            <p class="text-xs text-gray-500">
+              🔒 Secure payment · PCI DSS compliant
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div>
+      <div
+        class="sticky top-24 bg-white border rounded-2xl p-6 shadow-sm space-y-4"
+      >
+        <div class="flex justify-between text-sm text-gray-600">
+          <span>1 night</span>
+          <span>₹<%= hotel.price %></span>
+        </div>
+
+        <div class="text-2xl font-bold">
+          <input type="hidden" name="amount" value="<%= hotel.price%>" />
+          <span> ₹<%= hotel.price %> </span>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-medium transition"
+        >
+          Confirm & Pay
+        </button>
+
+        <p class="text-xs text-gray-500 text-center">
+          You won’t be charged yet
+        </p>
+      </div>
+    </div>
+  </form>
+
+  <!-- MOBILE CTA -->
+  <div
+    class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-between items-center lg:hidden"
+  >
+    <span class="font-semibold text-lg">₹<%= hotel.price %></span>
+    <button
+      type="submit"
+      form="bookingForm"
+      class="bg-indigo-600 text-white px-6 py-3 rounded-xl"
+    >
+      Book Now
+    </button>
+  </div>
+
+  <%- include("footer") %>
+</body>

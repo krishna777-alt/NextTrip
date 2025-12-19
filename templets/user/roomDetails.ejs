@@ -1,0 +1,273 @@
+<%- include("navBar")%>
+<title>Room Details</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<body class="bg-gray-100">
+  <!-- Page Container -->
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <!-- Header -->
+    <div
+      class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    >
+      <div>
+        <a
+          href="javascript:history.back()"
+          class="text-sm text-gray-500 hover:underline"
+        >
+          ← Back
+        </a>
+
+        <h1 class="text-3xl font-semibold mt-2"><%= room.roomTypeCode %></h1>
+
+        <div class="flex items-center gap-3 mt-1 text-sm text-gray-500">
+          <span>
+            Max <%= room.maxOccupancy %> guests (<%= room.adults %> adults, <%=
+            room.children %> children)
+          </span>
+
+          <% if(room.ac === "AC"){ %>
+          <span
+            class="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs"
+          >
+            AC
+          </span>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- PRICE -->
+      <div class="text-right">
+        <p class="text-sm text-gray-500">Price per night</p>
+        <p class="text-3xl font-bold text-indigo-600">
+          ₹<%= room.price.toLocaleString() %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- LEFT CONTENT -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Image Gallery -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-2 row-span-2">
+            <img
+              src="/uploads/hotels/<%= room.mainImage%>"
+              class="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+          <% room.roomPhotos.forEach((image)=>{%>
+
+          <img
+            src="/uploads/hotels/<%= image%>"
+            class="w-full h-40 object-cover rounded-xl"
+          />
+          <%})%>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-6 border-b pb-3 text-sm font-medium">
+          <span class="text-indigo-600 border-b-2 border-indigo-600 pb-2">
+            Overview
+          </span>
+          <span class="text-gray-500">Rooms</span>
+          <span class="text-gray-500">Amenities</span>
+          <span class="text-gray-500">Policies</span>
+        </div>
+
+        <!-- Overview -->
+        <div class="bg-white rounded-xl p-6 shadow-sm space-y-5">
+          <h2 class="text-xl font-semibold">Property overview</h2>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+            <div class="flex items-center gap-2">✔ Free Wi-Fi</div>
+            <div class="flex items-center gap-2">✔ Air conditioning</div>
+            <div class="flex items-center gap-2">✔ Private bathroom</div>
+            <div class="flex items-center gap-2">✔ Free parking</div>
+            <div class="flex items-center gap-2">✔ 24-hour front desk</div>
+            <div class="flex items-center gap-2">✔ Key card access</div>
+          </div>
+
+          <p class="text-gray-600 leading-relaxed">
+            This spacious luxury room offers modern comfort with premium
+            interiors, soft lighting, and a calm atmosphere. Ideal for couples,
+            families, or business travelers looking for a relaxing stay.
+          </p>
+          <div class="bg-white rounded-xl p-6 shadow-sm">
+            <h2 class="text-xl font-semibold mb-4">Room Details</h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+              <div>
+                <p class="text-gray-500">Room Size</p>
+                <p class="font-medium">
+                  <%= room.sizeSqM ? room.sizeSqM + " m²" : "Not specified" %>
+                </p>
+              </div>
+
+              <div>
+                <p class="text-gray-500">Max Occupancy</p>
+                <p class="font-medium"><%= room.maxOccupancy %> Guests</p>
+              </div>
+
+              <div>
+                <p class="text-gray-500">Air Conditioning</p>
+                <p class="font-medium"><%= room.ac %></p>
+              </div>
+
+              <div>
+                <p class="text-gray-500">Adults</p>
+                <p class="font-medium"><%= room.adults %></p>
+              </div>
+
+              <div>
+                <p class="text-gray-500">Children</p>
+                <p class="font-medium"><%= room.children %></p>
+              </div>
+
+              <div>
+                <p class="text-gray-500">Hotel ID</p>
+                <p class="font-medium truncate"><%= room.hotelID %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: STICKY BOOKING FORM -->
+      <div class="lg:col-span-1">
+        <div
+          class="bg-white p-6 rounded-xl shadow-sm border sticky top-10 h-fit"
+        >
+          <h3 class="text-xl font-semibold mb-5">Book Room</h3>
+
+          <form
+            method="post"
+            action="http://localhost:3000/bookingRoom"
+            class="space-y-5"
+          >
+            <div>
+              <input
+                name="roomID"
+                type="hidden"
+                class="w-full p-3 mt-2 border rounded-lg"
+                value="<%= room._id%>"
+              />
+            </div>
+            <div>
+              <label class="font-medium">Your Name</label>
+              <input
+                name="name"
+                type="text"
+                class="w-full p-3 mt-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Phone Number</label>
+              <input
+                name="phone"
+                type="text"
+                class="w-full p-3 mt-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Check-in Date</label>
+              <input
+                name="checkInDate"
+                type="date"
+                class="w-full p-3 mt-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Check-out Date</label>
+              <input
+                name="checkOutDate"
+                type="date"
+                class="w-full p-3 mt-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label class="font-medium">Adults</label>
+              <select name="adults" class="w-full p-3 mt-2 border rounded-lg">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="font-medium">Children</label>
+              <select name="children" class="w-full p-3 mt-2 border rounded-lg">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="font-medium">Room Type</label>
+              <select
+                name="roomTypeCode"
+                class="w-full p-3 mt-2 border rounded-lg"
+              >
+                <option>KNG_DLX</option>
+                <option>DBL_STD</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="font-medium">Room Number</label>
+              <select name="roomNum" class="w-full p-3 mt-2 border rounded-lg">
+                <% for(let i =1;i< (totalRooms-bookedRooms);i++){%>
+                <option><%= i%></option>
+                <%}%>
+                <!-- <option>2</option>
+                <option>3</option> -->
+              </select>
+            </div>
+
+            <button
+              class="w-full bg-indigo-600 text-white py-3 rounded-xl text-lg hover:bg-indigo-700"
+            >
+              Book Now
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- ROOM AVAILABILITY -->
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold">Room Availability</h2>
+        <span class="text-sm text-gray-500">
+          <%= totalRooms - bookedRooms %> of <%= totalRooms %> rooms available
+        </span>
+      </div>
+
+      <!-- LEGEND -->
+      <div class="flex gap-4 text-sm mb-4">
+        <span> Rooms: <%= room.roomNum %></span>
+        <% if(room.isBooked){%>
+        <div class="flex items-center gap-2">
+          <span class="w-4 h-4 rounded-full bg-gray-900"></span>
+          Unavailable
+        </div>
+        <%}else{%>
+        <div class="flex items-center gap-2">
+          <span class="w-4 h-4 rounded-full bg-blue-500"></span>
+          Available
+        </div>
+
+        <%}%>
+      </div>
+
+      <!-- ROOMS GRID -->
+    </div>
+  </div>
+</body>
+<%- include("footer")%>

@@ -1,0 +1,138 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-semibold mb-6">Add New Room</h1>
+
+  <form
+    action="http://localhost:3000/hotel/rooms/addRoom"
+    method="post"
+    class="bg-white p-6 rounded-xl shadow max-w-3xl"
+    enctype="multipart/form-data"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium mb-1">Room Type Code</label>
+        <input
+          type="text"
+          name="roomTypeCode"
+          class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+          placeholder="KNG_DLX"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Max Occupancy</label>
+        <input
+          type="number"
+          name="maxOccupancy"
+          class="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Adults</label>
+        <input
+          type="number"
+          name="adults"
+          class="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Children</label>
+        <input
+          type="number"
+          name="children"
+          class="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Price</label>
+        <input
+          type="number"
+          name="price"
+          class="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Room Size (sqm)</label>
+        <input
+          type="number"
+          name="sizeSqM"
+          class="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Room Number</label>
+        <input
+          type="number"
+          name="roomNum"
+          class="w-full border rounded-lg px-4 py-2"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">AC / Non AC</label>
+        <select name="ac" class="w-full border rounded-lg px-4 py-2">
+          <option value="AC">AC</option>
+          <option value="Non-AC">Non AC</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Bed Configuration -->
+    <div class="mt-6">
+      <label class="block text-sm font-medium mb-1">Bed Configuration</label>
+      <input
+        type="text"
+        name="bedConfiguration"
+        placeholder="1 King Bed, 1 Sofa Bed"
+        class="w-full border rounded-lg px-4 py-2"
+      />
+      <p class="text-xs text-gray-500 mt-1">Comma separated values</p>
+    </div>
+
+    <!-- Main Image -->
+    <div class="mt-6">
+      <label class="block text-sm font-medium mb-1"> Main Room Image </label>
+      <input
+        type="file"
+        name="roomMainImage"
+        accept="image/*"
+        class="w-full border rounded-lg px-4 py-2 bg-white"
+      />
+      <p class="text-xs text-gray-500 mt-1">
+        This image will be used as the primary display image
+      </p>
+    </div>
+
+    <!-- Gallery Images -->
+    <div class="mt-6">
+      <label class="block text-sm font-medium mb-1"> Gallery Images </label>
+      <input
+        type="file"
+        name="roomGalleryImages"
+        multiple
+        accept="image/*"
+        class="w-full border rounded-lg px-4 py-2 bg-white"
+      />
+      <p class="text-xs text-gray-500 mt-1">You can select multiple images</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-8 flex gap-4">
+      <button
+        type="submit"
+        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+      >
+        Save Room
+      </button>
+      <a
+        href="http://localhost:3000/hotel/rooms"
+        class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+      >
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,246 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Room</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <div class="max-w-6xl mx-auto px-6 py-10">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-semibold text-gray-800">Update Room</h1>
+        <p class="text-gray-500 text-sm mt-1">
+          Modify room details and manage images
+        </p>
+      </div>
+
+      <a
+        href="/hotel/rooms"
+        class="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+      >
+        ← Back
+      </a>
+    </div>
+
+    <!-- Form Card -->
+   
+     <form
+      action="/hotel/rooms/updateRoom/<%= room._id %>?_method=PATCH"
+      method="POST"
+      enctype="multipart/form-data"
+      class="bg-white rounded-2xl shadow p-8"
+    >
+
+      <!-- Images Section -->
+      <div class="mb-10">
+        <h2 class="text-xl font-semibold mb-4">Room Images</h2>
+
+        <!-- Existing Images -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <% if (room.roomPhotos && room.roomPhotos.length > 0) { %>
+            <% room.roomPhotos.forEach(photo => { %>
+                
+              <div class="relative group">
+                <img
+                  src="/uploads/hotels/<%= photo %>"
+                  class="w-full h-40 object-cover rounded-xl border"
+                />
+                <span class="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                  Existing
+                </span>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p class="text-gray-400 col-span-full">
+              No images uploaded yet
+            </p>
+          <% } %>
+        </div>
+
+        <!-- Upload New Images -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              Replace Main Image
+            </label>
+            <input
+              type="file"
+              name="roomMainImage"
+              accept="image/*"
+              class="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              Add Gallery Images
+            </label>
+            <input
+              type="file"
+              name="roomGalleryImages"
+              multiple
+              accept="image/*"
+              class="w-full border rounded-lg px-4 py-2"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            Room Type Code
+          </label>
+          <input
+            type="text"
+            name="roomTypeCode"
+            value="<%= room.roomTypeCode %>"
+            class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            Price / Night (₹)
+          </label>
+          <input
+            type="number"
+            name="price"
+            value="<%= room.price %>"
+            class="w-full border rounded-lg px-4 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            Max Occupancy
+          </label>
+          <input
+            type="number"
+            name="maxOccupancy"
+            value="<%= room.maxOccupancy %>"
+            class="w-full border rounded-lg px-4 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            Room Size (sqm)
+          </label>
+          <input
+            type="number"
+            name="sizeSqM"
+            value="<%= room.sizeSqM %>"
+            class="w-full border rounded-lg px-4 py-2"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            Adults
+          </label>
+          <input
+            type="number"
+            name="adults"
+            value="<%= room.adults %>"
+            class="w-full border rounded-lg px-4 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            Children
+          </label>
+          <input
+            type="number"
+            name="children"
+            value="<%= room.children %>"
+            class="w-full border rounded-lg px-4 py-2"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            AC / Non-AC
+          </label>
+          <select
+            name="ac"
+            class="w-full border rounded-lg px-4 py-2"
+          >
+            <option value="AC" <%= room.ac === 'AC' ? 'selected' : '' %>>AC</option>
+            <option value="Non-AC" <%= room.ac === 'Non-AC' ? 'selected' : '' %>>
+              Non-AC
+            </option>
+            <option value="Executive" <%= room.ac === 'Executive' ? 'selected' : '' %>>
+              Executive
+            </option>
+          </select>
+        </div>
+         <div>
+          <label class="block text-sm font-medium mb-1">
+            Room Number
+          </label>
+          <input
+            type="number"
+            name="roomNum"
+            value="<%= room.roomNum %>"
+            class="w-full border rounded-lg px-4 py-2"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Bed Configuration -->
+      <div class="mt-8">
+        <label class="block text-sm font-medium mb-1">
+          Bed Configuration
+        </label>
+        <input
+          type="text"
+          name="bedConfiguration"
+          value="<%= room.bedConfiguration %>"
+          class="w-full border rounded-lg px-4 py-2"
+          placeholder="1 King Bed, 1 Sofa Bed"
+        />
+        <p class="text-xs text-gray-500 mt-1">
+          Separate values using commas
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-10 flex gap-4">
+        <button
+          type="submit"
+          class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+        >
+          Update Room
+        </button>
+
+        <a
+          href="/hotel/rooms"
+          class="px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        >
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+</body>
+</html>

@@ -1,55 +1,187 @@
-<div class="flex">
-  <!-- Sidebar -->
-  <%- include("nav")%>
-  <!-- paste sidebar here -->
+<%- include("nav")%>
 
-  <!-- Main -->
-  <div class="flex-1 p-6">
-    <h1 class="text-3xl font-semibold mb-6">
-      Welcome, Manager <%= manager.name%>
-    </h1>
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <!-- Top Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h3 class="text-lg">Total Rooms</h3>
-        <p class="text-3xl font-bold mt-2">12</p>
-      </div>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  </head>
 
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h3 class="text-lg">Total Bookings</h3>
-        <p class="text-3xl font-bold mt-2">37</p>
-      </div>
+  <body class="bg-gray-100">
+    <!-- Mobile Toggle -->
+    <button
+      id="sidebarToggle"
+      class="md:hidden fixed top-4 left-4 z-50 p-3 bg-gray-900 text-white rounded-lg"
+    >
+      ☰
+    </button>
 
-      <div class="p-6 bg-white shadow rounded-xl">
-        <h3 class="text-lg">Total Earnings</h3>
-        <p class="text-3xl font-bold mt-2">₹54,200</p>
-      </div>
+    <div class="flex min-h-screen">
+      <!-- SIDEBAR -->
+      <!-- <aside
+        id="sidebar"
+        class="fixed md:static left-0 top-0 w-64 bg-gray-900 text-white min-h-screen p-5 transform -translate-x-full md:translate-x-0 transition-all duration-300 z-40"
+      >
+        <h2 class="text-3xl font-bold mb-10 tracking-wide">Manager Panel</h2>
+
+        <nav class="space-y-2">
+          <button
+            data-section="dashboard"
+            class="nav-item w-full text-left flex items-center gap-3 p-3 rounded-lg bg-gray-700"
+          >
+            <i class="fa-solid fa-chart-line"></i>
+            Dashboard
+          </button>
+
+          <button
+            data-section="hotel"
+            class="nav-item w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+          >
+            <i class="fa-solid fa-hotel"></i>
+            Hotel
+          </button>
+
+          <button
+            data-section="rooms"
+            class="nav-item w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+          >
+            <i class="fa-solid fa-bed"></i>
+            Rooms
+          </button>
+
+          <button
+            data-section="bookings"
+            class="nav-item w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+          >
+            <i class="fa-solid fa-ticket"></i>
+            Bookings
+          </button>
+
+          <button
+            data-section="earnings"
+            class="nav-item w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+          >
+            <i class="fa-solid fa-wallet"></i>
+            Earnings
+          </button>
+
+          <button
+            data-section="profile"
+            class="nav-item w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700"
+          >
+            <i class="fa-solid fa-user"></i>
+            Profile
+          </button>
+
+          <a
+            href="http://localhost:3000/hotel/logout"
+            class="block text-center mt-8 p-3 bg-red-600 rounded-lg hover:bg-red-700"
+          >
+            Logout
+          </a>
+        </nav>
+      </aside> -->
+
+      <!-- MAIN CONTENT -->
+      <main class="flex-1 p-6 md:ml-0">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="content-section">
+          <h1 class="text-3xl font-semibold mb-6">
+            Welcome, Manager <%= manager?.name || "manager" %>
+          </h1>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow">
+              <h3>Total Rooms</h3>
+              <p class="text-3xl font-bold mt-2">12</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow">
+              <h3>Total Bookings</h3>
+              <p class="text-3xl font-bold mt-2">37</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow">
+              <h3>Total Earnings</h3>
+              <p class="text-3xl font-bold mt-2">₹54,200</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- HOTEL -->
+        <section id="hotel" class="content-section hidden">
+          <h2 class="text-2xl font-semibold mb-4">Manage Hotel</h2>
+          <div class="bg-white p-6 rounded-xl shadow">
+            <%- include("manageHotel") %>
+          </div>
+        </section>
+
+        <!-- ROOMS -->
+        <section id="rooms" class="content-section hidden">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-semibold">Rooms</h2>
+            <a
+              href="/hotel/rooms/addRoom"
+              class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            >
+              + Add Room
+            </a>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow">
+            <%- include("rooms") %>
+          </div>
+        </section>
+
+        <!-- BOOKINGS -->
+        <section id="bookings" class="content-section hidden">
+          <h2 class="text-2xl font-semibold mb-4">Bookings</h2>
+          <div class="bg-white p-6 rounded-xl shadow">Booking list here</div>
+        </section>
+
+        <!-- EARNINGS -->
+        <section id="earnings" class="content-section hidden">
+          <h2 class="text-2xl font-semibold mb-4">Earnings</h2>
+          <div class="bg-white p-6 rounded-xl shadow">
+            Earnings analytics here
+          </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section id="profile" class="content-section hidden">
+          <h2 class="text-2xl font-semibold mb-4">Profile</h2>
+          <div class="bg-white p-6 rounded-xl shadow">
+            Manager profile details
+          </div>
+        </section>
+      </main>
     </div>
 
-    <!-- Recent Bookings Table -->
-    <h2 class="text-xl font-semibold mb-3">Recent Bookings</h2>
+    <!-- JAVASCRIPT -->
+    <script>
+      const sidebar = document.getElementById("sidebar");
+      const toggleBtn = document.getElementById("sidebarToggle");
+      const navItems = document.querySelectorAll(".nav-item");
+      const sections = document.querySelectorAll(".content-section");
 
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="p-3 text-left">User</th>
-            <th class="p-3 text-left">Package</th>
-            <th class="p-3 text-left">Date</th>
-            <th class="p-3 text-left">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b">
-            <td class="p-3">Rahul</td>
-            <td class="p-3">Goa Beach Trip</td>
-            <td class="p-3">24 Nov</td>
-            <td class="p-3 text-green-600 font-medium">Confirmed</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+      toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("-translate-x-full");
+      });
+
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          const target = item.dataset.section;
+
+          sections.forEach((sec) => sec.classList.add("hidden"));
+          navItems.forEach((nav) => nav.classList.remove("bg-gray-700"));
+
+          document.getElementById(target).classList.remove("hidden");
+          item.classList.add("bg-gray-700");
+
+          // Close sidebar on mobile
+          sidebar.classList.add("-translate-x-full");
+        });
+      });
+    </script>
+  </body>
+</html>

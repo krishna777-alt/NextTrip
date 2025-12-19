@@ -143,10 +143,30 @@ exports.auth = function (req, res, next) {
 exports.getMangerDashbord = async (req, res) => {
   console.log("m:" + req.manager.id);
   const manager = (await HotelManager.findById(req.manager.id)) || false;
+
+  const managerId = req.manager.id;
+
+  const hotels = await Hotel.find({ managerId });
+  const hotelIds = hotels.map((h) => h._id);
+
+  const rooms = await Room.find({
+    hotelID: { $in: hotelIds },
+  });
+  let totalRooms = hotels.map((e) => e.totalRooms)[0];
   console.log(manager);
-  res.render("hotel/home", { manager });
+  res.render("hotel/home", { manager, totalRooms, rooms });
 };
 
+exports.showHotel = async (req, res) => {
+  const hotel = await Hotel.findOne({ managerId: req.manager.id });
+  console.log("Hotel:", hotel);
+  if (hotel) {
+    const roomType = await Room.findOne({ hotelID: hotel._id });
+    console.log("gallery:", hotel.galleryImages);
+    console.log(roomType);
+    return res.render("hotel/showHotel", { hotel, roomType });
+  }
+};
 exports.getManageHotel = async (req, res) => {
   const hotel = await Hotel.findOne({ managerId: req.manager.id });
   // console.log("manager:" + req.manager.id);
@@ -267,3 +287,146 @@ exports.createHotel = async (req, res) => {
     req.flash("error", "Failed to Create Hotel! Please try again");
   }
 };
+exports.displayRooms = async function (req, res) {
+  const managerId = req.manager.id;
+
+  const hotels = await Hotel.find({ managerId });
+  const hotelIds = hotels.map((h) => h._id);
+
+  const rooms = await Room.find({
+    hotelID: { $in: hotelIds },
+  });
+  let totalRooms = hotels.map((e) => e.totalRooms)[0];
+  console.log("Rooms:", rooms);
+  console.log("Hotels:", totalRooms);
+  res.render("hotel/rooms", { rooms, totalRooms });
+};
+
+exports.displayAddRoom = (req, res) => {
+  res.render("hotel/addRoom");
+};
+
+const storage2 = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "..", "uploads", "hotels"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const fileFilter2 = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) cb(null, true);
+  else cb(new Error("Only images allowed"), false);
+};
+
+const upload2 = multer({ storage: storage2, fileFilter: fileFilter2 });
+exports.uploadRoomImage = upload2.fields([
+  { name: "roomMainImage", maxCount: 1 },
+  { name: "roomGalleryImages", maxCount: 10 },
+]);
+exports.createAddRoom = async (req, res) => {
+  try {
+    const {
+      roomTypeCode,
+      maxOccupancy,
+      adults,
+      children,
+      sizeSqM,
+      roomNum,
+      ac,
+      bedConfiguration,
+    } = req.body;
+
+    const roomImage = req.files?.roomMainImage?.[0]?.filename;
+    const galleryImages = req.files?.roomGalleryImages?.map((f) => f.filename);
+
+    const bedConfigArray = bedConfiguration?.split(",").map((b) => b.trim());
+    const managerId = req.manager.id;
+    const hotel = await Hotel.findOne({ managerId });
+    const hotelID = hotel._id;
+
+    const rooms = new Room({
+      roomTypeCode,
+      maxOccupancy,
+      sizeSqM,
+      adults,
+      children,
+      ac,
+      roomNum,
+      roomPhotos: roomImage,
+      galleryImages,
+      hotelID,
+      bedConfiguration: bedConfigArray,
+    });
+    await rooms.save();
+    // res.status(201).render("hotel/home", { rooms });
+    res.redirect("http://localhost:3000/hotel/rooms");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.displayUpdateRoom = async (req, res) => {
+  try {
+    // const managerId = req.manager.id;
+    const roomId = req.params.id;
+
+    const room = await Room.findById(roomId);
+
+    if (!room) {
+      return res.status(404).send("Room not found");
+    }
+    // console.log("HotelRooms:", room);
+    res.render("hotel/updateRoom", { room });
+  } catch (err) {
+    res.status(500).json({ ERR_Message: err.message });
+  }
+};
+
+exports.roomUpdate = async (req, res) => {
+  try {
+    const roomId = req.params.id;
+
+    const roomImage = req.files?.roomMainImage?.[0]?.filename;
+    const galleryImages = req.files?.roomGalleryImages?.map((f) => f.filename);
+
+    const updatedData = {
+      roomTypeCode: req.body.roomTypeCode,
+      price: req.body.price,
+      maxOccupancy: req.body.maxOccupancy,
+      sizeSqM: req.body.sizeSqM,
+      adults: req.body.adults,
+      children: req.body.children,
+      ac: req.body.ac,
+      roomNum: req.body.roomNum,
+      mainImage: roomImage,
+      roomPhotos: galleryImages,
+      bedConfiguration: req.body.bedConfiguration
+        ?.split(",")
+        .map((b) => b.trim()),
+    };
+
+    // console.log("Files:", roomImage, galleryImages);
+    // if (req.files?.galleryImages) {
+    //   updatedData.roomPhotos = req.files.galleryImages.map(f => f.filename);
+    // }
+
+    await Room.findByIdAndUpdate(roomId, updatedData, { new: true });
+
+    res.redirect("/hotel/rooms");
+  } catch (err) {
+    res.status(500).json({ ERR: err.message });
+  }
+};
+
+// exports.roomUpdate = (req, res) => {
+//   try {
+//     const roomId = req.params.id;
+//     console.log("roomId:", roomId);
+//     res.status(201).json({ message: "success", roomId });
+//   } catch (err) {
+//     res.status(500).json({ ERR: err.message });
+//   }
+// };

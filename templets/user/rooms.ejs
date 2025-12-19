@@ -1,0 +1,122 @@
+<%- include("navBar")%>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Container -->
+    <div class="max-w-7xl mx-auto px-6 py-12">
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between mb-8">
+        <p class="text-sm text-gray-500">Items 1 to 6 of 6 items</p>
+
+        <div class="flex items-center gap-4 text-sm">
+          <div>
+            Show
+            <select class="border rounded px-2 py-1">
+              <option>6</option>
+              <option>12</option>
+            </select>
+            per page
+          </div>
+
+          <div>
+            Sort by:
+            <select class="border rounded px-2 py-1">
+              <option>Featured</option>
+              <option>Price</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rooms Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Card -->
+        <% rooms.forEach((room, index) => { 
+   const availableRooms = room.availableRooms || 5; // fallback
+%>
+
+<div
+  class="bg-white shadow-sm rounded-xl overflow-hidden group hover:shadow-lg transition duration-300"
+>
+  <!-- IMAGE AREA -->
+  <div class="relative overflow-hidden">
+    
+    <!-- ROOM NUMBER -->
+    <div
+      class="absolute top-3 left-3 bg-black/80 text-white text-xs font-semibold
+             px-3 py-1 rounded-full backdrop-blur z-10"
+    >
+      Room <%= room.roomNum %>
+    </div>
+
+    <!-- AVAILABILITY BADGE -->
+    <div
+      class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold z-10
+      <%= availableRooms > 0 
+          ? 'bg-blue-600 text-white' 
+          : 'bg-gray-800 text-gray-300' %>"
+    >
+      <%= availableRooms > 0 ? 'Available' : 'Booked' %>
+    </div>
+
+    <!-- FLOATING PRICE -->
+    <div
+      class="absolute bottom-3 left-3 bg-white text-gray-900 text-sm font-semibold
+             px-4 py-2 rounded-full shadow z-10"
+    >
+      ₹ <%= room.price %> / night
+    </div>
+
+    <!-- IMAGE -->
+    <img
+      src="/uploads/hotels/<%= room.mainImage %>"
+      class="w-full h-56 object-cover group-hover:scale-105 transition duration-500"
+    />
+  </div>
+
+  <!-- CONTENT -->
+  <div class="p-6 text-center">
+    
+    <h3 class="text-lg font-semibold mb-1">
+      <%= room.roomTypeCode %>
+    </h3>
+
+    <!-- ICON ROW -->
+    <div class="flex justify-center gap-4 text-sm text-gray-500 mb-3">
+      <span>🛏 <%= room.bedConfiguration?.[0] || 'Comfort Bed' %></span>
+      <span>❄ <%= room.ac %></span>
+      <span>👥 <%= room.maxOccupancy %> Guests</span>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <p class="text-sm text-gray-500 leading-relaxed mb-4">
+      <%= room.description || 'Modern room with premium comfort, ideal for a relaxing stay.' %>
+    </p>
+
+    <!-- URGENCY -->
+    <% if (availableRooms > 0 && availableRooms <= 3) { %>
+      <p class="text-sm text-red-600 font-medium mb-3">
+        Only <%= availableRooms %> rooms left
+      </p>
+    <% } %>
+
+    <!-- CTA -->
+    <a
+      href="/hotelRooms/displayRooms/<%= room._id %>"
+      class="inline-block w-full px-6 py-3 bg-indigo-600 text-white text-sm rounded-lg
+             hover:bg-indigo-700 transition"
+    >
+      View Details
+    </a>
+  </div>
+</div>
+
+<% }) %>
+
+       
+      </div>
+    </div>
+  </body>
+<%- include("footer")%>

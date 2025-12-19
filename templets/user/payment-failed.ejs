@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Failed</title>
+
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        overflow: hidden;
+      }
+
+      .container {
+        text-align: center;
+        position: relative;
+      }
+
+      /* ---------- PROCESSING ---------- */
+      .spinner {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 6px solid #f3f4f6;
+        border-top-color: #ef4444;
+        animation: spin 1s linear infinite;
+        margin: auto;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .processing-text {
+        margin-top: 24px;
+        font-size: 16px;
+        color: #374151;
+      }
+
+      /* ---------- FAILED ---------- */
+      .failed {
+        display: none;
+        animation: shake 0.35s ease;
+      }
+
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-6px);
+        }
+        50% {
+          transform: translateX(6px);
+        }
+        75% {
+          transform: translateX(-4px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      .failed-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #ef4444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        animation: pop 0.35s ease-out;
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      svg {
+        width: 56px;
+        height: 56px;
+      }
+
+      .cross {
+        fill: none;
+        stroke: white;
+        stroke-width: 6;
+        stroke-linecap: round;
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+        animation: drawCross 0.4s ease-out forwards;
+      }
+
+      @keyframes drawCross {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      .title {
+        margin-top: 24px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      .sub-text {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #6b7280;
+        max-width: 280px;
+        margin-inline: auto;
+      }
+
+      .actions {
+        margin-top: 28px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+      }
+
+      .retry {
+        background: #ef4444;
+        color: white;
+      }
+
+      .cancel {
+        background: #f3f4f6;
+        color: #374151;
+      }
+
+      .retry:hover {
+        background: #dc2626;
+      }
+
+      .cancel:hover {
+        background: #e5e7eb;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- PROCESSING -->
+      <div id="processing">
+        <div class="spinner"></div>
+        <div class="processing-text">Processing payment…</div>
+      </div>
+
+      <!-- FAILED -->
+      <div id="failed" class="failed">
+        <div class="failed-circle">
+          <svg viewBox="0 0 52 52">
+            <path class="cross" d="M16 16 L36 36" />
+            <path class="cross" d="M36 16 L16 36" />
+          </svg>
+        </div>
+
+        <div class="title">Payment Failed</div>
+        <div class="sub-text">
+          We couldn’t complete your payment.<br />
+          Please try again or use a different method. ERR:<%= err%>
+        </div>
+
+        <div class="actions">
+          <button class="btn retry" onclick="retry()">Retry</button>
+          <button class="btn cancel" onclick="cancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      setTimeout(() => {
+        document.getElementById("processing").style.display = "none";
+        document.getElementById("failed").style.display = "block";
+      }, 2200);
+
+      function retry() {
+        window.location.href = "/payment";
+      }
+
+      function cancel() {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

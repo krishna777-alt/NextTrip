@@ -19,10 +19,12 @@ router
 router.get(
   "/",
   hotelController.auth,
-  //   agentController.isAgent,
   hotelController.getMangerDashbord
+  // hotelController.auth,
+  // hotelController.getManageHotel
 );
 
+// router.get("/").get(hotelController.auth, hotelController.getManageHotel);
 router
   .route("/manageHotel")
   .get(hotelController.auth, hotelController.getManageHotel)
@@ -31,6 +33,22 @@ router
     hotelController.uploadHotelImage,
     hotelController.createHotel
   );
+
+router.get("/rooms", hotelController.auth, hotelController.displayRooms);
+router
+  .route("/rooms/addRoom")
+  .get(hotelController.auth, hotelController.displayAddRoom)
+  .post(
+    hotelController.auth,
+    hotelController.uploadRoomImage,
+    hotelController.createAddRoom
+  );
+router
+  .route("/rooms/updateRoom/:id")
+  .get(hotelController.auth, hotelController.displayUpdateRoom)
+  .patch(hotelController.uploadRoomImage, hotelController.roomUpdate);
+
+router.get("/showHotel", hotelController.auth, hotelController.showHotel);
 
 // router.get("/show", hotelController.showHotel);
 // router

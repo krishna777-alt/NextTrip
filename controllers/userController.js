@@ -9,6 +9,8 @@ const Contact = require("./../Models/contactModel");
 const HotelReview = require("./../Models/hotelReviewModel");
 const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const { Places, GalleryImage } = require("../Models/placeModel");
+const { Booking, Payment } = require("./../Models/bookingModel");
+const { json } = require("stream/consumers");
 
 exports.displayLogin = async (req, res) => {
   res.render("user/login");
@@ -106,6 +108,7 @@ exports.search = async function async(req, res) {
         { place: { $regex: query, $options: "i" } },
         { state: { $regex: query, $options: "i" } },
         { name: { $regex: query, $options: "i" } },
+        { address: { $regex: query, $options: "i" } },
       ],
     });
 
@@ -209,7 +212,7 @@ exports.displayHotelDetails = async (req, res) => {
     const facilityDoc = await HotelFacility.findOne({ hotelId: hotelID });
     const room = await Room.find({ hotelID });
     const facilities = facilityDoc ? facilityDoc.facilities : [];
-
+    console.log("Hotel Details:", room);
     const reviews = await HotelReview.find({ hotelID }).populate(
       "userID",
       "name avatar"
@@ -244,7 +247,134 @@ exports.createHotelReview = async (req, res) => {
 
 exports.displayUserAccount = async (req, res) => {
   const userID = req.user.id;
-  const user = await User.findById({ _id: userID });
-  // console.log("USER:" + user);
+  console.log(userID);
+  const user = (await User.findById(userID)) || false;
+  console.log("USER:" + user);
   res.render("user/account", { user });
 };
+exports.displayPackages = function (req, res) {
+  const user = req.user;
+  res.render("user/packages", { user });
+};
+
+exports.displayRoomDetails = async (req, res) => {
+  // const managerId = req.manager.id;
+
+  // const hotels = await Hotel.find({ managerId });
+  // const hotelIds = hotels.map((h) => h._id);
+
+  // const room = await Room.find({
+  //   hotelID: { $in: hotelIds },
+  // });
+  const roomID = req.params.id;
+  const room = await Room.findById(roomID);
+  const user = req.user;
+  const totalRooms = 100;
+  const bookedRooms = 90;
+  console.log("Room detrails:", room);
+  res.render("user/roomDetails", { user, room, totalRooms, bookedRooms });
+};
+exports.displayCurrentHotelRoomDetails = async (req, res) => {
+  const hotelID = req.params.id;
+  const user = req.user;
+
+  const rooms = await Room.find({ hotelID });
+  // console.log("HotelID:", hotelID);
+  // console.log("Rooms of this Hotel:", rooms);
+  res.render("user/rooms", { user, rooms });
+};
+
+exports.createBooking = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = req.user;
+    const hotel = await Room.findById(req.body.roomID).populate("hotelID");
+
+    const {
+      name,
+      phone,
+      checkInDate,
+      checkOutDate,
+      adults,
+      children,
+      roomTypeCode,
+      roomNum,
+    } = req.body;
+    const booking = new Booking({
+      name,
+      phone,
+      checkInDate,
+      checkOutDate,
+      adults,
+      children,
+      roomTypeCode,
+      roomNum,
+      userId,
+      hotelId: hotel.hotelID._id,
+    });
+    await booking.save();
+    console.log("Booking:", booking._id);
+    res.status(201).render("user/booking", { user, hotel, booking });
+    // res.status(201).json({ booking });
+  } catch (err) {
+    res.status(500).json({ message: "Booking Failed!", ERROR: err.message });
+  }
+};
+
+exports.payment = async (req, res) => {
+  try {
+    console.log("user:", req.user.id);
+    const {
+      bookingId,
+      roomType,
+      price,
+      guestName,
+      email,
+      phone,
+      specialRequest,
+      cardName,
+      cardNumber,
+      expMonth,
+      expYear,
+      cvc,
+      amount,
+    } = req.body;
+
+    const payment = new Payment({
+      bookingId,
+      userId: req.user.id,
+      guestName,
+      email,
+      phone,
+      specialRequest,
+      roomType,
+      price,
+      cardName,
+      cardNumber,
+      expMonth,
+      expYear,
+      cvc,
+      amount,
+    });
+
+    if (await payment.save()) {
+      res.status(201).render("user/payment-success");
+    } else {
+      const err = "Server Error!Please try again later";
+      res.status(501).render("user/payment-failed", { err });
+    }
+
+    // console.log("paymetn:", d);
+    // res.status(201).json({ message: "success", payment });
+  } catch (err) {
+    res.status(501).render("user/payment-failed", { err });
+  }
+};
+
+// exports.getBooking = async (req, res) => {
+//   const roomID = req.params.id;
+//   const user = req.user.id;
+//   const hotel = await Room.findById(roomID).populate("hotelID");
+//   // console.log("Both:", hotel);
+//   res.render("user/booking", { hotel, user });
+// };

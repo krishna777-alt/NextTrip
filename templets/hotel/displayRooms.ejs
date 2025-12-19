@@ -1,0 +1,138 @@
+<%- include("nav")%>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Room Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-semibold text-gray-800">Room Details</h1>
+
+        <a
+          href="/hotel/rooms"
+          class="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        >
+          ← Back to Rooms
+        </a>
+      </div>
+
+      <!-- Main Card -->
+      <div class="bg-white rounded-2xl shadow overflow-hidden">
+        <!-- Image Gallery -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <% room.roomPhotos.forEach(p=>{%>
+          <img
+            src="/uploads/hotels/<%= p %>"
+            alt="Room Image"
+            class="w-full h-64 object-cover"
+          />
+          <%})%>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8">
+          <!-- Title + AC Badge -->
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">
+              <%= room.roomTypeCode %>
+            </h2>
+
+            <span
+              class="px-4 py-1 rounded-full text-sm font-medium <%= room.ac === 'AC' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700' %>"
+            >
+              <%= room.ac %>
+            </span>
+          </div>
+
+          <!-- Price -->
+          <p class="text-xl font-semibold text-indigo-600 mb-6">
+            ₹<%= room.price %> / night
+          </p>
+
+          <!-- Info Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-users text-gray-500"></i>
+              <span>
+                Max Occupancy:
+                <strong><%= room.maxOccupancy %> Guests</strong>
+              </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-person text-gray-500"></i>
+              <span>
+                Adults:
+                <strong><%= room.adults %></strong>, Children:
+                <strong><%= room.children %></strong>
+              </span>
+            </div>
+
+            <% if (room.sizeSqM) { %>
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-ruler-combined text-gray-500"></i>
+              <span>
+                Room Size:
+                <strong><%= room.sizeSqM %> sqm</strong>
+              </span>
+            </div>
+            <% } %> <% if (room.hotelID) { %>
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-hotel text-gray-500"></i>
+              <span>
+                Assigned Hotel:
+                <strong><%= room.hotelID.name || 'Hotel' %></strong>
+              </span>
+            </div>
+            <% } %>
+          </div>
+
+          <!-- Bed Configuration -->
+          <div class="mt-8">
+            <h3 class="text-lg font-semibold mb-3">Bed Configuration</h3>
+
+            <% if (room.length > 0) { %>
+            <div class="flex flex-wrap gap-2">
+              <% room.forEach(bed => { %>
+              <span
+                class="px-4 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+              >
+                <%= bed.bedConfiguration %>
+              </span>
+              <% }) %>
+            </div>
+            <% } else { %>
+            <p class="text-gray-500 text-sm">No bed details provided</p>
+            <% } %>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-10 flex gap-4">
+            <a
+              href="/hotel/rooms/updateRoom/<%= room._id %>"
+              class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+            >
+              Edit Room
+            </a>
+
+            <a
+              href="/hotel/rooms"
+              class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+            >
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

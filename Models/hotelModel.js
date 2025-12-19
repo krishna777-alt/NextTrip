@@ -93,12 +93,35 @@ const roomTypeSchema = new mongoose.Schema({
     type: String,
     default: "AC",
   },
+  roomNum: {
+    type: Number,
+    default: 0,
+  },
+  price: {
+    type: Number,
+    default: 5000,
+  },
   hotelID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Hotel",
     default: null,
   },
-  bedConfiguration: [String], // e.g., ['1 King Bed', '1 Sofa Bed']
+  bedConfiguration: {
+    type: [String],
+    default: [],
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+  isBooked: {
+    type: Boolean,
+    default: false,
+  },
+  mainImage: {
+    type: String,
+    default: "",
+  }, // e.g., ['1 King Bed', '1 Sofa Bed']
   // description: String, // Room-specific description
   roomPhotos: [String],
 });
