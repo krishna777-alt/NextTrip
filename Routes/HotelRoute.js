@@ -50,6 +50,16 @@ router
 
 router.get("/showHotel", hotelController.auth, hotelController.showHotel);
 
+router.post(
+  "/updateHotel/:id",
+  hotelController.uploadHotelImage,
+  hotelController.updateHotelData
+);
+router.get(
+  "/manageBookings",
+  hotelController.auth,
+  hotelController.displayManageBooking
+);
 // router.get("/show", hotelController.showHotel);
 // router
 //   .route("/agentPackage")

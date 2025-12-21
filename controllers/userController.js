@@ -10,7 +10,7 @@ const HotelReview = require("./../Models/hotelReviewModel");
 const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const { Places, GalleryImage } = require("../Models/placeModel");
 const { Booking, Payment } = require("./../Models/bookingModel");
-const { json } = require("stream/consumers");
+// const { json } = require("stream/consumers");
 
 exports.displayLogin = async (req, res) => {
   res.render("user/login");
@@ -19,17 +19,25 @@ exports.displaySignup = async (req, res) => {
   res.render("user/signup");
 };
 
-exports.auth = (req, res, next) => {
+exports.auth = async (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
     // return res.render("user/login");
     // return res.redirect("http://localhost:3000/login");
     req.user = null;
+    // console.log("Auth User:", req.user);
     return next();
   }
   // return res.status(401).json({ message: "You are not logged in!" });
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const findedUser = await User.findById(decode.id);
+    if (findedUser === null) {
+      req.user = null;
+      // console.log("Auth User:", req.user);
+      return next();
+    }
+    // console.log("decoded Token:", decode);
     req.user = decode;
     next();
   } catch (err) {
@@ -61,6 +69,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: process.env.JWT_TOKEN_EXPRIES }
     );
+    // console.log("user Token:", token);
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: false,
@@ -288,7 +297,8 @@ exports.createBooking = async (req, res) => {
   try {
     const userId = req.user.id;
     const user = req.user;
-    const hotel = await Room.findById(req.body.roomID).populate("hotelID");
+    const roomID = req.body.roomID;
+    const hotel = await Room.findById(roomID).populate("hotelID");
 
     const {
       name,
@@ -313,8 +323,8 @@ exports.createBooking = async (req, res) => {
       hotelId: hotel.hotelID._id,
     });
     await booking.save();
-    console.log("Booking:", booking._id);
-    res.status(201).render("user/booking", { user, hotel, booking });
+    console.log("Booking:", roomID);
+    res.status(201).render("user/booking", { roomID, user, hotel, booking });
     // res.status(201).json({ booking });
   } catch (err) {
     res.status(500).json({ message: "Booking Failed!", ERROR: err.message });
@@ -326,6 +336,7 @@ exports.payment = async (req, res) => {
     console.log("user:", req.user.id);
     const {
       bookingId,
+      roomID,
       roomType,
       price,
       guestName,
@@ -343,6 +354,7 @@ exports.payment = async (req, res) => {
     const payment = new Payment({
       bookingId,
       userId: req.user.id,
+      roomId: roomID,
       guestName,
       email,
       phone,
@@ -358,6 +370,7 @@ exports.payment = async (req, res) => {
     });
 
     if (await payment.save()) {
+      await Room.findByIdAndUpdate(roomID, { isBooked: true }, { new: true });
       res.status(201).render("user/payment-success");
     } else {
       const err = "Server Error!Please try again later";
@@ -370,7 +383,92 @@ exports.payment = async (req, res) => {
     res.status(501).render("user/payment-failed", { err });
   }
 };
+exports.aiChatBot = async (req, res) => {
+  try {
+    const msg = req.body.message.toLowerCase().trim();
 
+    /* ---------- GREETING ---------- */
+    if (/\b(hi|hello|hey)\b/.test(msg)) {
+      return res.json({
+        reply:
+          "👋 Hi! You can ask like:\n• Hotels in Goa\n• Munnar\n• Kerala hotels",
+      });
+    }
+
+    // Clean message
+    const cleanMsg = msg.replace(/[^\w\s]/gi, "");
+    const words = cleanMsg.split(" ");
+
+    let place = null;
+
+    /* ---------- DETECT PLACE ---------- */
+    if (cleanMsg.includes("hotel")) {
+      // hotels in munnar / munnar hotels
+      place = words[words.length - 1];
+    } else if (words.length === 1) {
+      // user typed only place name: "kerala"
+      place = words[0];
+    }
+
+    /* ---------- SEARCH HOTELS ---------- */
+    if (place) {
+      const hotels = await Hotel.find({
+        place: new RegExp(`^${place}$`, "i"),
+        isApproved: true,
+      }).limit(3);
+
+      if (hotels.length === 0) {
+        return res.json({
+          reply: `😔 No hotels found in ${place}`,
+        });
+      }
+
+      let text = `🏨 Hotels in ${place.toUpperCase()}:\n\n`;
+
+      hotels.forEach((h) => {
+        text += `• ${h.name} – ₹${h.price}/night\n`;
+      });
+
+      return res.json({ reply: text });
+    }
+    if (msg.includes("find hotels")) {
+      return res.json({
+        reply: "🏨 Sure! Try typing: Hotels in Goa / Manali / Munnar",
+      });
+    }
+
+    if (msg.includes("popular places")) {
+      return res.json({
+        reply: "📍 Popular destinations: Goa, Manali, Munnar, Ooty, Jaipur",
+      });
+    }
+
+    if (msg.includes("how booking works")) {
+      return res.json({
+        reply:
+          "📖 Booking is simple:\n1️⃣ Choose hotel\n2️⃣ Select dates\n3️⃣ Click Book\n4️⃣ Pay & confirm",
+      });
+    }
+
+    if (msg.includes("contact support")) {
+      return res.json({
+        reply: "☎️ Contact us at support@yourtravel.com",
+      });
+    }
+    /* ---------- DEFAULT ---------- */
+    return res.json({
+      reply:
+        "🤔 Try something like:\n• Hotels in Goa\n• Munnar\n• Kerala hotels",
+    });
+  } catch (err) {
+    console.error("AI Bot Error:", err);
+    return res.status(500).json({
+      reply: "⚠️ Something went wrong. Please try again.",
+    });
+  }
+};
+
+// router.post("/", async (req, res) => {});
 // exports.getBooking = async (req, res) => {
 //   const roomID = req.params.id;
 //   const user = req.user.id;

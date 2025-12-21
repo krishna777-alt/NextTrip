@@ -1,0 +1,39 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div
+  class="flex flex-col items-center justify-center py-24 bg-white rounded-2xl border shadow-sm"
+>
+  <!-- ICON -->
+  <div
+    class="w-20 h-20 flex items-center justify-center rounded-full bg-indigo-50 mb-6"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-10 h-10 text-indigo-600"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M8 7V3m8 4V3M3 11h18M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+      />
+    </svg>
+  </div>
+
+  <!-- TEXT -->
+  <h3 class="text-xl font-semibold text-gray-800 mb-2">No bookings yet</h3>
+  <p class="text-gray-500 text-sm max-w-md text-center mb-6">
+    Your hotel hasn’t received any bookings so far. Once guests start reserving
+    rooms, all booking details will appear here.
+  </p>
+
+  <!-- CTA (Optional) -->
+  <a
+    href="/admin/rooms"
+    class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition shadow-sm"
+  >
+    Manage Rooms
+  </a>
+</div>

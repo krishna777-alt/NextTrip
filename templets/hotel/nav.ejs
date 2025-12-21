@@ -37,17 +37,23 @@
             <a href="/packages" class="hover:text-indigo-600 transition"
               >Packages</a
             >
-            <a href="/bookings" class="hover:text-indigo-600 transition">
+            <a
+              href="/hotel/manageBookings"
+              class="hover:text-indigo-600 transition"
+            >
               Bookings</a
             >
             <a href="/bookings" class="hover:text-indigo-600 transition">
               Earnings</a
             >
+            <a href="/hotel/logout" class="hover:text-indigo-600 transition">
+              logout</a
+            >
           </nav>
 
           <!-- Right: User Menu -->
           <div class="relative">
-            <button
+            <!-- <button
               id="userMenuBtn"
               class="flex items-center gap-3 focus:outline-none"
             >
@@ -60,10 +66,10 @@
                 John Doe
               </span>
               <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
-            </button>
+            </button> -->
 
             <!-- Dropdown -->
-            <div
+            <!-- <div
               id="userDropdown"
               class="hidden absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border overflow-hidden"
             >
@@ -91,12 +97,12 @@
               <hr />
 
               <a
-                href="/logout"
+                href="http://localhost:3000/hotel/logout"
                 class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50"
               >
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
               </a>
-            </div>
+            </div> -->
           </div>
 
           <!-- Mobile Menu Button -->
@@ -112,7 +118,9 @@
           <a href="/" class="hover:text-indigo-600">Home</a>
           <a href="/hotels" class="hover:text-indigo-600">Hotels</a>
           <a href="/packages" class="hover:text-indigo-600">Packages</a>
-          <a href="/bookings" class="hover:text-indigo-600">My Bookings</a>
+          <a href="/manageBookings" class="hover:text-indigo-600"
+            >My Bookings</a
+          >
         </nav>
       </div>
     </header>

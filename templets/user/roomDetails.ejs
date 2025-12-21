@@ -230,12 +230,43 @@
                 <option>3</option> -->
               </select>
             </div>
+            <%if(!user){%>
+            <a
+              href="http://localhost:3000/login"
+              class="group relative w-full inline-flex items-center justify-center gap-2 bg-black text-white py-3 rounded-xl text-lg font-semibold shadow-lg shadow-black/20 transition-all duration-300 hover:shadow-xl hover:-translate-y-[1px] active:scale-[0.98]"
+            >
+              <!-- Lock Icon -->
+              <svg
+                class="w-5 h-5 opacity-90"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 11c1.657 0 3 1.343 3 3v3H9v-3c0-1.657 1.343-3 3-3zm6 0V8a6 6 0 10-12 0v3"
+                />
+              </svg>
 
+              Login to Continue
+            </a>
+
+            <%}else{%> <% if(!room.isBooked){%>
             <button
               class="w-full bg-indigo-600 text-white py-3 rounded-xl text-lg hover:bg-indigo-700"
             >
               Book Now
             </button>
+            <%} else{%>
+            <button
+              class="w-full bg-black text-white py-3 rounded-xl text-lg font-medium opacity-95 shadow-inner cursor-not-allowed"
+              disabled
+            >
+              Reserved
+            </button>
+            <%}%> <%}%>
           </form>
         </div>
       </div>

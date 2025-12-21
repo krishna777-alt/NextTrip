@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 
 const Package = require("../Models/packageModel");
-const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const HotelManager = require("../Models/hotelManagerModel");
-
+const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
+const { Payment, Booking } = require("./../Models/bookingModel");
 // exports.auth = (req,res,next)=>{
 
 // }
@@ -287,6 +287,63 @@ exports.createHotel = async (req, res) => {
     req.flash("error", "Failed to Create Hotel! Please try again");
   }
 };
+
+// exports.getUpdateHotelData = (req, res) => {};
+exports.updateHotelData = async (req, res) => {
+  try {
+    const hotelID = req.params.id;
+
+    // Fetch existing hotel first
+    const hotel = await Hotel.findById(hotelID);
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+
+    /* ---------- FILE HANDLING ---------- */
+
+    // Main image (replace only if new uploaded)
+    if (req.files?.image?.length > 0) {
+      hotel.image = req.files.image[0].filename;
+    }
+
+    // Gallery images (append new ones)
+    if (req.files?.galleryImages?.length > 0) {
+      const newGalleryImages = req.files.galleryImages.map(
+        (file) => file.filename
+      );
+      hotel.galleryImages.push(...newGalleryImages);
+    }
+
+    /* ---------- TEXT / FORM DATA ---------- */
+
+    hotel.name = req.body.name;
+    hotel.slug = req.body.slug;
+    hotel.state = req.body.state;
+    hotel.place = req.body.place;
+    hotel.description = req.body.description;
+    hotel.price = req.body.price;
+    hotel.rating = req.body.rating;
+    hotel.address = req.body.address;
+
+    // Amenities: "wifi, pool" → ["wifi", "pool"]
+    if (req.body.amenities) {
+      hotel.amenities = req.body.amenities.split(",").map((a) => a.trim());
+    }
+
+    /* ---------- SAVE ---------- */
+    await hotel.save();
+
+    // Redirect back to hotel list or details page
+    res.redirect("/hotel/manageHotel");
+  } catch (err) {
+    console.error("Update Hotel Error:", err);
+    res.status(500).json({
+      message: "Failed to update hotel",
+      error: err.message,
+    });
+  }
+};
+
 exports.displayRooms = async function (req, res) {
   const managerId = req.manager.id;
 
@@ -420,13 +477,64 @@ exports.roomUpdate = async (req, res) => {
     res.status(500).json({ ERR: err.message });
   }
 };
+exports.displayManageBooking = async (req, res) => {
+  try {
+    /* ------------------------------------------------
+       1️⃣ Get logged-in manager
+    ------------------------------------------------ */
+    const managerId = req.manager.id;
 
-// exports.roomUpdate = (req, res) => {
-//   try {
-//     const roomId = req.params.id;
-//     console.log("roomId:", roomId);
-//     res.status(201).json({ message: "success", roomId });
-//   } catch (err) {
-//     res.status(500).json({ ERR: err.message });
-//   }
-// };
+    /* ------------------------------------------------
+       2️⃣ Find hotel owned by manager
+    ------------------------------------------------ */
+    const hotel = await Hotel.findOne({ managerId });
+
+    if (!hotel) {
+      return res.render("hotel/booking", {
+        bookings: [],
+        message: "No hotel found for this account",
+      });
+    }
+
+    const hotelId = hotel._id;
+
+    /* ------------------------------------------------
+       3️⃣ Get bookings of this hotel
+    ------------------------------------------------ */
+    const hotelBookings = await Booking.find({ hotelId }, "_id");
+
+    if (hotelBookings.length === 0) {
+      return res.render("hotel/booking", {
+        bookings: [],
+        message: "No bookings yet for your hotel",
+      });
+    }
+
+    const bookingIds = hotelBookings.map((b) => b._id);
+
+    /* ------------------------------------------------
+       4️⃣ Get payments linked to those bookings
+    ------------------------------------------------ */
+    const payments = await Payment.find({
+      bookingId: { $in: bookingIds },
+    })
+      .populate("userId", "name email")
+      .populate("roomId")
+      .populate("bookingId") // enough
+      .sort({ createdAt: -1 });
+
+    /* ------------------------------------------------
+       5️⃣ Render
+    ------------------------------------------------ */
+    res.render("hotel/booking", {
+      bookings: payments,
+      hotel,
+    });
+  } catch (err) {
+    console.error("Manage Booking Error:", err);
+    res.status(500).json({
+      message: "Failed to load bookings",
+      error: err.message,
+    });
+  }
+};

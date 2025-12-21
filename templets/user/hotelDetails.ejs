@@ -46,29 +46,54 @@
       <!-- LEFT CONTENT (Rooms + Details + Rules + Map) -->
       <div class="lg:col-span-2 space-y-10">
         <!-- Top Image Section -->
-        <div class="grid grid-cols-3 gap-4">
-          <div class="col-span-1 space-y-4">
-            <% hotel.galleryImages.slice(0,4).forEach(img => { %>
-            <div
-              class="h-32 rounded-xl shadow bg-white overflow-hidden fade-card"
-            >
-              <img
-                src="/uploads/hotels/<%= img %>"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <% }) %>
-          </div>
-
-          <div
-            class="col-span-2 h-72 rounded-xl shadow overflow-hidden fade-card"
-          >
+<div class="grid grid-cols-3 gap-4">
+  <!-- LEFT GALLERY -->
+  <div class="col-span-1 grid grid-cols-2 grid-rows-2 gap-4 h-72">
+    <% if (hotel.galleryImages.length <= 4) { %>
+      <% hotel.galleryImages.forEach((img, index) => { %>
+        <div class="rounded-xl shadow overflow-hidden cursor-pointer gallery-thumb">
+          <img
+            src="/uploads/hotels/<%= img %>"
+            data-index="<%= index %>"
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      <% }) %>
+    <% } else { %>
+      <% for (let i = 0; i < 4; i++) { %>
+        <% if (i < 3) { %>
+          <div class="rounded-xl shadow overflow-hidden cursor-pointer gallery-thumb">
             <img
-              src="/uploads/hotels/<%= hotel.image %>"
-              class="w-full h-full object-cover"
+              src="/uploads/hotels/<%= hotel.galleryImages[i] %>"
+              data-index="<%= i %>"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
-        </div>
+        <% } else { %>
+          <div class="rounded-xl shadow overflow-hidden cursor-pointer gallery-thumb relative">
+            <img
+              src="/uploads/hotels/<%= hotel.galleryImages[i] %>"
+              data-index="<%= i %>"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-lg font-bold more-overlay">
+              +<%= hotel.galleryImages.length - 4 %> more
+            </div>
+          </div>
+        <% } %>
+      <% } %>
+    <% } %>
+  </div>
+
+  <!-- MAIN IMAGE -->
+  <div class="col-span-2 h-72 rounded-xl shadow overflow-hidden cursor-pointer gallery-thumb">
+    <img
+      src="/uploads/hotels/<%= hotel.image %>"
+      data-index="0"
+      class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+    />
+  </div>
+</div>
 
         <!-- Main Room Info -->
         <div class="bg-white p-6 rounded-xl shadow-sm border fade-card">
@@ -88,10 +113,10 @@
           </div>
 
           <div class="mt-6 flex items-center gap-3">
-            <p class="text-3xl font-bold text-indigo-600">
-              ₹<%= hotel.price %>
-            </p>
-            <span class="text-gray-500">/ night</span>
+            <!-- <p class="text-3xl font-bold text-indigo-600">
+              ₹
+            </p> -->
+            <!-- <span class="text-gray-500">/ night</span> -->
           </div>
 
           <div class="mt-6 flex flex-wrap gap-6 text-gray-600 text-sm">
@@ -213,7 +238,8 @@
               : 'bg-blue-500 text-white hover:scale-110 transition cursor-pointer' %>"
             title="Room <%= r.roomNum %>"
           >
-            <%= r.roomNum %>
+            
+            <a href="http://localhost:3000/hotelRooms/displayRooms/<%= r._id%>"><%= r.roomNum %></a>
           </div>
         <% }) %>
       </div>
@@ -223,10 +249,94 @@
       <!-- SINGLE REVIEW -->
     
     </div>
-
     <%- include("hotelReview", {reviews}) %>
   </div>
   </div>
   
     </div>
  <%- include("footer") %>
+<div
+  id="galleryModal"
+  class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center"
+>
+  <div class="relative max-w-5xl w-full px-4">
+    <!-- Close Button -->
+    <button
+      id="closeGallery"
+      class="absolute -top-12 right-4 text-white text-3xl"
+    >
+      ✕
+    </button>
+
+    <!-- Main Image -->
+    <div class="rounded-2xl overflow-hidden shadow-xl">
+      <img
+        id="galleryMainImage"
+        src=""
+        class="w-full h-[70vh] object-contain bg-black"
+      />
+    </div>
+
+    <!-- Thumbnails -->
+    <div class="flex gap-3 mt-4 overflow-x-auto justify-center">
+      <% hotel.galleryImages.forEach((img, index) => { %>
+        <img
+          src="/uploads/hotels/<%= img %>"
+          data-index="<%= index %>"
+          class="w-20 h-14 object-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100 border-2 border-transparent gallery-thumb-modal"
+        />
+      <% }) %>
+    </div>
+  </div>
+</div>
+<script>
+  const modal = document.getElementById("galleryModal");
+  const mainImage = document.getElementById("galleryMainImage");
+  const closeBtn = document.getElementById("closeGallery");
+
+  const mainImg = document.querySelector('.col-span-2 img');
+  const thumbs = document.querySelectorAll(".gallery-thumb");
+  const modalThumbs = document.querySelectorAll(".gallery-thumb-modal");
+
+  function openGallery(src) {
+    mainImage.src = src;
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGallery() {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "auto";
+  }
+
+  // Thumbnails open modal
+  thumbs.forEach(div => {
+    div.addEventListener("click", () => {
+      const img = div.querySelector('img');
+      if (img) {
+        openGallery(img.src);
+      }
+    });
+  });
+
+  // Main image opens modal
+  mainImg.addEventListener("click", () => openGallery(mainImg.src));
+
+  modalThumbs.forEach(img => {
+    img.addEventListener("click", () => {
+      mainImage.src = img.src;
+      modalThumbs.forEach(t => t.classList.remove("border-white"));
+      img.classList.add("border-white");
+    });
+  });
+
+  closeBtn.addEventListener("click", closeGallery);
+
+  modal.addEventListener("click", e => {
+    if (e.target === modal) closeGallery();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeGallery();
+  });
+</script>

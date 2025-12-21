@@ -70,4 +70,5 @@ router.post("/bookingRoom", userController.auth, userController.createBooking);
 
 router.post("/payment", userController.auth, userController.payment);
 
+router.post("/chat", userController.auth, userController.aiChatBot);
 module.exports = router;

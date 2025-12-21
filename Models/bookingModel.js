@@ -2,15 +2,15 @@
 const mongoose = require("mongoose");
 
 // Embedded Guest Schema
-const guestSchema = new mongoose.Schema(
-  {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: String,
-  },
-  { _id: false }
-);
+// const guestSchema = new mongoose.Schema(
+//   {
+//     firstName: { type: String, required: true },
+//     lastName: { type: String, required: true },
+//     email: { type: String, required: true },
+//     phone: String,
+//   },
+//   { _id: false }
+// );
 
 const bookingSchema = new mongoose.Schema(
   {
@@ -50,31 +50,6 @@ const bookingSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    // status: {
-    //   type: String,
-    //   enum: [
-    //     "CONFIRMED",
-    //     "PENDING_PAYMENT",
-    //     "CANCELED",
-    //     "CHECKED_IN",
-    //     "CHECKED_OUT",
-    //   ],
-    //   default: "PENDING_PAYMENT",
-    //   required: true,
-    // },
-
-    // --- AUDIT & TIMESTAMPS ---
-    // bookingConfirmationCode: {
-    //   type: String,
-    //   required: true,
-    //   unique: true,
-    // },
-    // paymentId: {
-    //   // Reference to a separate Payment Transaction document
-    //   type: mongoose.Schema.ObjectId,
-    //   ref: "Payment",
-    //   required: false,
-    // },
   },
   {
     timestamps: true, // Tracks booking creation time
@@ -90,12 +65,18 @@ const paymentSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Booking",
       required: true,
-      unique: true, // A payment transaction is uniquely tied to a single booking
+      // unique: true, // A payment transaction is uniquely tied to a single booking
       index: true,
     },
     userId: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
+      required: false, // If booking was made by a guest
+      index: true,
+    },
+    roomId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
       required: false, // If booking was made by a guest
       index: true,
     },
@@ -156,7 +137,7 @@ const paymentSchema = new mongoose.Schema(
         "REFUNDED",
         "VOIDED",
       ],
-      default: "PENDING",
+      default: "CAPTURED",
     },
     gatewayResponseCode: String, // The specific code returned by the payment processor (e.g., 20000)
     gatewayResponseMessage: String, // The message accompanying the response code

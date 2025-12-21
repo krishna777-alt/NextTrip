@@ -1,0 +1,141 @@
+<!-- CHATBOT -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div
+  id="chatbot"
+  class="fixed bottom-24 right-6 w-[340px] h-[460px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden hidden z-[9999]"
+>
+  <!-- HEADER -->
+  <div
+    class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white"
+  >
+    <div class="flex items-center gap-2 font-semibold">
+      ✈️ <span>Travel Assistant</span>
+    </div>
+    <button id="close-chat" class="text-xl hover:scale-110 transition">
+      ×
+    </button>
+  </div>
+
+  <!-- QUICK QUESTIONS -->
+  <div class="p-3 flex flex-wrap gap-2 bg-gray-50 border-b">
+    <button
+      data-msg="find hotels"
+      class="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+    >
+      🏨 Find hotels
+    </button>
+    <button
+      data-msg="popular places"
+      class="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+    >
+      📍 Popular places
+    </button>
+    <button
+      data-msg="how booking works"
+      class="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+    >
+      📖 Booking help
+    </button>
+    <button
+      data-msg="contact support"
+      class="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+    >
+      ☎️ Support
+    </button>
+  </div>
+
+  <!-- MESSAGES -->
+  <div
+    id="chat-messages"
+    class="flex-1 p-4 space-y-3 overflow-y-auto bg-white"
+  ></div>
+
+  <!-- INPUT -->
+  <form id="chat-form" class="flex items-center gap-2 p-3 border-t bg-white">
+    <input
+      id="chat-input"
+      type="text"
+      placeholder="Ask about hotels, places..."
+      class="flex-1 px-4 py-2 text-sm border rounded-full outline-none focus:ring-2 focus:ring-indigo-500"
+      autocomplete="off"
+    />
+    <button
+      class="w-10 h-10 rounded-full bg-indigo-600 text-white grid place-items-center hover:bg-indigo-700 transition"
+    >
+      ➤
+    </button>
+  </form>
+</div>
+
+<!-- TOGGLE BUTTON -->
+<button
+  id="chat-toggle"
+  class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-indigo-600 text-white text-2xl grid place-items-center shadow-xl hover:scale-110 transition z-[9999]"
+>
+  💬
+</button>
+<script>
+  const bot = document.getElementById("chatbot");
+  const toggle = document.getElementById("chat-toggle");
+  const closeBtn = document.getElementById("close-chat");
+  const form = document.getElementById("chat-form");
+  const input = document.getElementById("chat-input");
+  const messages = document.getElementById("chat-messages");
+
+  toggle.onclick = () => bot.classList.remove("hidden");
+  closeBtn.onclick = () => bot.classList.add("hidden");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage("user", text);
+    input.value = "";
+
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text }),
+    });
+
+    const data = await res.json();
+    addMessage("bot", data.reply);
+  });
+
+  function addMessage(sender, text) {
+    const wrapper = document.createElement("div");
+    wrapper.className =
+      sender === "user" ? "flex justify-end" : "flex justify-start";
+
+    const bubble = document.createElement("div");
+    bubble.className =
+      sender === "user"
+        ? "bg-indigo-600 text-white px-4 py-2 rounded-2xl rounded-br-sm text-sm max-w-[75%]"
+        : "bg-gray-100 text-gray-800 px-4 py-2 rounded-2xl rounded-bl-sm text-sm max-w-[75%]";
+
+    bubble.innerText = text;
+    wrapper.appendChild(bubble);
+    messages.appendChild(wrapper);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  document.querySelectorAll("[data-msg]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sendQuick(btn.dataset.msg);
+    });
+  });
+
+  async function sendQuick(text) {
+    addMessage("user", text);
+
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text }),
+    });
+
+    const data = await res.json();
+    addMessage("bot", data.reply);
+  }
+</script>
