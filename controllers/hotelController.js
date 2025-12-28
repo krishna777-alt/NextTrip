@@ -195,15 +195,15 @@ exports.getMangerDashbord = async (req, res) => {
 
   const hotels = await Hotel.find({ managerId });
   const hotelId = hotels.map((h) => h._id)[0];
-
+  const bookings = await Booking.find({hotelId});
   const rooms = await Room.find({
     hotelID: { $in: hotelId },
   });
-  let totalRooms = hotels.map((e) => e.totalRooms)[0];
+  let totalRooms = (await Room.find({hotelID:hotelId})).length;
   let account  = hotels.map((e)=>e.account)[0];
-
-  console.log(hotelId);
-  res.render("hotel/home", { manager, totalRooms, rooms,account });
+  let bookingCount = bookings.length;
+  console.log(totalRooms);
+  res.render("hotel/home", { manager, totalRooms, rooms,account,bookingCount });
 };
 
 exports.showHotel = async (req, res) => {
