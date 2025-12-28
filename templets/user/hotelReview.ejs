@@ -21,12 +21,19 @@
       <% reviews.slice(0, 4).forEach(review => { %>
       <div class="flex gap-4 p-4 border rounded-lg hover:shadow-sm transition">
         <!-- Profile -->
+         <% if(!review.userID?.avatar){ %>
         <img
           src="/images/profile.png"
           class="w-12 h-12 rounded-full object-cover"
           alt="Profile"
         />
-
+          <%}else{%>
+             <img
+          src="/uploads/user/<%= review.userID?.avatar%>"
+          class="w-12 h-12 rounded-full object-cover"
+          alt="Profile"
+        />
+            <%}%>
         <!-- Content -->
         <div class="flex-1">
           <div class="flex items-center justify-between">

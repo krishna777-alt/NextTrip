@@ -30,13 +30,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
     },
-    booking: [
-      {
-        type: [mongoose.Schema.Types.ObjectId],
-        default: [],
-        ref: "Package",
-      },
-    ],
+   
   },
   { timestamps: true }
 );

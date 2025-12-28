@@ -121,7 +121,7 @@ exports.register = async (req, res) => {
 };
 exports.auth = function (req, res, next) {
   const token = req.cookies.jwt;
-  // console.log(token);
+  console.log("ManagerToke:",token);
   if (!token) {
     //    return res.status(401).json({
     //         status:401,
@@ -132,14 +132,61 @@ exports.auth = function (req, res, next) {
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
     console.log("Decode" + decode.id);
+    if(decode.role !== "manager"){
+      return res.render("hotel/hotelHome");
+    }
     req.manager = decode;
-    // console.log(req.manager);
+    console.log("Manager n:",req.manager);
     next();
   } catch (err) {
     return res.status(403).json({ message: "Invalid Token!" + err });
   }
 };
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////
+// exports.getMangerDashbord = async (req, res) => {
+//   try {
+//     console.log("Manager ID:", req.manager.id);
+
+//     /* -----------------------------
+//        1️⃣ Manager details
+//     ----------------------------- */
+//     const manager = await HotelManager.findById(req.manager.id);
+//     if (!manager) {
+//       return res.status(404).send("Manager not found");
+//     }
+
+//     /* -----------------------------
+//        2️⃣ Manager's hotels
+//     ----------------------------- */
+//     const hotels = await Hotel.find({ managerId: req.manager.id });
+//     const hotelIds = hotels.map((h) => h._id);
+
+//     /* -----------------------------
+//        3️⃣ Rooms of those hotels
+//     ----------------------------- */
+//     const totalRooms = await Room.countDocuments({
+//       hotelId: { $in: hotelIds },   // ✅ FIXED
+//     });
+
+//     const rooms = await Room.find({
+//       hotelId: { $in: hotelIds },   // ✅ FIXED
+//     });
+
+//     /* -----------------------------
+//        4️⃣ Render dashboard
+//     ----------------------------- */
+//     res.render("hotel/home", {
+//       manager,
+//       totalRooms,
+//       rooms,
+//     });
+//   } catch (err) {
+//     console.error("Manager Dashboard Error:", err);
+//     res.status(500).send("Server Error");
+//   }
+// };
+
+
 exports.getMangerDashbord = async (req, res) => {
   console.log("m:" + req.manager.id);
   const manager = (await HotelManager.findById(req.manager.id)) || false;
@@ -147,14 +194,16 @@ exports.getMangerDashbord = async (req, res) => {
   const managerId = req.manager.id;
 
   const hotels = await Hotel.find({ managerId });
-  const hotelIds = hotels.map((h) => h._id);
+  const hotelId = hotels.map((h) => h._id)[0];
 
   const rooms = await Room.find({
-    hotelID: { $in: hotelIds },
+    hotelID: { $in: hotelId },
   });
   let totalRooms = hotels.map((e) => e.totalRooms)[0];
-  console.log(manager);
-  res.render("hotel/home", { manager, totalRooms, rooms });
+  let account  = hotels.map((e)=>e.account)[0];
+
+  console.log(hotelId);
+  res.render("hotel/home", { manager, totalRooms, rooms,account });
 };
 
 exports.showHotel = async (req, res) => {
@@ -441,6 +490,13 @@ exports.displayUpdateRoom = async (req, res) => {
     res.status(500).json({ ERR_Message: err.message });
   }
 };
+
+exports.showRoomDetails = async(req,res) =>{
+  const roomID = req.params.id;
+  const roomType = await Room.findById(roomID);
+  // console.log("roomDE:",);
+  res.render("hotel/showRoom",{roomType});
+}
 
 exports.roomUpdate = async (req, res) => {
   try {

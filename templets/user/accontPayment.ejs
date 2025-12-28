@@ -1,0 +1,77 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="bg-white rounded-2xl shadow p-6">
+  <h3 class="text-xl font-semibold mb-1">Payment History</h3>
+  <p class="text-sm text-gray-500 mb-6">
+    Your transaction records
+  </p>
+
+  <% if (!payment || payment.length === 0) { %>
+    <div class="text-center text-gray-400 py-10">
+      No payments found.
+    </div>
+  <% } else { %>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+        <thead class="bg-gray-100 text-sm text-gray-700">
+          <tr>
+            <th class="px-4 py-3 text-left">Hotel</th>
+            <th class="px-4 py-3 text-left">Room</th>
+            <th class="px-4 py-3 text-left">Amount</th>
+            <th class="px-4 py-3 text-left">Method</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Date</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+          <% payment.forEach(payment => { %>
+            <tr class="text-sm hover:bg-gray-50">
+              
+              <!-- Hotel -->
+              <td class="px-4 py-3 font-medium text-gray-900">
+                <%= payment.bookingId?.hotelId?.name || "N/A" %>
+              </td>
+
+              <!-- Room -->
+              <td class="px-4 py-3 text-gray-600">
+                <%= payment.roomType || "—" %>
+              </td>
+
+              <!-- Amount -->
+              <td class="px-4 py-3 font-semibold text-gray-800">
+                ₹<%= payment.amount %>
+              </td>
+
+              <!-- Method -->
+              <td class="px-4 py-3 text-gray-600">
+                <%= payment.paymentMethod %>
+              </td>
+
+              <!-- Status -->
+              <td class="px-4 py-3">
+                <span class="
+                  px-3 py-1 rounded-full text-xs font-semibold
+                  <%= payment.status === 'CAPTURED'
+                      ? 'bg-green-100 text-green-700'
+                      : payment.status === 'PENDING'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-red-100 text-red-700'
+                  %>
+                ">
+                  <%= payment.status %>
+                </span>
+              </td>
+
+              <!-- Date -->
+              <td class="px-4 py-3 text-gray-500">
+                <%= new Date(payment.createdAt).toLocaleDateString() %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+  <% } %>
+</div>

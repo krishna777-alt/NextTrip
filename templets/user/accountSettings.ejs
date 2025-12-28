@@ -1,0 +1,181 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="flex-1 p-8 bg-gray-50 min-h-screen">
+
+  <!-- Header -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm border mb-8">
+    <h1 class="text-2xl font-semibold text-gray-900">Account Settings</h1>
+    <p class="text-sm text-gray-500 mt-1">
+      Manage your personal information and security preferences.
+    </p>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+    <!-- LEFT COLUMN -->
+    <div class="xl:col-span-2 space-y-8">
+
+      <!-- Profile Info -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+          Profile Information
+        </h2>
+
+        <form action="http://localhost:3000/account/updateUserData" method="POST" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm text-gray-600">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value="<%= userDetails.name %>"
+                class="mt-1 w-full rounded-xl border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-600">Email Address</label>
+              <input
+                type="email"
+                value="<%= userDetails.email %>"
+                disabled
+                class="mt-1 w-full rounded-xl border-gray-200 bg-gray-100 cursor-not-allowed"
+              />
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-600">Phone</label>
+              <input
+                type="text"
+                name="phone"
+                value="<%= userDetails.phone || '' %>"
+                placeholder="+91 XXXXX XXXXX"
+                class="mt-1 w-full rounded-xl border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          </div>
+
+          <button
+            class="mt-4 px-6 py-2 rounded-xl bg-indigo-600 text-white font-medium
+                   hover:bg-indigo-700 transition"
+          >
+            Save Changes
+          </button>
+        </form>
+      </div>
+
+      <!-- Password -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+          Change Password
+        </h2>
+
+        <form action="http://localhost:3000/account/updateUserPassword" method="POST" class="space-y-4">
+          <input
+            type="password"
+            name="currentPassword"
+            placeholder="Current password"
+            class="w-full rounded-xl border-gray-300 focus:ring-indigo-500"
+          />
+
+          <input
+            type="password"
+            name="newPassword"
+            placeholder="New password"
+            class="w-full rounded-xl border-gray-300 focus:ring-indigo-500"
+          />
+
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm new password"
+            class="w-full rounded-xl border-gray-300 focus:ring-indigo-500"
+          />
+
+          <button
+            class="px-6 py-2 rounded-xl bg-black text-white font-medium
+                   hover:bg-gray-800 transition"
+          >
+            Update Password
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="space-y-8">
+
+      <!-- Profile Card -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6 text-center">
+        <form
+            action="http://localhost:3000/account/updateAvatar"
+            method="POST"
+            enctype="multipart/form-data"
+            class="space-y-4"
+        >
+            <div class="relative w-28 h-28 mx-auto">
+            <img
+                id="avatarPreview"
+                src="/uploads/user/<%= userDetails.avatar %>"
+                class="w-28 h-28 rounded-full object-cover border"
+            />
+
+            <label
+                class="absolute bottom-0 right-0 bg-indigo-600 text-white
+                    w-8 h-8 rounded-full grid place-items-center
+                    cursor-pointer shadow-lg hover:bg-indigo-700 transition"
+            >
+                ✎
+                <input
+                type="file"
+                name="avatar"
+                accept="image/*"
+                hidden
+                onchange="previewAvatar(event)"
+                />
+            </label>
+            </div>
+
+            <h3 class="font-semibold text-gray-900"><%= userDetails.name %></h3>
+            <p class="text-sm text-gray-500"><%= userDetails.email %></p>
+
+            <button
+            class="w-full mt-3 py-2 rounded-xl bg-black text-white
+                    hover:bg-gray-800 transition"
+            >
+            Save Avatar
+            </button>
+        </form>
+</div>
+
+
+      <!-- Danger Zone -->
+      <div class="bg-white rounded-2xl shadow-sm border border-red-200 p-6">
+        <h2 class="text-lg font-semibold text-red-600">
+          Danger Zone
+        </h2>
+
+        <p class="text-sm text-gray-500 mt-2">
+          Permanently delete your account and all associated data.
+        </p>
+
+        <form action="/settings/delete" method="POST">
+          <button
+            class="mt-4 w-full px-4 py-2 rounded-xl
+                   bg-red-600 text-white font-medium
+                   hover:bg-red-700 transition"
+          >
+            Delete Account
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  function previewAvatar(event) {
+    const img = document.getElementById("avatarPreview");
+    img.src = URL.createObjectURL(event.target.files[0]);
+  }
+</script>

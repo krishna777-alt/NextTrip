@@ -1,5 +1,9 @@
 <%- include("navBar") %>
-    <title><%= hotel.name %> | Details</title>
+    <% if(hotel){%>
+      <title><%= hotel.name %> | Details</title>
+      <%}else{%>
+        <title>Hotel Details | Details</title>
+        <%}%>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>

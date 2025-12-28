@@ -1,0 +1,143 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="flex-1 p-8 bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-2xl font-semibold text-gray-900">My Bookings</h1>
+    <p class="text-gray-500 text-sm mt-1">
+      All your hotel bookings appear here.
+    </p>
+  </div>
+
+  <% if (bookings.length === 0) { %>
+    <!-- EMPTY STATE -->
+    <div class="flex flex-col items-center justify-center bg-white rounded-2xl p-16 shadow-sm border">
+      <div class="w-20 h-20 flex items-center justify-center rounded-full bg-indigo-50 text-indigo-600 text-3xl mb-4">
+        🏨
+      </div>
+      <h3 class="text-xl font-semibold text-gray-800">
+        No bookings yet
+      </h3>
+      <p class="text-gray-500 mt-2 text-center max-w-md">
+        You haven’t booked any hotels yet. Start exploring and reserve your next stay.
+      </p>
+
+      <a
+        href="/hotels"
+        class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl
+               bg-indigo-600 text-white font-medium
+               hover:bg-indigo-700 transition"
+      >
+        Explore Hotels
+      </a>
+    </div>
+  <% } else { %>
+
+  <!-- BOOKINGS LIST -->
+  <div class="space-y-6">
+    <% payment.forEach(booking => { 
+    //   const payment = Payments.find(p => String(p.bookingId) === String(booking._id));
+    %>
+
+    <div class="bg-white rounded-2xl shadow-sm border hover:shadow-md transition">
+      <div class="flex flex-col lg:flex-row gap-6 p-6">
+
+        <!-- Hotel Image -->
+        <img
+          src="/uploads/hotels/<%= booking.bookingId.hotelId.image %>"
+          class="w-full lg:w-48 h-36 object-cover rounded-xl"
+          alt="Hotel Image"
+        />
+
+        <!-- Booking Info -->
+        <div class="flex-1">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                <%= booking.bookingId.hotelId.name %>
+              </h3>
+              <p class="text-sm text-gray-500">
+                <%= booking.bookingId.hotelId.place %>, <%= booking.bookingId.hotelId.state %>
+              </p>
+            </div>
+
+            <!-- Payment Status -->
+           
+                <% if (booking) { %>
+                <span class="px-3 py-1 rounded-full text-xs font-medium
+                    <%= booking.status === "CAPTURED" 
+                        ? "bg-green-100 text-green-700"
+                        : booking.status === "FAILED"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-yellow-100 text-yellow-700" %>">
+                    <%= booking.status %>
+                </span>
+                <%}%>
+            
+          </div>
+
+          <!-- Details -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-sm">
+            <div>
+              <p class="text-gray-500">Room Type</p>
+              <p class="font-medium"><%= booking.bookingId.roomTypeCode %></p>
+            </div>
+
+            <div>
+              <p class="text-gray-500">Guests</p>
+              <p class="font-medium">
+                <%= booking.bookingId.adults %> Adults, <%= booking.bookingId.children %> Children
+              </p>
+            </div>
+
+            <div>
+              <p class="text-gray-500">Check-in</p>
+              <p class="font-medium">
+                <%= booking.bookingId.checkInDate.toDateString() %>
+              </p>
+            </div>
+
+            <div>
+              <p class="text-gray-500">Check-out</p>
+              <p class="font-medium">
+                <%= booking.bookingId.checkOutDate.toDateString() %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 gap-4">
+           
+                <p class="text-lg font-semibold text-gray-900">
+                  ₹<%= booking.price %>
+               </p>
+           
+
+            <div class="flex gap-3">
+              <a
+                href="/displayHotelDetails/<%= booking.bookingId.hotelId._id %>"
+                class="px-5 py-2 rounded-lg border border-gray-300
+                       text-gray-700 hover:bg-gray-100 transition text-sm"
+              >
+                View Details
+              </a>
+
+              <% if (booking && booking.status === "CAPTURED") { %>
+                <a
+                  href="/invoice/<%= booking._id %>"
+                  class="px-5 py-2 rounded-lg bg-black text-white
+                         hover:bg-gray-800 transition text-sm"
+                >
+                  cancel
+                </a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% }) %>
+  </div>
+
+  <% } %>
+</div>

@@ -15,6 +15,10 @@ const hotelManagerSchema = new mongoose.Schema({
     type: String,
     default: "root",
   },
+  role:{
+    type:String,
+    default:"manager"
+  },
   password: {
     type: String,
     select: false,

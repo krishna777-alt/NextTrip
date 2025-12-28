@@ -73,7 +73,7 @@
         </div>
 
         <!-- AC Filter -->
-        <div>
+        <!-- <div>
           <label class="font-semibold">Room Type</label>
           <select
             id="filterAC"
@@ -83,7 +83,7 @@
             <option value="ac">AC</option>
             <option value="nonac">Non-AC</option>
           </select>
-        </div>
+        </div> -->
       </div>
 
       <!-- Hotel Cards -->
@@ -144,7 +144,7 @@
 
       const filterRating = document.getElementById("filterRating");
       const filterPrice = document.getElementById("filterPrice");
-      const filterAC = document.getElementById("filterAC");
+     
 
       function renderHotels(list) {
         container.innerHTML = "";
@@ -165,11 +165,7 @@
                 <p class="text-gray-700 mb-2 font-medium">₹ ${h.price} / night</p>
 
                 <p class="text-sm mb-4">
-                  <span class="px-3 py-1 rounded-full text-white ${
-                    h.ac ? "bg-blue-600" : "bg-gray-600"
-                  }">
-                  ${h.ac ? "AC Room" : "Non-AC Room"}
-                  </span>
+                  
                 </p>
 
                 <div class="flex gap-3 mt-4">
@@ -189,7 +185,7 @@
       function applyFilters() {
         const rating = filterRating.value;
         const price = filterPrice.value;
-        const ac = filterAC.value;
+       
         // console.log("AC:"+ac);
         let filtered = allHotels.slice();
 
@@ -205,8 +201,7 @@
         if (price === "high") filtered = filtered.filter((h) => h.price > 3000);
 
         // AC Filter
-        if (ac === "ac") filtered = filtered.filter((h) => h.ac === true);
-        if (ac === "nonac") filtered = filtered.filter((h) => h.ac === false);
+        
 
         renderHotels(filtered);
       }

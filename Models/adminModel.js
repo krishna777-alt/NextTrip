@@ -15,6 +15,10 @@ const AdminSchema = new mongoose.Schema({
         type:String,
         default:"admin"
     },
+    account:{
+        type:Number,
+        default:0
+    },
     createdAt:{
         type:Date,
         default:Date.now

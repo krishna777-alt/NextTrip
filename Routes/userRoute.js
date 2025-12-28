@@ -3,6 +3,8 @@ const userController = require("./../controllers/userController");
 
 const router = express.Router();
 
+router.get("/logout",userController.logout);
+
 router
   .route("/login")
   .get(userController.displayLogin)
@@ -13,6 +15,19 @@ router
   .get(userController.displaySignup)
   .post(userController.signup);
 
+
+router.post("/account/updateAvatar",
+  userController.auth,
+  userController.uploadUserProfile,
+  userController.updateUserAvatar);  
+
+router.post("/account/updateUserData",
+  userController.auth,
+  userController.updateUserProfile);
+
+router.post("/account/updateUserPassword",
+  userController.auth,
+  userController.updatePassword);  
 router.get(
   "/",
   userController.auth,

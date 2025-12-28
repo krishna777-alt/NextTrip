@@ -8,13 +8,13 @@
     <div class="max-w-7xl mx-auto px-6 py-12">
       <!-- Top Bar -->
       <div class="flex items-center justify-between mb-8">
-        <p class="text-sm text-gray-500">Items 1 to 6 of 6 items</p>
+        <p id="items-text" class="text-sm text-gray-500">Items 1 to 6 of 6 items</p>
 
         <div class="flex items-center gap-4 text-sm">
           <div>
             Show
-            <select class="border rounded px-2 py-1">
-              <option>6</option>
+            <select id="show-select" class="border rounded px-2 py-1">
+              <option>2</option>
               <option>12</option>
             </select>
             per page
@@ -22,9 +22,12 @@
 
           <div>
             Sort by:
-            <select class="border rounded px-2 py-1">
-              <option>Featured</option>
+            <select id="sort-select" class="border rounded px-2 py-1">
+              
               <option>Price</option>
+              <option>AC</option>
+              <option>NON-AC</option>
+              <option>Executive</option>
             </select>
           </div>
         </div>
@@ -39,6 +42,7 @@
 
 <div
   class="bg-white shadow-sm rounded-xl overflow-hidden group hover:shadow-lg transition duration-300"
+  data-price="<%= room.price %>" data-ac="<%= room.ac %>" data-type="<%= room.roomTypeCode %>"
 >
   <!-- IMAGE AREA -->
   <div class="relative overflow-hidden">
@@ -117,6 +121,104 @@
 
        
       </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-between mt-8">
+        <p id="page-text" class="text-sm text-gray-500">Page 1 of 1</p>
+        <div>
+          <button id="prev-btn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50" disabled>Previous</button>
+          <button id="next-btn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 ml-2">Next</button>
+        </div>
+      </div>
     </div>
+
+<script>
+const showSelect = document.getElementById('show-select');
+const sortSelect = document.getElementById('sort-select');
+const roomsContainer = document.querySelector('.grid');
+const roomCards = Array.from(roomsContainer.children);
+const itemsText = document.getElementById('items-text');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const pageText = document.getElementById('page-text');
+
+let currentPage = 1;
+
+function updateDisplay() {
+  const show = parseInt(showSelect.value);
+  const sortBy = sortSelect.value;
+  const total = roomCards.length;
+
+  // sort the cards
+  roomCards.sort((a, b) => {
+    if (sortBy === 'Price') {
+      return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+    } else if (sortBy === 'AC') {
+      return a.dataset.ac.localeCompare(b.dataset.ac);
+    } else if (sortBy === 'NON-AC') {
+      return b.dataset.ac.localeCompare(a.dataset.ac);
+    } else if (sortBy === 'Executive') {
+      const aExec = a.dataset.type.toLowerCase().includes('executive') ? 1 : 0;
+      const bExec = b.dataset.type.toLowerCase().includes('executive') ? 1 : 0;
+      return bExec - aExec;
+    }
+    return 0;
+  });
+
+  const totalPages = Math.ceil(total / show);
+  if (currentPage > totalPages) currentPage = totalPages || 1;
+  if (currentPage < 1) currentPage = 1;
+
+  const start = (currentPage - 1) * show;
+  const end = start + show;
+  const visibleCards = roomCards.slice(start, end);
+
+  // clear container
+  roomsContainer.innerHTML = '';
+
+  // append visible
+  visibleCards.forEach(card => roomsContainer.appendChild(card));
+
+  // update texts
+  const showing = visibleCards.length;
+  const startItem = start + 1;
+  const endItem = start + showing;
+  itemsText.textContent = `Items ${startItem} to ${endItem} of ${total} items`;
+  pageText.textContent = `Page ${currentPage} of ${totalPages}`;
+
+  // buttons
+  prevBtn.disabled = currentPage <= 1;
+  nextBtn.disabled = currentPage >= totalPages;
+}
+
+showSelect.addEventListener('change', () => {
+  currentPage = 1;
+  updateDisplay();
+});
+
+sortSelect.addEventListener('change', () => {
+  currentPage = 1;
+  updateDisplay();
+});
+
+prevBtn.addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    updateDisplay();
+  }
+});
+
+nextBtn.addEventListener('click', () => {
+  const totalPages = Math.ceil(roomCards.length / parseInt(showSelect.value));
+  if (currentPage < totalPages) {
+    currentPage++;
+    updateDisplay();
+  }
+});
+
+// initial
+updateDisplay();
+</script>
+
   </body>
 <%- include("footer")%>

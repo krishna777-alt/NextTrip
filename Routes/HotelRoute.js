@@ -35,6 +35,7 @@ router
   );
 
 router.get("/rooms", hotelController.auth, hotelController.displayRooms);
+router.get("/rooms/showRoom/:id",hotelController.auth,hotelController.showRoomDetails);
 router
   .route("/rooms/addRoom")
   .get(hotelController.auth, hotelController.displayAddRoom)
