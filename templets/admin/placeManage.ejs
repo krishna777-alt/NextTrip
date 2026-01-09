@@ -1,0 +1,97 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-800">Manage Places</h1>
+    <p class="text-sm text-gray-500">Create, update and manage travel places</p>
+  </div>
+
+  <!-- <a
+    href="/admin/createPlaces"
+    class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg shadow transition"
+  >
+    ➕ Add Place
+  </a> -->
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <% places.forEach(place => { %>
+  <div
+    class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition overflow-hidden group"
+  >
+    <!-- Image -->
+    <div class="relative h-44 overflow-hidden">
+      <img
+        src="/uploads/places/<%= place.images %>"
+        alt="<%= place.title %>"
+        class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+      />
+
+      <!-- Status Badge -->
+      <span
+        class="absolute top-3 left-3 px-3 py-1 text-xs rounded-full bg-emerald-600 text-white"
+      >
+        <%= place.status %>
+      </span>
+    </div>
+
+    <!-- Content -->
+    <div class="p-5 space-y-3">
+      <h3 class="text-lg font-semibold text-gray-800 truncate">
+        <%= place.title %>
+      </h3>
+
+      <p class="text-sm text-gray-500 line-clamp-2"><%= place.description %></p>
+
+      <div class="flex text-xs text-gray-500 gap-4">
+        <span>🗓 <%= place.days %>D / <%= place.nights %>N</span>
+        <span>📍 <%= place.state || "India" %></span>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between pt-3 border-t">
+        <a
+          href="/admin/currentPlace/<%= place._id %>"
+          class="text-sm text-indigo-600 hover:underline"
+        >
+          View
+        </a>
+
+        <div class="flex gap-3">
+          <a
+            href="/admin/updateCurentPlace/<%= place._id %>"
+            class="text-sm text-amber-600 hover:underline"
+          >
+            Edit
+          </a>
+
+          <form
+            action="/admin/places/delete/<%= place._id %>"
+            method="POST"
+            onsubmit="return confirm('Delete this place?')"
+          >
+            <button type="submit" class="text-sm text-red-600 hover:underline">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<% if (places.length === 0) { %>
+<div class="bg-white rounded-2xl p-12 text-center shadow-sm">
+  <div class="text-5xl mb-4">📍</div>
+  <h2 class="text-xl font-semibold text-gray-800">No places added yet</h2>
+  <p class="text-gray-500 mt-2 mb-6">
+    Start by adding your first travel destination
+  </p>
+
+  <a
+    href="/admin/places/new"
+    class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg transition"
+  >
+    ➕ Add Place
+  </a>
+</div>
+<% } %>

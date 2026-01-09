@@ -39,4 +39,22 @@ router.post(
 router.get("/accepted/:id", adminController.hotelAcceptedByAdmin);
 
 router.get("/hotelView/:id", adminController.hotelViewSection);
+
+router.get("/currentPlace/:id", adminController.viewPlaceDetails);
+
+router.get("/currentHotel/:id", adminController.viewHotelDetails);
+
+router.get("/currentUser/:id", adminController.viewUserDetails);
+
+router.post("/reviews/delete/:id", adminController.deleteUserDetails);
+
+router.post("/payments/delete/:id", adminController.deletePaymnetDetails);
+
+router
+  .route("/updateCurentPlace/:id")
+  .get(adminController.diaplayUpdateCurentPlace)
+  .post(adminController.uploadHotelImage, adminController.updateCurrentPlace);
+
+router.get("/places/remove-gallery/:id", adminController.removeGalleryImage);
+
 module.exports = router;

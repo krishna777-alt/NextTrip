@@ -1,0 +1,233 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-800">Update Place</h1>
+    <p class="text-sm text-gray-500">Modify destination details</p>
+  </div>
+
+  <a
+    href="/admin/currentPlace/<%= place._id %>"
+    class="px-4 py-2 bg-gray-200 rounded-lg text-sm hover:bg-gray-300"
+  >
+    ← Cancel
+  </a>
+</div>
+
+<form
+  action="/admin/updateCurentPlace/<%= place._id %>"
+  method="POST"
+  enctype="multipart/form-data"
+  class="space-y-6"
+>
+  <div class="bg-white p-6 rounded-2xl shadow-sm grid md:grid-cols-2 gap-6">
+    <div>
+      <label class="text-sm font-medium">Title</label>
+      <input
+        type="text"
+        name="title"
+        value="<%= place.title %>"
+        class="mt-1 w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="text-sm font-medium">State</label>
+      <input
+        type="text"
+        name="state"
+        value="<%= place.state %>"
+        class="mt-1 w-full border rounded-lg px-4 py-2"
+      />
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="text-sm font-medium">Description</label>
+      <textarea
+        name="description"
+        rows="4"
+        class="mt-1 w-full border rounded-lg px-4 py-2"
+        required
+      >
+<%= place.description %></textarea
+      >
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-2xl shadow-sm grid grid-cols-2 gap-6">
+    <div>
+      <label class="text-sm font-medium">Latitude</label>
+      <input
+        type="number"
+        step="any"
+        name="lat"
+        value="<%= place.location.lat %>"
+        class="mt-1 w-full border rounded-lg px-4 py-2"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="text-sm font-medium">Longitude</label>
+      <input
+        type="number"
+        step="any"
+        name="lng"
+        value="<%= place.location.lng %>"
+        class="mt-1 w-full border rounded-lg px-4 py-2"
+        required
+      />
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-2xl shadow-sm grid grid-cols-2 gap-6">
+    <div>
+      <label class="text-sm font-medium">Days</label>
+      <input
+        type="number"
+        name="days"
+        value="<%= place.days %>"
+        class="mt-1 w-full border rounded-lg px-4 py-2"
+      />
+    </div>
+
+    <div>
+      <label class="text-sm font-medium">Nights</label>
+      <input
+        type="number"
+        name="nights"
+        value="<%= place.nights %>"
+        class="mt-1 w-full border rounded-lg px-4 py-2"
+      />
+    </div>
+  </div>
+
+ 
+
+  <div class="bg-white p-6 rounded-2xl shadow-sm">
+    <h2 class="text-lg font-semibold mb-4">Images</h2>
+
+    <!-- Main Image -->
+    <div class="mb-4">
+      <p class="text-sm text-gray-500 mb-2">Current Main Image</p>
+      <img
+        src="/uploads/places/<%= place.images %>"
+        class="h-40 rounded-xl object-cover mb-2"
+      />
+      <input type="file" name="image" />
+    </div>
+
+    <!-- Gallery -->
+   <div>
+  <p class="text-sm font-medium text-gray-600 mb-4">
+    Gallery Images
+  </p>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+    <% galleryImages.forEach(img => { %>
+      <% img.imageUrl.forEach((i, index) => { %>
+
+        <div class="group relative bg-white rounded-2xl shadow-sm overflow-hidden border hover:shadow-lg transition">
+
+          <!-- Image -->
+          <img
+            src="/uploads/places/<%= i %>"
+            class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+
+          <!-- Dark overlay -->
+          <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition"></div>
+
+          <!-- Actions -->
+          <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition">
+            
+            <!-- View -->
+            <button
+              type="button"
+              onclick="openImage('/uploads/places/<%= i %>')"
+              class="px-3 py-1.5 bg-white/90 text-sm rounded-lg hover:bg-white"
+            >
+              View
+            </button>
+
+            <!-- Remove -->
+            <a
+              href="/admin/places/remove-gallery/<%= img._id %>?img=<%= i %>"
+              class="px-3 py-1.5 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700"
+            >
+              Delete
+            </a>
+          </div>
+
+          <!-- Badge -->
+          <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+            Gallery
+          </div>
+        </div>
+
+      <% }) %>
+    <% }) %>
+  </div>
+
+  <!-- Upload -->
+  <div class="mt-6">
+    <label class="block text-sm font-medium mb-2">
+      Add more images
+    </label>
+    <input
+      type="file"
+      name="galleryImages"
+      multiple
+      class="block w-full text-sm text-gray-500
+             file:mr-4 file:py-2 file:px-4
+             file:rounded-lg file:border-0
+             file:bg-indigo-50 file:text-indigo-700
+             hover:file:bg-indigo-100"
+    />
+  </div>
+</div>
+
+  </div>
+<div class="bg-white p-6 rounded-2xl shadow-sm">
+  <label class="text-sm font-medium">Status</label>
+  <select
+    name="status"
+    class="mt-1 w-full border rounded-lg px-4 py-2"
+  >
+    <option value="live" <%= place.status === "live" ? "selected" : "" %>>Live</option>
+    <option value="draft" <%= place.status === "draft" ? "selected" : "" %>>Draft</option>
+  </select>
+</div>
+
+<div class="flex justify-end gap-4">
+  <button
+    type="submit"
+    class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+  >
+    Save Changes
+  </button>
+</div>
+
+</form>
+
+<!-- Image Modal -->
+<div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-4 rounded-lg max-w-3xl max-h-screen overflow-auto">
+    <img id="modalImage" src="" class="max-w-full max-h-full">
+    <button onclick="closeModal()" class="mt-2 px-4 py-2 bg-red-500 text-white rounded">Close</button>
+  </div>
+</div>
+
+<script>
+function openImage(src) {
+  document.getElementById('modalImage').src = src;
+  document.getElementById('imageModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('imageModal').classList.add('hidden');
+}
+</script>
+
+</div>
+

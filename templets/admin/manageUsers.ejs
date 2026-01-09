@@ -1,0 +1,76 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+  <% users.forEach(user => { %>
+  <div
+    class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition overflow-hidden"
+  >
+    <div class="p-5 space-y-4">
+      <!-- Avatar + Info -->
+      <div class="flex items-center gap-4">
+        <img
+          src="/uploads/user/<%= user.avatar %>"
+          class="w-14 h-14 rounded-full object-cover border"
+          alt="<%= user.name %>"
+        />
+
+        <div class="flex-1 min-w-0">
+          <h3 class="text-lg font-semibold text-gray-800 truncate">
+            <%= user.name %>
+          </h3>
+          <p class="text-sm text-gray-500 truncate"><%= user.email %></p>
+        </div>
+
+        <!-- Role Badge -->
+        <% if(user.role === 'admin'){ %>
+        <span class="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full">
+          Admin
+        </span>
+        <% } else { %>
+        <span class="text-xs bg-gray-200 text-gray-700 px-3 py-1 rounded-full">
+          User
+        </span>
+        <% } %>
+      </div>
+
+      <!-- Meta Info -->
+      <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+        <div>
+          <p class="text-gray-400 text-xs">Phone</p>
+          <p><%= user.phone || "Not provided" %></p>
+        </div>
+
+        <div>
+          <p class="text-gray-400 text-xs">Joined</p>
+          <p><%= user.createdAt.toDateString() %></p>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between pt-4 border-t">
+        <a
+          href="/admin/currentUser/<%= user._id %>"
+          class="text-sm text-indigo-600 hover:underline"
+        >
+          View
+        </a>
+
+        <div class="flex gap-3">
+          <!-- <a
+            href="/admin/users/edit/"
+            class="text-sm text-amber-600 hover:underline"
+          >
+            Edit
+          </a> -->
+
+          <form
+            action="/admin/users/delete/<%= user._id %>"
+            method="POST"
+            onsubmit="return confirm('Delete this user?')"
+          >
+            <button class="text-sm text-red-600 hover:underline">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>

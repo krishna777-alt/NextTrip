@@ -1,0 +1,114 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-800 capitalize">
+      <%= place.title %>
+    </h1>
+    <p class="text-sm text-gray-500">Detailed destination overview</p>
+  </div>
+
+  <div class="flex gap-3">
+    <a
+      href="/admin/"
+      class="px-4 py-2 bg-gray-200 rounded-lg text-sm hover:bg-gray-300"
+    >
+      ← Back
+    </a>
+    <a
+      href="/admin/places/edit/<%= place._id %>"
+      class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700"
+    >
+      Edit Place
+    </a>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm p-5 mb-6">
+  <img
+    src="/uploads/places/<%= place.images %>"
+    class="w-full h-72 object-cover rounded-xl mb-4"
+  />
+
+  <% if (galleryImages.length > 0) { %>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <% galleryImages.forEach(img => { %> <%img.imageUrl.forEach((i)=>{%>
+    <img
+      src="/uploads/places/<%= i %>"
+      class="h-32 w-full object-cover rounded-xl hover:scale-105 transition"
+    />
+
+    <%}) %> <% }) %>
+  </div>
+  <% } %>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+  <h2 class="text-xl font-semibold mb-3">Description</h2>
+  <p class="text-gray-600 leading-relaxed"><%= place.description %></p>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+  <h2 class="text-xl font-semibold mb-4">Trip Information</h2>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+    <div>
+      <p class="text-gray-500">Days</p>
+      <p class="font-medium"><%= place.days %></p>
+    </div>
+
+    <div>
+      <p class="text-gray-500">Nights</p>
+      <p class="font-medium"><%= place.nights %></p>
+    </div>
+
+    <div>
+      <p class="text-gray-500">State</p>
+      <p class="font-medium capitalize"><%= place.state %></p>
+    </div>
+
+    <div>
+      <p class="text-gray-500">Slug</p>
+      <p class="font-medium"><%= place.place %></p>
+    </div>
+
+    <div>
+      <p class="text-gray-500">Status</p>
+      <span
+        class="inline-block px-3 py-1 text-xs rounded-full <%= place.status === 'live' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700' %>"
+      >
+        <%= place.status %>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+  <h2 class="text-xl font-semibold mb-4">Location</h2>
+
+  <div class="grid grid-cols-2 gap-6 text-sm">
+    <div>
+      <p class="text-gray-500">Latitude</p>
+      <p class="font-medium"><%= place.location.lat %></p>
+    </div>
+
+    <div>
+      <p class="text-gray-500">Longitude</p>
+      <p class="font-medium"><%= place.location.lng %></p>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm p-6 border border-red-200">
+  <h2 class="text-xl font-semibold text-red-600 mb-3">Danger Zone</h2>
+
+  <form
+    action="/admin/places/delete/<%= place._id %>"
+    method="POST"
+    onsubmit="return confirm('This action cannot be undone. Delete this place?')"
+  >
+    <button class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+      Delete Place
+    </button>
+  </form>
+</div>

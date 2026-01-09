@@ -50,21 +50,48 @@
       <!-- LEFT CONTENT -->
       <div class="lg:col-span-2 space-y-8">
         <!-- Image Gallery -->
-        <div class="grid grid-cols-3 gap-4">
-          <div class="col-span-2 row-span-2">
-            <img
-              src="/uploads/hotels/<%= room.mainImage%>"
-              class="w-full h-full object-cover rounded-xl"
-            />
-          </div>
-          <% room.roomPhotos.forEach((image)=>{%>
+        <!-- Modern Image Gallery -->
+<div id="gallery" class="grid grid-cols-4 grid-rows-2 gap-4">
+  <!-- Main Image -->
+  <div
+    class="col-span-2 row-span-2 relative overflow-hidden rounded-2xl group cursor-pointer"
+  >
+    <img
+      src="/uploads/hotels/<%= room.mainImage %>"
+      data-index="0"
+      class="gallery-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+  </div>
 
-          <img
-            src="/uploads/hotels/<%= image%>"
-            class="w-full h-40 object-cover rounded-xl"
-          />
-          <%})%>
+  <!-- Side Images -->
+  <% const maxImages = 4; %>
+  <% room.roomPhotos.slice(0, maxImages).forEach((image, index) => { %>
+    <div
+      class="relative overflow-hidden rounded-2xl group aspect-square cursor-pointer"
+    >
+      <img
+        src="/uploads/hotels/<%= image %>"
+        data-index="<%= index + 1 %>"
+        class="gallery-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+
+      <!-- Dark hover overlay -->
+      <div
+        class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition"
+      ></div>
+
+      <!-- +N Photos Overlay -->
+      <% if (index === maxImages - 1 && room.roomPhotos.length > maxImages) { %>
+        <div
+          class="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xl font-semibold"
+        >
+          +<%= room.roomPhotos.length - maxImages %> photos
         </div>
+      <% } %>
+    </div>
+  <% }) %>
+</div>
 
         <!-- Tabs -->
         <div class="flex gap-6 border-b pb-3 text-sm font-medium">
@@ -223,9 +250,9 @@
             <div>
               <label class="font-medium">Room Number</label>
               <select name="roomNum" class="w-full p-3 mt-2 border rounded-lg">
-                <% for(let i =1;i< (totalRooms-bookedRooms);i++){%>
-                <option><%= i%></option>
-                <%}%>
+                
+                <option><%= room.roomNum%></option>
+
                 <!-- <option>2</option>
                 <option>3</option> -->
               </select>
@@ -302,3 +329,86 @@
   </div>
 </body>
 <%- include("footer")%>
+<!-- Lightbox -->
+<div
+  id="lightbox"
+  class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center"
+>
+  <!-- Close -->
+  <button
+    id="closeLightbox"
+    class="absolute top-6 right-6 text-white text-3xl hover:scale-110 transition"
+  >
+    ✕
+  </button>
+
+  <!-- Image -->
+  <img
+    id="lightboxImage"
+    class="max-w-[90%] max-h-[85%] rounded-2xl shadow-2xl transition-all"
+  />
+
+  <!-- Navigation -->
+  <button
+    id="prev"
+    class="absolute left-6 text-white text-4xl hover:scale-110 transition"
+  >
+    ‹
+  </button>
+  <button
+    id="next"
+    class="absolute right-6 text-white text-4xl hover:scale-110 transition"
+  >
+    ›
+  </button>
+</div>
+<script>
+  const images = [
+    "/uploads/hotels/<%= room.mainImage %>",
+    <% room.roomPhotos.forEach(img => { %>
+      "/uploads/hotels/<%= img %>",
+    <% }) %>
+  ];
+
+  const galleryImgs = document.querySelectorAll(".gallery-img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImage");
+
+  let currentIndex = 0;
+
+  galleryImgs.forEach(img => {
+    img.addEventListener("click", () => {
+      currentIndex = Number(img.dataset.index);
+      openLightbox();
+    });
+  });
+
+  function openLightbox() {
+    lightboxImg.src = images[currentIndex];
+    lightbox.classList.remove("hidden");
+  }
+
+  function closeLightbox() {
+    lightbox.classList.add("hidden");
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    lightboxImg.src = images[currentIndex];
+  }
+
+  function prevImage() {
+    currentIndex =
+      (currentIndex - 1 + images.length) % images.length;
+    lightboxImg.src = images[currentIndex];
+  }
+
+  document.getElementById("closeLightbox").onclick = closeLightbox;
+  document.getElementById("next").onclick = nextImage;
+  document.getElementById("prev").onclick = prevImage;
+
+  // Close on background click
+  lightbox.addEventListener("click", e => {
+    if (e.target === lightbox) closeLightbox();
+  });
+</script>

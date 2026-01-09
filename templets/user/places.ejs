@@ -42,11 +42,52 @@
         </div>
 
         <!-- Filter Within a State -->
-        <div>
-          <label class="font-semibold mr-2">Sort by Places in State:</label>
-          <select id="sortPlaces" class="px-4 py-2 border rounded-lg">
-            <option value="none">Select a State First</option>
-          </select>
+        <!-- <div>
+        
+        </div> -->
+        <div class="relative flex-1 max-w-lg">
+          <form
+            method="GET"
+            action="http://localhost:3000/search"
+            class="flex items-center gap-2"
+          >
+            <!-- Input -->
+            <div class="relative flex-1">
+              <span
+                class="absolute inset-y-0 left-4 flex items-center text-gray-400"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
+                  />
+                </svg>
+              </span>
+
+              <input
+                type="text"
+                name="q"
+                placeholder="Search places, beaches, temples..."
+                class="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition"
+              />
+            </div>
+
+            <!-- Button -->
+            <button
+              type="submit"
+              class="px-6 py-3 rounded-2xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 active:scale-95 transition flex items-center gap-2"
+            >
+              Search
+            </button>
+          </form>
         </div>
       </div>
 
@@ -92,7 +133,6 @@
       const allPlaces = <%-JSON.stringify(places)%>;
 
         const sortState = document.getElementById("sortState");
-        const sortPlaces = document.getElementById("sortPlaces");
         const placeContainer = document.getElementById("placeContainer");
 
         // Render cards
@@ -127,32 +167,12 @@
           const state = sortState.value;
 
           if (state === "all") {
-            sortPlaces.innerHTML = `<option value="none">Select a State First</option>`;
             renderPlaces(allPlaces);
             return;
           }
 
           const filtered = allPlaces.filter(p => p.state === state);
-
-          // Fill place dropdown
-          sortPlaces.innerHTML = `<option value="all">All Places</option>`;
-          filtered.forEach(p => {
-            sortPlaces.innerHTML += `<option value="${p.name}">${p.name}</option>`;
-          });
-
           renderPlaces(filtered);
-        });
-
-        // On Place Change
-        sortPlaces.addEventListener("change", () => {
-          const selectedPlace = sortPlaces.value;
-          const selectedState = sortState.value;
-
-          if (selectedPlace === "all") {
-            renderPlaces(allPlaces.filter(p => p.state === selectedState));
-          } else {
-            renderPlaces(allPlaces.filter(p => p.name === selectedPlace));
-          }
         });
 
         // Initial load

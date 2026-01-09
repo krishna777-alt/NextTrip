@@ -20,7 +20,6 @@ exports.displaySignup = async (req, res) => {
   res.render("user/signup");
 };
 
-
 exports.logout = (req, res) => {
   res.clearCookie("jwt");
   return res.redirect("/");
@@ -130,18 +129,22 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 exports.uploadUserProfile = upload.single("avatar");
 
-exports.updateUserAvatar = async(req,res)=>{
-  try{
+exports.updateUserAvatar = async (req, res) => {
+  try {
     const id = req.user.id;
     const avatar = req.file.filename;
 
-    const updateAvatar = await User.findByIdAndUpdate(id,{avatar},{new:true});
-    console.log("Profile:",updateAvatar);
-    res.redirect("http://localhost:3000/account")
-  }catch(err){
-    res.status(500).json({message:err.message});
+    const updateAvatar = await User.findByIdAndUpdate(
+      id,
+      { avatar },
+      { new: true }
+    );
+    console.log("Profile:", updateAvatar);
+    res.redirect("http://localhost:3000/account");
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-}
+};
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////
 exports.search = async function async(req, res) {
@@ -179,9 +182,12 @@ exports.search = async function async(req, res) {
 
 exports.displayPlaces = async (req, res) => {
   const user = req.user;
-  const states = ["kerala", "tamilnadu", "karnadaka", "gova"];
+  // const states = ["kerala", "tamilnadu", "karnadaka", "gova"];
   const places = await Places.find();
-  res.status(200).render("user/places", { user, states, places });
+  const states = places.map((s) => s.state);
+  const statePlaces = places.map((p) => p.place);
+  console.log(statePlaces);
+  res.status(200).render("user/places", { user, states, places, statePlaces });
 };
 
 exports.displayPlaceDetails = async (req, res) => {
@@ -296,40 +302,44 @@ exports.createHotelReview = async (req, res) => {
 exports.displayUserAccount = async (req, res) => {
   try {
     const userID = req.user.id;
-    const user = req.user
-    const bookings = await Booking.find({ userId: userID })
-      .populate("hotelId")
-      .sort({ createdAt: -1 });
-
-    if (bookings.length === 0) {
-      const user = await User.findById(userID);
-      return res.render("user/account", {
-        user,
-        bookings: [],
-        payments: [],
-        facilities: [],
-        hotel: null,
-        reviews: [],
-      });
-    }
-    const userDetails = await User.findById(userID);
-console.log("UserfdL:",userDetails)
+    const user = req.user || false;
+    console.log("hel:", user);
+    const booking =
+      (await Booking.find({ userId: userID })
+        .populate("hotelId")
+        .sort({ createdAt: -1 })) || false;
+    console.log("fdef:xxxxxxx:", booking);
+    // if (booking.length === 0) {
+    //   const userDetails = await User.findById(userID) || null;
+    //   return res.render("user/account", {
+    //     user,
+    //     userDetails,
+    //     booking: [],
+    //     payments: [],
+    //     facilities: [],
+    //     hotel: null,
+    //     reviews: [],
+    //   });
+    // }
+    const userDetails = (await User.findById(userID)) || false;
+    console.log("UserfdL:", userDetails);
     //  bookings.forEach((e)=>console.log("ferfer:",e.hotelId._id));
 
-     const payment = await Payment.find({userId:userID})
-    .populate({
-      path: "bookingId",
-      populate: { path: "hotelId"},
-    })
-    
-    // console.log("ferfer:",payment[0].bookingId.hotelId)
+    const payment =
+      (await Payment.find({ userId: userID }).populate({
+        path: "bookingId",
+        populate: { path: "hotelId" },
+      })) || false;
+
+    payment.forEach((p) => {
+      console.log("ferfer:", p.bookingId);
+    });
     res.render("user/account", {
       user,
-      bookings,
+      booking,
       payment,
       userDetails,
     });
-
   } catch (err) {
     console.error("User Account Error:", err);
     res.status(500).json({
@@ -363,14 +373,10 @@ exports.updateUserProfile = async (req, res) => {
        - runValidators ensures schema rules
        - new: true returns updated document
     -------------------------------- */
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      updateData,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
       return res.status(404).json({
@@ -381,9 +387,8 @@ exports.updateUserProfile = async (req, res) => {
     /* --------------------------------
        4️⃣ Redirect or respond
     -------------------------------- */
-    return res.redirect("/settings"); 
+    return res.redirect("/settings");
     // OR: res.json({ success: true, user: updatedUser });
-
   } catch (err) {
     console.error("Update Profile Error:", err);
     return res.status(500).json({
@@ -392,8 +397,6 @@ exports.updateUserProfile = async (req, res) => {
     });
   }
 };
-
-
 
 exports.updatePassword = async (req, res) => {
   try {
@@ -445,7 +448,6 @@ exports.updatePassword = async (req, res) => {
        6️⃣ Success response
     -------------------------------- */
     res.redirect("/settings");
-
   } catch (err) {
     console.error("Password Update Error:", err);
     res.status(500).json({
@@ -454,7 +456,6 @@ exports.updatePassword = async (req, res) => {
     });
   }
 };
-
 
 exports.displayPackages = function (req, res) {
   const user = req.user;
@@ -582,10 +583,7 @@ exports.payment = async (req, res) => {
     /* ----------------------------
        Update Admin account
     ---------------------------- */
-    await Admin.findOneAndUpdate(
-      {},
-      { $inc: { account: commission } }
-    );
+    await Admin.findOneAndUpdate({}, { $inc: { account: commission } });
 
     /* ----------------------------
        Update Hotel account (FIXED)

@@ -7,9 +7,8 @@ const Package = require("../Models/packageModel");
 const HotelManager = require("../Models/hotelManagerModel");
 const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const { Payment, Booking } = require("./../Models/bookingModel");
-// exports.auth = (req,res,next)=>{
 
-// }
+
 exports.logout = function (req, res) {
   res.clearCookie("jwt");
   return res.redirect("/hotel/login");
@@ -202,7 +201,7 @@ exports.getMangerDashbord = async (req, res) => {
   let totalRooms = (await Room.find({hotelID:hotelId})).length;
   let account  = hotels.map((e)=>e.account)[0];
   let bookingCount = bookings.length;
-  console.log(totalRooms);
+  // console.log(totalRooms);
   res.render("hotel/home", { manager, totalRooms, rooms,account,bookingCount });
 };
 

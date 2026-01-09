@@ -5,7 +5,11 @@ const bcrypt = require("bcryptjs");
 const flash = require("connect-flash");
 const Admin = require("./../Models/adminModel");
 const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
-const { render } = require("../app");
+const { Places, GalleryImage } = require("../Models/placeModel");
+const User = require("../Models/userModels");
+const HotelReview = require("../Models/hotelReviewModel");
+const { Payment, Booking } = require("../Models/bookingModel");
+const HotelManager = require("../Models/hotelManagerModel");
 
 //////////////////////////////////////////////////////////////ADMIN AUTH///////////////////////////////
 
@@ -13,7 +17,7 @@ exports.auth = (req, res, next) => {
   const token = req.cookies.jwt;
   console.log("token:", token);
   if (!token) {
-    return res.status(401).json({ message: "You are not logged in!" });
+    return res.render("admin/login");
   }
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -109,10 +113,29 @@ exports.adminHome = async (req, res) => {
     // res.status(200).sendFile(path.join(__dirname,'../templets','admin','home.ejs'));
     const hotels = await Hotel.find({ isApproved: false });
     console.log("hotels:" + hotels);
+
+    const places = await Places.find();
+    // res.status(200).render({ places });
+    // console.log("from admin:", places);
+
+    const viewAllHotels = await Hotel.find();
+    const users = await User.find();
+    const reviews = await HotelReview.find()
+      .populate("userID")
+      .populate("hotelID");
+    const payments = await Payment.find();
+    reviews.forEach((r) => {
+      // console.log("HotelReviewsds:", r.userID.name);
+    });
     return res.render("admin/home", {
       admin: req.adminData,
       successMsg: req.flash("success"),
       hotels,
+      viewAllHotels,
+      places,
+      users,
+      reviews,
+      payments,
     });
   } catch (err) {
     res.status(404).json({
@@ -121,6 +144,197 @@ exports.adminHome = async (req, res) => {
   }
 };
 
+exports.viewPlaceDetails = async (req, res) => {
+  try {
+    const placeId = req.params.id;
+
+    const place = await Places.findById(placeId);
+    const galleryImages = await GalleryImage.find({ placeId });
+    console.log("PlaceID:", placeId, " ", "places:", galleryImages.length);
+    galleryImages.forEach((e) => {
+      e.imageUrl.forEach((i) => {
+        console.log(i);
+      });
+    });
+    console.log("Places:", place);
+    res.status(200).render("admin/viewPlaceDetails", { place, galleryImages });
+  } catch (err) {
+    res.status(501).json({ message: err.message });
+  }
+};
+
+exports.diaplayUpdateCurentPlace = async (req, res) => {
+  const placeId = req.params.id;
+  const place = await Places.findById(placeId);
+  const galleryImages = await GalleryImage.find({ placeId });
+
+  res.render("admin/updateCurentPlace", { place, galleryImages });
+};
+
+const storage2 = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "..", "uploads", "places"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const fileFilter2 = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) cb(null, true);
+  else cb(new Error("Only images allowed"), false);
+};
+
+const upload2 = multer({ storage: storage2, fileFilter: fileFilter2 });
+exports.uploadHotelImage = upload2.fields([
+  { name: "image", maxCount: 1 },
+  { name: "galleryImages", maxCount: 10 },
+]);
+
+exports.updateCurrentPlace = async (req, res) => {
+  try {
+    const placeId = req.params.id;
+    console.log("Files", req.files);
+    const {
+      title,
+      description,
+      lat,
+      lng,
+      days,
+      nights,
+      includes,
+      excludes,
+      state,
+      status,
+    } = req.body;
+
+    // Prepare update data
+    const updateData = {
+      title,
+      description,
+      location: {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng),
+      },
+      days: parseInt(days),
+      nights: parseInt(nights),
+      includes: includes ? includes.split(",").map((item) => item.trim()) : [],
+      excludes: excludes ? excludes.split(",").map((item) => item.trim()) : [],
+      state,
+      status,
+      place: title.toLowerCase(),
+    };
+
+    // Handle main image upload
+    if (req.files && req.files.image && req.files.image[0]) {
+      updateData.images = req.files.image[0].filename;
+    }
+
+    const updatedPlace = await Places.findByIdAndUpdate(placeId, updateData, {
+      new: true,
+    });
+
+    if (!updatedPlace) {
+      return res.status(404).json({ message: "Place not found" });
+    }
+
+    // Handle gallery images upload
+    if (
+      req.files &&
+      req.files.galleryImages &&
+      req.files.galleryImages.length > 0
+    ) {
+      for (const file of req.files.galleryImages) {
+        await GalleryImage.create({
+          placeId: placeId,
+          imageUrl: [file.filename],
+        });
+      }
+    }
+
+    req.flash("success", "Place updated successfully!");
+    res.redirect("/admin/currentPlace/" + placeId);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error updating place: " + err.message });
+  }
+};
+
+exports.removeGalleryImage = async (req, res) => {
+  try {
+    const galleryId = req.params.id;
+    const img = req.query.img;
+    const gallery = await GalleryImage.findById(galleryId);
+    // const galleryImages = gallery;
+    console.log("ef:", gallery);
+    const place = await Places.findById(gallery.placeId);
+
+    if (gallery) {
+      gallery.imageUrl = gallery.imageUrl.filter((url) => url !== img);
+      if (gallery.imageUrl.length === 0) {
+        await GalleryImage.findByIdAndDelete(galleryId);
+      } else {
+        await gallery.save();
+      }
+      req.flash("success", "Gallery image removed successfully!");
+    }
+    // return res.render("admin/updateCurentPlace", { place, galleryImages });
+    return res.redirect(`http://localhost:3000/admin/`);
+  } catch (err) {
+    console.log(err);
+    req.flash("error", "Error removing gallery image");
+    res.redirect("back");
+  }
+};
+exports.viewHotelDetails = async (req, res) => {
+  try {
+    const hotelId = req.params.id;
+
+    const hotel = await Hotel.findById(hotelId);
+    const manager = await HotelManager.findById(hotel.managerId);
+    const facilities = await HotelFacility.find({ hotelId: hotel._id });
+    const roomTypes = await Room.find({ hotelID: hotel._id });
+
+    res.render("admin/viewHotelDetails", {
+      hotel,
+      manager,
+      facilities,
+      roomTypes,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+    console.log(err);
+  }
+};
+
+exports.viewUserDetails = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+
+    res.render("admin/viewUserDetails", { user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+exports.deleteUserDetails = async (req, res) => {
+  try {
+    const reviewID = req.params.id;
+    await HotelReview.findByIdAndDelete(reviewID);
+
+    return res.redirect("http://localhost:3000/admin/");
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+exports.deletePaymnetDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Payment.findByIdAndDelete(id);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 exports.hotelAcceptedByAdmin = async (req, res) => {
   const acceptedHotelID = req.params.id;
   const hotel = await Hotel.findByIdAndUpdate(acceptedHotelID, {
@@ -274,19 +488,4 @@ exports.getAllAdmin = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-};
-
-exports.displayAgentPackage = async function (req, res) {
-  try {
-    const agentId = req.agent.id;
-    const packages = await Package.find({ agentId });
-    console.log(packages);
-    res.render("agents/myPackage", { packages });
-  } catch (err) {
-    console.log("ERROR" + err);
-  }
-};
-
-exports.agentProfile = function (req, res) {
-  res.render("agents/agentProfile");
 };

@@ -1,0 +1,118 @@
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-800">Manage Payments</h1>
+    <p class="text-sm text-gray-500">
+      View and manage all booking payment transactions
+    </p>
+  </div>
+
+  <div class="bg-white px-4 py-2 rounded-lg shadow-sm text-sm">
+    Total Payments:
+    <span class="font-semibold text-gray-800"><%= payments.length %></span>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+      <tr>
+        <th class="px-6 py-4 text-left">User</th>
+        <th class="px-6 py-4 text-left">Hotel</th>
+        <th class="px-6 py-4 text-left">Amount</th>
+        <th class="px-6 py-4 text-left">Method</th>
+        <th class="px-6 py-4 text-left">Status</th>
+        <th class="px-6 py-4 text-left">Date</th>
+        <!-- <th class="px-6 py-4 text-right">Actions</th> -->
+      </tr>
+    </thead>
+
+    <tbody class="divide-y">
+      <% payments.forEach(payment => { %>
+      <tr class="hover:bg-gray-50 transition">
+        <!-- User -->
+        <td class="px-6 py-4">
+          <p class="font-medium text-gray-800">
+            <%= payment.userId?.name || payment.guestName || "Guest" %>
+          </p>
+          <p class="text-xs text-gray-500">
+            <%= payment.userId?.email || payment.email || "—" %>
+          </p>
+        </td>
+
+        <!-- Hotel -->
+        <td class="px-6 py-4">
+          <p class="font-medium text-gray-800">
+            <%= payment.bookingId?.hotelId?.name || "Unknown Hotel" %>
+          </p>
+          <p class="text-xs text-gray-500">
+            Room: <%= payment.roomType || payment.bookingId?.roomTypeCode %>
+          </p>
+        </td>
+
+        <!-- Amount -->
+        <td class="px-6 py-4 font-semibold text-gray-800">
+          ₹<%= payment.amount.toLocaleString() %>
+        </td>
+
+        <!-- Method -->
+        <td class="px-6 py-4">
+          <span
+            class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-medium"
+          >
+            <%= payment.paymentMethod %>
+          </span>
+        </td>
+
+        <!-- Status -->
+        <td class="px-6 py-4">
+          <% if(payment.status === "CAPTURED"){ %>
+          <span
+            class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700"
+          >
+            Success
+          </span>
+          <% } else if(payment.status === "FAILED"){ %>
+          <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700">
+            Failed
+          </span>
+          <% } else { %>
+          <span
+            class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700"
+          >
+            Pending
+          </span>
+          <% } %>
+        </td>
+
+        <!-- Date -->
+        <td class="px-6 py-4 text-gray-600">
+          <%= payment.createdAt.toDateString() %>
+        </td>
+
+        <!-- Actions -->
+        <!-- <td class="px-6 py-4 text-right">
+          <div class="flex justify-end gap-4">
+            <form
+              action="/admin/payments/delete/ %>"
+              method="POST"
+              onsubmit="return confirm('Delete this payment record?')"
+            >
+              <button class="text-red-600 hover:underline">Delete</button>
+            </form>
+          </div> -->
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<% if(payments.length === 0){ %>
+<div class="bg-white rounded-2xl p-16 text-center shadow-sm">
+  <div class="text-5xl mb-4">💳</div>
+  <h2 class="text-xl font-semibold text-gray-800">No payments found</h2>
+  <p class="text-gray-500 mt-2">
+    All completed booking payments will appear here
+  </p>
+</div>
+<% } %>

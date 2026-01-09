@@ -28,24 +28,24 @@
         <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Users
         </button>
-        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+        <!-- <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Bookings
-        </button>
-        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+        </button> -->
+        <!-- <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Reports
-        </button>
+        </button> -->
         <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Reviews
         </button>
         <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Payments
         </button>
-        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+        <!-- <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Settings
-        </button>
-        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
+        </button> -->
+        <!-- <button class="w-full text-left p-3 rounded-lg hover:bg-gray-800">
           Activity Logs
-        </button>
+        </button> -->
         <a
           href="http://localhost:3000/admin/manage-admin"
           class="w-full text-left p-3 rounded-lg hover:bg-gray-800"
@@ -148,24 +148,27 @@
       <section id="destinationsModule" class="hidden p-6">
         <h2 class="text-2xl font-semibold mb-4">Places</h2>
         <p class="text-gray-600">Manage all uploaded destinations here.</p>
+
         <%- include('addPlaces') %>
       </section>
 
       <!-- PACKAGES MODULE -->
       <section id="packagesModule" class="hidden p-6">
-        <h2 class="text-2xl font-semibold mb-4">Packages</h2>
-        <p class="text-gray-600">Manage travel packages here.</p>
+        <!-- <h2 class="text-2xl font-semibold mb-4">Packages</h2>
+        <p class="text-gray-600">Manage travel packages here.</p> -->
+        <%- include("placeManage") %>
       </section>
 
       <!-- HOTELS MODULE -->
       <section id="agentsModule" class="hidden p-6">
-        <%- include('hotels') %>
+        <%- include('hotels') %> <%- include("manageHotel") %>
       </section>
 
       <!-- USERS MODULE -->
       <section id="usersModule" class="hidden p-6">
         <h2 class="text-2xl font-semibold mb-4">Users</h2>
         <p class="text-gray-600">Manage platform users.</p>
+        <%- include("manageUsers") %>
       </section>
 
       <!-- BOOKINGS MODULE -->
@@ -184,14 +187,16 @@
 
       <!-- REVIEWS MODULE -->
       <section id="reviewsModule" class="hidden p-6">
-        <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
-        <p class="text-gray-600">Manage ratings and user reviews.</p>
+        <!-- <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
+        <p class="text-gray-600">Manage ratings and user reviews.</p> -->
+        <%- include("manageReviews") %>
       </section>
 
       <!-- PAYMENTS MODULE -->
       <section id="paymentsModule" class="hidden p-6">
-        <h2 class="text-2xl font-semibold mb-4">Payments</h2>
-        <p class="text-gray-600">Revenue, failed payments, refund requests.</p>
+        <!-- <h2 class="text-2xl font-semibold mb-4">Payments</h2>
+        <p class="text-gray-600">Revenue, failed payments, refund requests.</p> -->
+        <%- include("managePayment") %>
       </section>
 
       <!-- SETTINGS MODULE -->

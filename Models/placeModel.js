@@ -12,28 +12,10 @@ const placeSchema = new mongoose.Schema(
       required: true,
     },
 
-    price: {
-      type: Number,
-      required: true,
-    },
-
     location: {
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },
     },
-
-    days: {
-      type: Number,
-      default: 2,
-    },
-    nights: {
-      type: Number,
-      default: 2,
-    },
-
-    includes: [String],
-    excludes: [String],
-
     images: {
       type: String,
       required: true,

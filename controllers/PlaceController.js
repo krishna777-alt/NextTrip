@@ -47,11 +47,11 @@ exports.createPlaces = async (req, res) => {
         lat: req.body.lat,
         lng: req.body.long,
       },
-      days: req.body.days,
+      // days: req.body.days,
       state: req.body.state?.trim().toLowerCase(),
-      nights: req.body.nights,
-      includes: req.body.includes,
-      excludes: req.body.excludes,
+      // nights: req.body.nights,
+      // includes: req.body.includes,
+      // excludes: req.body.excludes,
       images: mainImage, // Store MAIN image
     });
 
