@@ -69,9 +69,9 @@ const hotelSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    account:{
-      type:Number,
-      default:0
+    account: {
+      type: Number,
+      default: 0,
     },
     managerId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -101,14 +101,10 @@ const roomTypeSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  category:{
-    type:String,
-    default:"AC",
-    enum: [
-        "Exicutive",
-        "NON-AC",
-        "AC"
-      ],
+  category: {
+    type: String,
+    default: "AC",
+    enum: ["Exicutive", "NON-AC", "AC"],
   },
   price: {
     type: Number,

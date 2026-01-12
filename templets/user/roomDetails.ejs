@@ -51,47 +51,50 @@
       <div class="lg:col-span-2 space-y-8">
         <!-- Image Gallery -->
         <!-- Modern Image Gallery -->
-<div id="gallery" class="grid grid-cols-4 grid-rows-2 gap-4">
-  <!-- Main Image -->
-  <div
-    class="col-span-2 row-span-2 relative overflow-hidden rounded-2xl group cursor-pointer"
-  >
-    <img
-      src="/uploads/hotels/<%= room.mainImage %>"
-      data-index="0"
-      class="gallery-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-    />
-    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-  </div>
+        <div id="gallery" class="grid grid-cols-4 grid-rows-2 gap-4">
+          <!-- Main Image -->
+          <div
+            class="col-span-2 row-span-2 relative overflow-hidden rounded-2xl group cursor-pointer"
+          >
+            <img
+              src="/uploads/hotels/<%= room.roomPhotos[0] %>"
+              data-index="0"
+              class="gallery-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
+            ></div>
+          </div>
 
-  <!-- Side Images -->
-  <% const maxImages = 4; %>
-  <% room.roomPhotos.slice(0, maxImages).forEach((image, index) => { %>
-    <div
-      class="relative overflow-hidden rounded-2xl group aspect-square cursor-pointer"
-    >
-      <img
-        src="/uploads/hotels/<%= image %>"
-        data-index="<%= index + 1 %>"
-        class="gallery-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-      />
+          <!-- Side Images -->
+          <% const maxImages = 4; %> <% room.roomPhotos.slice(0,
+          maxImages).forEach((image, index) => { %>
+          <div
+            class="relative overflow-hidden rounded-2xl group aspect-square cursor-pointer"
+          >
+            <img
+              src="/uploads/hotels/<%= image %>"
+              data-index="<%= index + 1 %>"
+              class="gallery-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
 
-      <!-- Dark hover overlay -->
-      <div
-        class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition"
-      ></div>
+            <!-- Dark hover overlay -->
+            <div
+              class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition"
+            ></div>
 
-      <!-- +N Photos Overlay -->
-      <% if (index === maxImages - 1 && room.roomPhotos.length > maxImages) { %>
-        <div
-          class="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xl font-semibold"
-        >
-          +<%= room.roomPhotos.length - maxImages %> photos
+            <!-- +N Photos Overlay -->
+            <% if (index === maxImages - 1 && room.roomPhotos.length >
+            maxImages) { %>
+            <div
+              class="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xl font-semibold"
+            >
+              +<%= room.roomPhotos.length - maxImages %> photos
+            </div>
+            <% } %>
+          </div>
+          <% }) %>
         </div>
-      <% } %>
-    </div>
-  <% }) %>
-</div>
 
         <!-- Tabs -->
         <div class="flex gap-6 border-b pb-3 text-sm font-medium">
@@ -250,7 +253,6 @@
             <div>
               <label class="font-medium">Room Number</label>
               <select name="roomNum" class="w-full p-3 mt-2 border rounded-lg">
-                
                 <option><%= room.roomNum%></option>
 
                 <!-- <option>2</option>
@@ -363,52 +365,70 @@
   </button>
 </div>
 <script>
-  const images = [
-    "/uploads/hotels/<%= room.mainImage %>",
-    <% room.roomPhotos.forEach(img => { %>
-      "/uploads/hotels/<%= img %>",
-    <% }) %>
-  ];
+  document.addEventListener("DOMContentLoaded", () => {
+    const images = [
+      "/uploads/hotels/<%= room.mainImage %>"
+      <% if (room.roomPhotos?.length) { %>,
+        <% room.roomPhotos.forEach(img => { %>
+          "/uploads/hotels/<%= img %>",
+        <% }) %>
+      <% } %>
+    ];
 
-  const galleryImgs = document.querySelectorAll(".gallery-img");
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightboxImage");
+    const galleryImgs = document.querySelectorAll(".gallery-img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImage");
 
-  let currentIndex = 0;
+    let currentIndex = 0;
 
-  galleryImgs.forEach(img => {
-    img.addEventListener("click", () => {
-      currentIndex = Number(img.dataset.index);
-      openLightbox();
+    galleryImgs.forEach(img => {
+      img.addEventListener("click", () => {
+        currentIndex = Number(img.dataset.index);
+        lightboxImg.src = images[currentIndex];
+        lightbox.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      });
     });
-  });
 
-  function openLightbox() {
-    lightboxImg.src = images[currentIndex];
-    lightbox.classList.remove("hidden");
-  }
+    function closeLightbox() {
+      lightbox.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
 
-  function closeLightbox() {
-    lightbox.classList.add("hidden");
-  }
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImg.src = images[currentIndex];
+    }
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
-    lightboxImg.src = images[currentIndex];
-  }
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImg.src = images[currentIndex];
+    }
 
-  function prevImage() {
-    currentIndex =
-      (currentIndex - 1 + images.length) % images.length;
-    lightboxImg.src = images[currentIndex];
-  }
+    document.getElementById("closeLightbox").onclick = e => {
+      e.stopPropagation();
+      closeLightbox();
+    };
 
-  document.getElementById("closeLightbox").onclick = closeLightbox;
-  document.getElementById("next").onclick = nextImage;
-  document.getElementById("prev").onclick = prevImage;
+    document.getElementById("next").onclick = e => {
+      e.stopPropagation();
+      nextImage();
+    };
 
-  // Close on background click
-  lightbox.addEventListener("click", e => {
-    if (e.target === lightbox) closeLightbox();
+    document.getElementById("prev").onclick = e => {
+      e.stopPropagation();
+      prevImage();
+    };
+
+    lightbox.addEventListener("click", e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (lightbox.classList.contains("hidden")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    });
   });
 </script>

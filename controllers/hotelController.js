@@ -8,7 +8,6 @@ const HotelManager = require("../Models/hotelManagerModel");
 const { Hotel, Room, HotelFacility } = require("../Models/hotelModel");
 const { Payment, Booking } = require("./../Models/bookingModel");
 
-
 exports.logout = function (req, res) {
   res.clearCookie("jwt");
   return res.redirect("/hotel/login");
@@ -120,7 +119,7 @@ exports.register = async (req, res) => {
 };
 exports.auth = function (req, res, next) {
   const token = req.cookies.jwt;
-  console.log("ManagerToke:",token);
+  console.log("ManagerToke:", token);
   if (!token) {
     //    return res.status(401).json({
     //         status:401,
@@ -131,11 +130,11 @@ exports.auth = function (req, res, next) {
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
     console.log("Decode" + decode.id);
-    if(decode.role !== "manager"){
+    if (decode.role !== "manager") {
       return res.render("hotel/hotelHome");
     }
     req.manager = decode;
-    console.log("Manager n:",req.manager);
+    console.log("Manager n:", req.manager);
     next();
   } catch (err) {
     return res.status(403).json({ message: "Invalid Token!" + err });
@@ -185,7 +184,6 @@ exports.auth = function (req, res, next) {
 //   }
 // };
 
-
 exports.getMangerDashbord = async (req, res) => {
   console.log("m:" + req.manager.id);
   const manager = (await HotelManager.findById(req.manager.id)) || false;
@@ -194,15 +192,21 @@ exports.getMangerDashbord = async (req, res) => {
 
   const hotels = await Hotel.find({ managerId });
   const hotelId = hotels.map((h) => h._id)[0];
-  const bookings = await Booking.find({hotelId});
+  const bookings = await Booking.find({ hotelId });
   const rooms = await Room.find({
     hotelID: { $in: hotelId },
   });
-  let totalRooms = (await Room.find({hotelID:hotelId})).length;
-  let account  = hotels.map((e)=>e.account)[0];
+  let totalRooms = (await Room.find({ hotelID: hotelId })).length;
+  let account = hotels.map((e) => e.account)[0];
   let bookingCount = bookings.length;
   // console.log(totalRooms);
-  res.render("hotel/home", { manager, totalRooms, rooms,account,bookingCount });
+  res.render("hotel/home", {
+    manager,
+    totalRooms,
+    rooms,
+    account,
+    bookingCount,
+  });
 };
 
 exports.showHotel = async (req, res) => {
@@ -439,6 +443,8 @@ exports.createAddRoom = async (req, res) => {
       children,
       sizeSqM,
       roomNum,
+      category,
+      description,
       ac,
       bedConfiguration,
     } = req.body;
@@ -458,7 +464,9 @@ exports.createAddRoom = async (req, res) => {
       adults,
       children,
       ac,
+      category,
       roomNum,
+      description,
       roomPhotos: roomImage,
       galleryImages,
       hotelID,
@@ -490,12 +498,12 @@ exports.displayUpdateRoom = async (req, res) => {
   }
 };
 
-exports.showRoomDetails = async(req,res) =>{
+exports.showRoomDetails = async (req, res) => {
   const roomID = req.params.id;
   const roomType = await Room.findById(roomID);
   // console.log("roomDE:",);
-  res.render("hotel/showRoom",{roomType});
-}
+  res.render("hotel/showRoom", { roomType });
+};
 
 exports.roomUpdate = async (req, res) => {
   try {

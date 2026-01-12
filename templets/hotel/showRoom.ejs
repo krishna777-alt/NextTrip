@@ -3,14 +3,15 @@
 <div class="max-w-7xl mx-auto px-6 py-10">
   <!-- Breadcrumb -->
   <p class="text-sm text-gray-500 mb-4">
-    Hotel / Rooms / <span class="text-gray-800 font-medium"><%= roomType.roomTypeCode %></span>
+    Hotel / Rooms /
+    <span class="text-gray-800 font-medium"><%= roomType.roomTypeCode %></span>
   </p>
 
   <!-- Main Image -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
     <div class="lg:col-span-2">
       <img
-        src="/uploads/hotels/<%= roomType.mainImage || '/images/room-placeholder.jpg' %>"
+        src="/uploads/hotels/<%= roomType.roomPhotos[0] || '/images/room-placeholder.jpg' %>"
         alt="Room Image"
         class="w-full h-[420px] object-cover rounded-2xl shadow"
       />
@@ -19,14 +20,16 @@
     <!-- Side Gallery -->
     <div class="grid grid-cols-2 gap-4">
       <% roomType.roomPhotos.forEach(photo => { %>
-        <img
-          src="/uploads/hotels/<%= photo %>"
-          class="h-48 w-full object-cover rounded-xl border"
-        />
+      <img
+        src="/uploads/hotels/<%= photo %>"
+        class="h-48 w-full object-cover rounded-xl border"
+      />
       <% }) %>
     </div>
   </div>
-  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+  <div
+    class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6"
+  >
     <div>
       <h1 class="text-3xl font-bold text-gray-900">
         <%= roomType.category %> Room
@@ -73,13 +76,17 @@
     <div class="p-5 rounded-xl border bg-gray-50">
       <p class="text-sm text-gray-500">Status</p>
       <% if (roomType.isBooked) { %>
-        <span class="inline-block px-4 py-1 rounded-full bg-black text-white text-sm">
-          Reserved
-        </span>
+      <span
+        class="inline-block px-4 py-1 rounded-full bg-black text-white text-sm"
+      >
+        Reserved
+      </span>
       <% } else { %>
-        <span class="inline-block px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm">
-          Available
-        </span>
+      <span
+        class="inline-block px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm"
+      >
+        Available
+      </span>
       <% } %>
     </div>
   </div>
@@ -88,23 +95,22 @@
     <h2 class="text-xl font-semibold mb-4">Bed Configuration</h2>
     <div class="flex flex-wrap gap-3">
       <% roomType.bedConfiguration.forEach(bed => { %>
-        <span class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm">
-          <%= bed %>
-        </span>
+      <span class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm">
+        <%= bed %>
+      </span>
       <% }) %>
     </div>
   </div>
 
-    <div class="mb-12">
+  <div class="mb-12">
     <h2 class="text-xl font-semibold mb-3">Room Description</h2>
     <p class="text-gray-600 leading-relaxed">
       <%= roomType.description || "No description provided for this room." %>
     </p>
   </div>
 
-    <div class="flex flex-col sm:flex-row gap-4">
-    
-      <!-- <button
+  <div class="flex flex-col sm:flex-row gap-4">
+    <!-- <button
         class="w-full sm:w-auto bg-black text-white py-3 px-8 rounded-xl
                text-lg font-medium cursor-not-allowed opacity-90"
         disabled
@@ -112,19 +118,16 @@
         Reserved
       </button>
    -->
-      <a
-        href="/hotel/rooms/updateRoom/<%= roomType._id %>"
-        class="w-full sm:w-auto bg-indigo-600 text-white py-3 px-8 rounded-xl
-               text-lg font-medium hover:bg-indigo-700 transition"
-      >
-        update
-      </a>
-
+    <a
+      href="/hotel/rooms/updateRoom/<%= roomType._id %>"
+      class="w-full sm:w-auto bg-indigo-600 text-white py-3 px-8 rounded-xl text-lg font-medium hover:bg-indigo-700 transition"
+    >
+      update
+    </a>
 
     <a
       href="/hotel/rooms"
-      class="w-full sm:w-auto border border-gray-300 py-3 px-8 rounded-xl
-             text-lg text-gray-700 hover:bg-gray-100 transition"
+      class="w-full sm:w-auto border border-gray-300 py-3 px-8 rounded-xl text-lg text-gray-700 hover:bg-gray-100 transition"
     >
       Back to Rooms
     </a>

@@ -14,7 +14,7 @@
           <div>
             Show
             <select id="show-select" class="border rounded px-2 py-1">
-              <option>2</option>
+              <option>6</option>
               <option>12</option>
             </select>
             per page
@@ -75,7 +75,7 @@
 
     <!-- IMAGE -->
     <img
-      src="/uploads/hotels/<%= room.mainImage %>"
+      src="/uploads/hotels/<%= room.roomPhotos[0] %>"
       class="w-full h-56 object-cover group-hover:scale-105 transition duration-500"
     />
   </div>

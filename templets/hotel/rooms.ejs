@@ -27,7 +27,7 @@
       <!-- Image -->
       <div class="h-48 bg-gray-100 overflow-hidden">
         <img
-          src="/uploads/hotels/<%= room.mainImage || 'default-room.jpg' %>"
+          src="/uploads/hotels/<%= room.roomPhotos[0] || 'default-room.jpg' %>"
           class="w-full h-full object-cover hover:scale-105 transition duration-300"
           alt="Room Image"
         />
