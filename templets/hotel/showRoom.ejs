@@ -11,7 +11,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
     <div class="lg:col-span-2">
       <img
-        src="/uploads/hotels/<%= roomType.roomPhotos[0] || '/images/room-placeholder.jpg' %>"
+        src="/uploads/hotels/<%= roomType.mainImage|| roomType.roomPhotos[0] %>"
         alt="Room Image"
         class="w-full h-[420px] object-cover rounded-2xl shadow"
       />

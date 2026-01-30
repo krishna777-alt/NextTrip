@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
       return res.redirect("/hotel/login");
     }
     const manager = await HotelManager.findOne({ username }).select(
-      "+password"
+      "+password",
     );
     console.log("managerL:" + manager);
     if (!manager) {
@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
         role: manager.role,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: process.env.JWT_TOKEN_EXPRIES }
+      { expiresIn: process.env.JWT_TOKEN_EXPRIES },
     );
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -101,7 +101,7 @@ exports.register = async (req, res) => {
       "success",
       `
             successfully account registered    
-            `
+            `,
     );
     return res.redirect("/hotel/login");
     // res.render('agents/login',{
@@ -361,7 +361,7 @@ exports.updateHotelData = async (req, res) => {
     // Gallery images (append new ones)
     if (req.files?.galleryImages?.length > 0) {
       const newGalleryImages = req.files.galleryImages.map(
-        (file) => file.filename
+        (file) => file.filename,
       );
       hotel.galleryImages.push(...newGalleryImages);
     }
@@ -445,13 +445,14 @@ exports.createAddRoom = async (req, res) => {
       roomNum,
       category,
       description,
+      price,
       ac,
       bedConfiguration,
     } = req.body;
 
     const roomImage = req.files?.roomMainImage?.[0]?.filename;
     const galleryImages = req.files?.roomGalleryImages?.map((f) => f.filename);
-
+    console.log("GalatyL:", galleryImages);
     const bedConfigArray = bedConfiguration?.split(",").map((b) => b.trim());
     const managerId = req.manager.id;
     const hotel = await Hotel.findOne({ managerId });
@@ -466,9 +467,10 @@ exports.createAddRoom = async (req, res) => {
       ac,
       category,
       roomNum,
+      price,
       description,
-      roomPhotos: roomImage,
-      galleryImages,
+      mainImage: roomImage,
+      roomPhotos: galleryImages,
       hotelID,
       bedConfiguration: bedConfigArray,
     });
