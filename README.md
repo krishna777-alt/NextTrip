@@ -32,7 +32,7 @@ Frontend
 
 HTML
 
-CSS
+CSS(tailwind)
 
 JavaScript
 
