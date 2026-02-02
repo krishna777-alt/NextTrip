@@ -3,7 +3,7 @@ const userController = require("./../controllers/userController");
 
 const router = express.Router();
 
-router.get("/logout",userController.logout);
+router.get("/logout", userController.logout);
 
 router
   .route("/login")
@@ -15,31 +15,36 @@ router
   .get(userController.displaySignup)
   .post(userController.signup);
 
-
-router.post("/account/updateAvatar",
+router.post(
+  "/account/updateAvatar",
   userController.auth,
   userController.uploadUserProfile,
-  userController.updateUserAvatar);  
+  userController.updateUserAvatar,
+);
 
-router.post("/account/updateUserData",
+router.post(
+  "/account/updateUserData",
   userController.auth,
-  userController.updateUserProfile);
+  userController.updateUserProfile,
+);
 
-router.post("/account/updateUserPassword",
+router.post(
+  "/account/updateUserPassword",
   userController.auth,
-  userController.updatePassword);  
+  userController.updatePassword,
+);
 router.get(
   "/",
   userController.auth,
   // userController.isUser,
-  userController.home
+  userController.home,
 );
 
 router.get("/places", userController.auth, userController.displayPlaces);
 router.get(
   "/placeDetails/:id",
   userController.auth,
-  userController.displayPlaceDetails
+  userController.displayPlaceDetails,
 );
 
 router.get("/hotels", userController.auth, userController.diplayHotel);
@@ -54,7 +59,7 @@ router
 router.get(
   "/displayHotelDetails/:id",
   userController.auth,
-  userController.displayHotelDetails
+  userController.displayHotelDetails,
 );
 
 router
@@ -71,19 +76,21 @@ router.get("/package", userController.auth, userController.displayPackages);
 router.get(
   "/hotelRooms/displayRooms/:id",
   userController.auth,
-  userController.displayRoomDetails
+  userController.displayRoomDetails,
 );
 
 router.get(
   "/hotelRooms/:id",
   userController.auth,
-  userController.displayCurrentHotelRoomDetails
+  userController.displayCurrentHotelRoomDetails,
 );
 // router.get("/booking/:id", userController.auth, userController.getBooking);
 
 router.post("/bookingRoom", userController.auth, userController.createBooking);
 
 router.post("/payment", userController.auth, userController.payment);
+
+router.delete("/account/booking/cancel/:id", userController.bookingCancel);
 
 router.post("/chat", userController.auth, userController.aiChatBot);
 module.exports = router;
