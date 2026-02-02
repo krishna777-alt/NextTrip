@@ -223,19 +223,14 @@
             <div>
               <label class="font-medium">Adults</label>
               <select name="adults" class="w-full p-3 mt-2 border rounded-lg">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
+                <option><%= room.adults%></option>                
               </select>
             </div>
 
             <div>
               <label class="font-medium">Children</label>
               <select name="children" class="w-full p-3 mt-2 border rounded-lg">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
+                <option><%= room.children %></option>
               </select>
             </div>
 
@@ -245,8 +240,8 @@
                 name="roomTypeCode"
                 class="w-full p-3 mt-2 border rounded-lg"
               >
-                <option>KNG_DLX</option>
-                <option>DBL_STD</option>
+              <option><%= room.roomTypeCode%></option>
+                
               </select>
             </div>
 

@@ -1,0 +1,108 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">Booking Details</h1>
+      <p class="text-sm text-gray-500">
+        Booking ID: <span class="font-mono"><%= booking._id %></span>
+      </p>
+    </div>
+
+    <a
+      href="http://localhost:3000/hotel/manageBookings"
+      class="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+    >
+      ← Back
+    </a>
+  </div>
+
+  <!-- Booking Overview -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Left: Booking Info -->
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- Guest Info -->
+      <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">Guest Information</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <p><span class="text-gray-500">Name:</span> <%= booking.name || "Guest User" %></p>
+          <p><span class="text-gray-500">Phone:</span> <%= booking.phone || "—" %></p>
+          <p><span class="text-gray-500">Adults:</span> <%= booking.adults %></p>
+          <p><span class="text-gray-500">Children:</span> <%= booking.children %></p>
+        </div>
+      </div>
+
+      <!-- Stay Details -->
+      <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">Stay Details</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <p>
+            <span class="text-gray-500">Check-In:</span>
+            <%= booking.checkInDate.toDateString() %>
+          </p>
+          <p>
+            <span class="text-gray-500">Check-Out:</span>
+            <%= booking.checkOutDate.toDateString() %>
+          </p>
+          <p><span class="text-gray-500">Room Type:</span> <%= booking.roomTypeCode %></p>
+          <p><span class="text-gray-500">Room No:</span> <%= booking.roomNum || "Not Assigned" %></p>
+        </div>
+      </div>
+
+      <!-- Payment Info -->
+      <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">Payment Information</h2>
+
+        <% if(payment){ %>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <p><span class="text-gray-500">Amount:</span> ₹<%= payment.amount %></p>
+            <p><span class="text-gray-500">Method:</span> <%= payment.paymentMethod %></p>
+            <p><span class="text-gray-500">Status:</span>
+              <span class="px-2 py-1 rounded-full text-xs
+                <%= payment.status === 'CAPTURED' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' %>">
+                <%= payment.status %>
+              </span>
+            </p>
+            <p><span class="text-gray-500">Processed:</span>
+              <%= payment.processedAt.toDateString() %>
+            </p>
+          </div>
+        <% } else { %>
+          <p class="text-gray-500 text-sm">No payment record found.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Right: Summary Card -->
+    <div class="bg-white rounded-2xl shadow p-6 space-y-4 h-fit">
+      <h2 class="text-lg font-semibold">Summary</h2>
+
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-500">Hotel</span>
+        <span class="font-medium"><%= hotel?.name || "—" %></span>
+      </div>
+
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-500">Currency</span>
+        <span><%= booking.currency %></span>
+      </div>
+
+      <div class="flex justify-between text-lg font-semibold">
+        <span>Total</span>
+        <span>₹<%= payment.amount %></span>
+      </div>
+
+      <div class="pt-4 border-t">
+        <p class="text-xs text-gray-500">
+          Booked on <%= booking.createdAt.toDateString() %>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
