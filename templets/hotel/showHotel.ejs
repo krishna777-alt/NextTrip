@@ -178,144 +178,14 @@
         </button>
       </form>
     
-     <div class="p-6 bg-white shadow-sm mb-6">
+     <!-- <div class="p-6 bg-white shadow-sm mb-6">
     <h1 class="text-3xl font-bold text-gray-800">Edit Room Type</h1>
     <p class="text-gray-500 mt-1">Update room details for hotel administration</p>
-  </div>
+  </div> -->
 
   <div class="max-w-5xl mx-auto">
 
-    <form
-      action="/admin/room-types/update/<%= roomType._id %>"
-      method="POST"
-      class="bg-white shadow-lg rounded-xl p-8 grid grid-cols-1 md:grid-cols-2 gap-6"
-    >
-      <!-- Room Type Code -->
-      <div>
-        <label class="block font-semibold mb-1">Room Type Code *</label>
-        <input
-          type="text"
-          name="roomTypeCode"
-          value="<%= roomType.roomTypeCode %>"
-          required
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-        />
-      </div>
-
-      <!-- Max Occupancy -->
-      <div>
-        <label class="block font-semibold mb-1">Max Occupancy *</label>
-        <input
-          type="number"
-          name="maxOccupancy"
-          value="<%= roomType.maxOccupancy %>"
-          min="1"
-          required
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- Size SqM -->
-      <div>
-        <label class="block font-semibold mb-1">Room Size (SqM)</label>
-        <input
-          type="number"
-          name="sizeSqM"
-          value="<%= roomType.sizeSqM %>"
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- Adults -->
-      <div>
-        <label class="block font-semibold mb-1">Adults *</label>
-        <input
-          type="number"
-          name="adults"
-          value="<%= roomType.adults %>"
-          min="1"
-          required
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- Children -->
-      <div>
-        <label class="block font-semibold mb-1">Children</label>
-        <input
-          type="number"
-          name="children"
-          value="<%= roomType.children %>"
-          min="0"
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- AC -->
-      <div>
-        <label class="block font-semibold mb-1">AC Type</label>
-        <select
-          name="ac"
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        >
-          <option value="AC" <%= roomType.ac === "AC" ? "selected" : "" %>>
-            AC
-          </option>
-          <option value="Non AC" <%= roomType.ac === "Non AC" ? "selected" : "" %>>
-            Non AC
-          </option>
-        </select>
-      </div>
-
-      <!-- Hotel ID -->
-      
-      <!-- Bed Config -->
-      <div class="md:col-span-2">
-        <label class="block font-semibold mb-1">Bed Configuration</label>
-        <input
-          type="text"
-          name="bedConfiguration"
-          value="<%= roomType.bedConfiguration.join(', ') %>"
-          placeholder="e.g., 1 King Bed, 1 Sofa Bed"
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- Room Photos -->
-      <div class="md:col-span-2">
-        <label class="block font-semibold mb-1">Room Photos (URLs)</label>
-        <input
-          type="text"
-          name="roomPhotos"
-          value="<%= roomType.roomPhotos.join(', ') %>"
-          placeholder="Comma separated URLs"
-          class="w-full rounded-lg border-gray-300 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- Photo Preview -->
-      <div class="md:col-span-2 mt-4">
-        <p class="font-semibold mb-2">Photo Preview</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <% roomType.roomPhotos.forEach(photo => { %>
-          <img
-            src="/uploads/hotels/<%= photo %>"
-            class="w-full h-32 object-cover rounded-lg shadow"
-          />
-          <% }) %>
-        </div>
-      </div>
-
-      <!-- Submit Button -->
-      <div class="md:col-span-2 flex justify-end mt-6">
-        <button
-          type="submit"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md"
-        >
-          Update Room Type
-        </button>
-      </div>
-    </form>
+  
   </div>
  </div> 
   </body>

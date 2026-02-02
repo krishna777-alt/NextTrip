@@ -94,44 +94,7 @@
     </div>
 
     <!-- ROOM TYPES -->
-    <div class="bg-white p-6 rounded-xl shadow mb-10 border">
-      <h3 class="text-xl font-semibold mb-4">Room Types</h3>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="text-gray-600 border-b">
-              <th class="py-3">Code</th>
-              <th>Max</th>
-              <th>Size</th>
-              <th>Adults</th>
-              <th>Children</th>
-              <th>Beds</th>
-              <th>AC</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% room %>
-            <tr class="border-b hover:bg-gray-50">
-              <td class="py-3 font-semibold"><%= room.roomTypeCode %></td>
-              <td><%= room.maxOccupancy %></td>
-              <td><%= room.sizeSqM || "N/A" %> sqm</td>
-              <td><%= room.adults %></td>
-              <td><%= room.children %></td>
-              <td>
-                <% room.bedConfiguration.forEach(b => { %>
-                <span class="bg-gray-200 px-2 py-1 rounded text-xs mr-1"
-                  ><%= b %></span
-                >
-                <% }) %>
-              </td>
-              <td><%= room.ac %></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+   
 
     <!-- FACILITIES -->
     <div class="bg-white p-6 rounded-xl shadow mb-10 border">

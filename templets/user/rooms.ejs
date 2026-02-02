@@ -23,14 +23,27 @@
 
           <div>
             Sort by:
-            <select id="sort-select" class="border rounded px-2 py-1">
-              
-              <option>Price</option>
-              <option>AC</option>
+            <select id="sort-room" class="border rounded px-2 py-1">
+              <option>All</option>
+               <option>AC</option>
               <option>NON-AC</option>
               <option>Executive</option>
             </select>
           </div>
+           <div>
+            Sort by:
+           <select
+              id="price-filter"
+              class="border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Filter by Budget</option>
+              <option value="0-1000">Under ₹3000</option>
+              <option value="1000-2000">₹3000 – ₹5000</option>
+              <option value="2000+">Above ₹2000</option>
+            </select>
+
+          </div>
+          
         </div>
       </div>
 
@@ -43,7 +56,7 @@
 
 <div
   class="bg-white shadow-sm rounded-xl overflow-hidden group hover:shadow-lg transition duration-300"
-  data-price="<%= room.price %>" data-ac="<%= room.ac %>" data-type="<%= room.roomTypeCode %>"
+  data-price="<%= room.price %>" data-category="<%= room.category %>" data-type="<%= room.roomTypeCode %>"
 >
   <!-- IMAGE AREA -->
   <div class="relative overflow-hidden">
@@ -91,8 +104,9 @@
     <!-- ICON ROW -->
     <div class="flex justify-center gap-4 text-sm text-gray-500 mb-3">
       <span>🛏 <%= room.bedConfiguration?.[0] || 'Comfort Bed' %></span>
-      <span>❄ <%= room.ac %></span>
+      <span class="category">❄ <%= room.category %></span>
       <span>👥 <%= room.maxOccupancy %> Guests</span>
+      
     </div>
 
     <!-- DESCRIPTION -->
@@ -135,7 +149,8 @@
 
 <script>
 const showSelect = document.getElementById('show-select');
-const sortSelect = document.getElementById('sort-select');
+const sortSelect = document.getElementById('sort-room');
+const priceFilter = document.getElementById('price-filter');
 const roomsContainer = document.querySelector('.grid');
 const roomCards = Array.from(roomsContainer.children);
 const itemsText = document.getElementById('items-text');
@@ -145,26 +160,49 @@ const pageText = document.getElementById('page-text');
 
 let currentPage = 1;
 
-function updateDisplay() {
-  const show = parseInt(showSelect.value);
-  const sortBy = sortSelect.value;
-  const total = roomCards.length;
+function filterAndSortCards() {
+  let filtered = [...roomCards];
+  const priceRange = priceFilter.value;
 
-  // sort the cards
-  roomCards.sort((a, b) => {
-    if (sortBy === 'Price') {
-      return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+  // Filter by price
+  if (priceRange) {
+    filtered = filtered.filter(card => {
+      const price = parseInt(card.dataset.price);
+      if (priceRange === '0-1000') return price <= 3000;
+      if (priceRange === '1000-2000') return price >= 3000 && price <= 5000;
+      if (priceRange === '2000+') return price > 5000;
+      return true;
+    });
+  }
+
+  // Sort the cards
+  const sortBy = sortSelect.value;
+  filtered.sort((a, b) => {
+    if (sortBy === 'All') {
+      return 0;
     } else if (sortBy === 'AC') {
-      return a.dataset.ac.localeCompare(b.dataset.ac);
+      const aIsAC = a.dataset.category.toLowerCase().includes('ac') ? 1 : 0;
+      const bIsAC = b.dataset.category.toLowerCase().includes('ac') ? 1 : 0;
+      return bIsAC - aIsAC;
     } else if (sortBy === 'NON-AC') {
-      return b.dataset.ac.localeCompare(a.dataset.ac);
+      const aIsNonAC = a.dataset.category.toLowerCase().includes('non') ? 1 : 0;
+      const bIsNonAC = b.dataset.category.toLowerCase().includes('non') ? 1 : 0;
+      return bIsNonAC - aIsNonAC;
     } else if (sortBy === 'Executive') {
-      const aExec = a.dataset.type.toLowerCase().includes('executive') ? 1 : 0;
-      const bExec = b.dataset.type.toLowerCase().includes('executive') ? 1 : 0;
-      return bExec - aExec;
+      const aIsExec = a.dataset.category.toLowerCase().includes('executive') ? 1 : 0;
+      const bIsExec = b.dataset.category.toLowerCase().includes('executive') ? 1 : 0;
+      return bIsExec - aIsExec;
     }
     return 0;
   });
+
+  return filtered;
+}
+
+function updateDisplay() {
+  const show = parseInt(showSelect.value);
+  const filtered = filterAndSortCards();
+  const total = filtered.length;
 
   const totalPages = Math.ceil(total / show);
   if (currentPage > totalPages) currentPage = totalPages || 1;
@@ -172,7 +210,7 @@ function updateDisplay() {
 
   const start = (currentPage - 1) * show;
   const end = start + show;
-  const visibleCards = roomCards.slice(start, end);
+  const visibleCards = filtered.slice(start, end);
 
   // clear container
   roomsContainer.innerHTML = '';
@@ -202,6 +240,11 @@ sortSelect.addEventListener('change', () => {
   updateDisplay();
 });
 
+priceFilter.addEventListener('change', () => {
+  currentPage = 1;
+  updateDisplay();
+});
+
 prevBtn.addEventListener('click', () => {
   if (currentPage > 1) {
     currentPage--;
@@ -210,7 +253,8 @@ prevBtn.addEventListener('click', () => {
 });
 
 nextBtn.addEventListener('click', () => {
-  const totalPages = Math.ceil(roomCards.length / parseInt(showSelect.value));
+  const filtered = filterAndSortCards();
+  const totalPages = Math.ceil(filtered.length / parseInt(showSelect.value));
   if (currentPage < totalPages) {
     currentPage++;
     updateDisplay();

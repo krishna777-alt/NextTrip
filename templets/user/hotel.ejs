@@ -58,32 +58,24 @@
           </select>
         </div>
 
-        <!-- Price Filter -->
+        <!-- Place Filter -->
         <div>
-          <label class="font-semibold">Price</label>
+          <label class="font-semibold">Place</label>
           <select
-            id="filterPrice"
+            id="filterPlaces"
             class="w-full mt-1 p-3 border rounded-lg bg-gray-50"
           >
-            <option value="all">All Prices</option>
-            <option value="low">Below ₹1500</option>
-            <option value="mid">₹1500 - ₹3000</option>
-            <option value="high">₹3000+</option>
+            <option value="all">All Places</option>
+            <% 
+              const uniquePlaces = [...new Set(hotels.map(h => h.place))];
+              uniquePlaces.forEach((place) => { 
+            %>
+            <option value="<%= place %>"><%= place %></option>
+            <% }); %>
           </select>
         </div>
 
-        <!-- AC Filter -->
-        <!-- <div>
-          <label class="font-semibold">Room Type</label>
-          <select
-            id="filterAC"
-            class="w-full mt-1 p-3 border rounded-lg bg-gray-50"
-          >
-            <option value="all">All</option>
-            <option value="ac">AC</option>
-            <option value="nonac">Non-AC</option>
-          </select>
-        </div> -->
+      
       </div>
 
       <!-- Hotel Cards -->
@@ -104,14 +96,7 @@
               ⭐ <%= hotel.rating %>/5
             </p>
             <p class="text-gray-700 mb-2 font-medium">
-              ₹ <%= hotel.price %> / night
-            </p>
-            <p class="text-sm mb-4">
-              <span
-                class="px-3 py-1 rounded-full text-white <%= acRooms ? 'bg-blue-600' : 'bg-gray-600' %>"
-              >
-                <%= acRooms ? "AC Room" : "Non-AC Room" %>
-              </span>
+              ₹ <%= hotel.description %> / night
             </p>
 
             <div class="flex gap-3 mt-4">
@@ -123,7 +108,7 @@
               </a>
 
               <a
-                href="/hotelDetails/<%= hotel._id %>"
+                href="/displayHotelDetails/<%= hotel._id %>"
                 class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
               >
                 Details
@@ -139,81 +124,89 @@
 
     <!-- Filter Script -->
     <script>
+      // Original hotels data
       const allHotels = <%- JSON.stringify(hotels) %>;
-      const container = document.getElementById("hotelContainer");
 
-      const filterRating = document.getElementById("filterRating");
-      const filterPrice = document.getElementById("filterPrice");
-     
+      // Get filter elements
+      const ratingFilter = document.getElementById("filterRating");
+      const placeFilter = document.getElementById("filterPlaces");
 
-      function renderHotels(list) {
-        container.innerHTML = "";
-
-        if (list.length === 0) {
-          container.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No hotels match your filters</p>';
-          return;
-        }
-
-        list.forEach((h) => {
-          container.innerHTML += `
-            <div class="bg-white border rounded-xl shadow overflow-hidden">
-              <img src="/uploads/hotels/${h.images ? h.images[0] : h.image}" class="h-48 w-full object-cover" />
-
-              <div class="p-5">
-                <h3 class="text-xl font-bold">${h.name}</h3>
-                <p class="text-yellow-500 font-semibold mb-1">⭐ ${h.rating}/5</p>
-                <p class="text-gray-700 mb-2 font-medium">₹ ${h.price} / night</p>
-
-                <p class="text-sm mb-4">
-                  
-                </p>
-
-                <div class="flex gap-3 mt-4">
-                  <a href="/hotelRooms/${h._id}" class="w-1/2 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                    Book Now
-                  </a>
-                  <a href="/displayHotelDetails/${h._id}" class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50">
-                    Details
-                  </a>
-                </div>
-              </div>
-            </div>
-          `;
-        });
-      }
-
+      // Filter and display hotels
       function applyFilters() {
-        const rating = filterRating.value;
-        const price = filterPrice.value;
-       
-        // console.log("AC:"+ac);
-        let filtered = allHotels.slice();
+        const selectedRating = ratingFilter.value;
+        const selectedPlace = placeFilter.value;
 
-        // Rating filter
-        if (rating !== "all") {
-          filtered = filtered.filter((h) => h.rating >= Number(rating));
+        let filtered = allHotels;
+
+        // Filter by rating
+        if (selectedRating !== "all") {
+          const minRating = parseFloat(selectedRating);
+          filtered = filtered.filter(hotel => parseFloat(hotel.rating) >= minRating);
         }
 
-        // Price filter
-        if (price === "low") filtered = filtered.filter((h) => h.price < 1500);
-        if (price === "mid")
-          filtered = filtered.filter((h) => h.price >= 1500 && h.price <= 3000);
-        if (price === "high") filtered = filtered.filter((h) => h.price > 3000);
+        // Filter by place (case-insensitive)
+        if (selectedPlace !== "all" && selectedPlace !== "") {
+          filtered = filtered.filter(hotel => hotel.place.toLowerCase() === selectedPlace.toLowerCase());
+        }
 
-        // AC Filter
-        
-
+        // Render filtered hotels
         renderHotels(filtered);
       }
 
-      // Initialize filters on page load
-      document.addEventListener('DOMContentLoaded', () => {
-        applyFilters();
-      });
+      // Render hotels to the DOM
+      function renderHotels(hotelsToRender) {
+        const container = document.getElementById("hotelContainer");
+        
+        if (hotelsToRender.length === 0) {
+          container.innerHTML = '<div class="col-span-full text-center py-10"><p class="text-gray-600 text-lg">No hotels found matching your filters.</p></div>';
+          return;
+        }
 
-      filterRating.addEventListener("change", applyFilters);
-      filterPrice.addEventListener("change", applyFilters);
-      filterAC.addEventListener("change", applyFilters);
+        container.innerHTML = hotelsToRender.map(hotel => `
+          <div class="bg-white border rounded-xl shadow overflow-hidden">
+            <img
+              src="/uploads/hotels/${hotel.images ? hotel.images[0] : hotel.image}"
+              class="h-48 w-full object-cover"
+              onerror="this.src='/images/placeholder.jpg'"
+            />
+
+            <div class="p-5">
+              <h3 class="text-xl font-bold">${hotel.name}</h3>
+              <p class="text-yellow-500 font-semibold mb-1">
+                ⭐ ${hotel.rating}/5
+              </p>
+              <p class="text-gray-700 mb-2 font-medium">
+                ₹ ${hotel.description} / night
+              </p>
+              <p class="text-gray-700 mb-2 font-medium">
+                ₹ ${hotel.place} / night
+              </p>
+
+
+              <div class="flex gap-3 mt-4">
+                <a
+                  href="/hotelRooms/${hotel._id}"
+                  class="w-1/2 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Book Now
+                </a>
+
+                <a
+                  href="/hotelDetails/${hotel._id}"
+                  class="w-1/2 text-center border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+                >
+                  Details
+                </a>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Add event listeners
+      ratingFilter.addEventListener("change", applyFilters);
+      placeFilter.addEventListener("change", applyFilters);
     </script>
+    
   </body>
 </html>
