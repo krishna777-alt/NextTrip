@@ -310,18 +310,18 @@ exports.createHotel = async (req, res) => {
       managerId,
     });
     await hotel.save();
-    const hotelRoom = new Room({
-      roomTypeCode,
-      maxOccupancy,
-      sizeSqM,
-      adults,
-      children,
-      ac,
-      hotelID: hotel._id,
-      bedConfiguration,
-      roomPhotos,
-    });
-    await hotelRoom.save();
+    // const hotelRoom = new Room({
+    //   roomTypeCode,
+    //   maxOccupancy,
+    //   sizeSqM,
+    //   adults,
+    //   children,
+    //   ac,
+    //   hotelID: hotel._id,
+    //   bedConfiguration,
+    //   roomPhotos,
+    // });
+    // await hotelRoom.save();
     const hotelFacility = new HotelFacility({
       hotelId: hotel._id,
       facilities,
@@ -332,7 +332,7 @@ exports.createHotel = async (req, res) => {
 
     req.flash("success", "Hotel Successfully Created");
     req.hotel = hotel;
-    console.log(req.hotel);
+    // console.log(req.hotel);
     return res.redirect("/hotel/manageHotel");
   } catch (err) {
     res.status(500).json({ ErrMessage: err.message });
