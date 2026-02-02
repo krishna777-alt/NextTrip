@@ -266,12 +266,12 @@ exports.displayHotelDetails = async (req, res) => {
     const facilityDoc = await HotelFacility.findOne({ hotelId: hotelID });
     const room = await Room.find({ hotelID });
     const facilities = facilityDoc ? facilityDoc.facilities : [];
-    console.log("Hotel Details:", room);
+    // console.log("Hotel Details:", room);
     const reviews = await HotelReview.find({ hotelID }).populate(
       "userID",
       "name avatar",
     );
-    console.log("Reviews:" + reviews);
+    // console.log("Reviews:" + reviews);
     // console.log("FACILITIES ARRAY:", facilities);
 
     res.render("user/hotelDetails", { hotel, facilities, room, user, reviews });
@@ -284,14 +284,14 @@ exports.createHotelReview = async (req, res) => {
   try {
     const hotelID = req.params.id;
     const userID = req.user.id;
-    console.log("BOdy:" + userID);
+    // console.log("BOdy:" + userID);
     const review = new HotelReview({
       message: req.body.reviewText,
       rating: req.body.rating,
       userID,
       hotelID,
     });
-    console.log("userID:" + userID);
+    // console.log("userID:" + userID);
     await review.save();
     res.status(200).json({ message: "success", review });
   } catch (err) {
@@ -303,12 +303,12 @@ exports.displayUserAccount = async (req, res) => {
   try {
     const userID = req.user.id;
     const user = req.user || false;
-    console.log("hel:", user);
+    // console.log("hel:", user);
     const booking =
       (await Booking.find({ userId: userID })
         .populate("hotelId")
         .sort({ createdAt: -1 })) || false;
-    console.log("fdef:xxxxxxx:", booking);
+    // console.log("fdef:xxxxxxx:", booking);
     // if (booking.length === 0) {
     //   const userDetails = await User.findById(userID) || null;
     //   return res.render("user/account", {
@@ -322,7 +322,7 @@ exports.displayUserAccount = async (req, res) => {
     //   });
     // }
     const userDetails = (await User.findById(userID)) || false;
-    console.log("UserfdL:", userDetails);
+    // console.log("UserfdL:", userDetails);
     //  bookings.forEach((e)=>console.log("ferfer:",e.hotelId._id));
 
     const payment =
@@ -331,9 +331,9 @@ exports.displayUserAccount = async (req, res) => {
         populate: { path: "hotelId" },
       })) || false;
 
-    payment.forEach((p) => {
-      console.log("ferfer:", p.bookingId);
-    });
+    // payment.forEach((p) => {
+    //   console.log("ferfer:", p.bookingId);
+    // });
     res.render("user/account", {
       user,
       booking,
@@ -476,7 +476,7 @@ exports.displayRoomDetails = async (req, res) => {
   const user = req.user;
   const totalRooms = 100;
   const bookedRooms = 90;
-  console.log("Room detrails:", room);
+  // console.log("Room detrails:", room);
   res.render("user/roomDetails", { user, room, totalRooms, bookedRooms });
 };
 exports.displayCurrentHotelRoomDetails = async (req, res) => {
@@ -519,7 +519,7 @@ exports.createBooking = async (req, res) => {
       hotelId: hotel.hotelID._id,
     });
     await booking.save();
-    console.log("Booking:", roomID);
+    // console.log("Booking:", roomID);
     res.status(201).render("user/booking", { roomID, user, hotel, booking });
     // res.status(201).json({ booking });
   } catch (err) {
@@ -578,7 +578,7 @@ exports.payment = async (req, res) => {
     }
 
     const hotelId = booking.hotelId;
-    console.log("Hotel ID:", hotelId.toString());
+    // console.log("Hotel ID:", hotelId.toString());
 
     /* ----------------------------
        Update Admin account
@@ -601,12 +601,30 @@ exports.payment = async (req, res) => {
       });
     }
 
-    console.log("Updated Hotel Account:", updatedHotel.account);
+    // console.log("Updated Hotel Account:", updatedHotel.account);
 
     res.render("user/payment-success");
   } catch (err) {
     console.error("Payment Error:", err);
     res.status(500).render("user/payment-failed", { err: err.message });
+  }
+};
+
+exports.bookingCancel = async (req, res) => {
+  try {
+    const paymentId = req.params.id;
+
+    const payment = await Payment.findByIdAndUpdate(paymentId, {
+      status: "REFUNDED",
+      isRefunded: true,
+    });
+    const updateRoom = await Room.findByIdAndUpdate(payment.roomId, {
+      isBooked: false,
+    });
+    console.log("ehfeUpdatreL:", updateRoom);
+    res.status(201).json({ message: "successfully canceld!" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed!", ERROR: err.message });
   }
 };
 

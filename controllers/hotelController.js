@@ -603,3 +603,26 @@ exports.displayManageBooking = async (req, res) => {
     });
   }
 };
+
+exports.showBookingDetails = async (req, res) => {
+  try {
+    const bookingId = req.params.bookingId;
+    const paymentId = req.params.paymentId;
+
+    const booking = await Booking.findById(bookingId);
+    const payment = await Payment.findById(paymentId);
+    const hotel = await Hotel.findById(booking.hotelId);
+
+    console.log("bookingIDs:", bookingId, "||", "Payment:", paymentId);
+    res.render("hotel/showBookingDetails", {
+      booking,
+      hotel,
+      // user,
+      payment,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: 500, message: "Server Error!", ERROR: err.message });
+  }
+};
