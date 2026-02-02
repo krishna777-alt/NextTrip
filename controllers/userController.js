@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: process.env.JWT_TOKEN_EXPRIES }
+      { expiresIn: process.env.JWT_TOKEN_EXPRIES },
     );
     // console.log("user Token:", token);
     res.cookie("jwt", token, {
@@ -137,7 +137,7 @@ exports.updateUserAvatar = async (req, res) => {
     const updateAvatar = await User.findByIdAndUpdate(
       id,
       { avatar },
-      { new: true }
+      { new: true },
     );
     console.log("Profile:", updateAvatar);
     res.redirect("http://localhost:3000/account");
@@ -198,7 +198,7 @@ exports.displayPlaceDetails = async (req, res) => {
   const galleryImages = await GalleryImage.findOne({ placeId: place._id });
 
   const gimg = galleryImages.imageUrl;
-  const hotels = await Hotel.find({ isApproved: true, state: place.state });
+  const hotels = await Hotel.find({ isApproved: true, place: place.place });
   res.status(200).render("user/place-details", {
     user,
     states,
@@ -269,7 +269,7 @@ exports.displayHotelDetails = async (req, res) => {
     console.log("Hotel Details:", room);
     const reviews = await HotelReview.find({ hotelID }).populate(
       "userID",
-      "name avatar"
+      "name avatar",
     );
     console.log("Reviews:" + reviews);
     // console.log("FACILITIES ARRAY:", facilities);
@@ -591,7 +591,7 @@ exports.payment = async (req, res) => {
     const updatedHotel = await Hotel.findByIdAndUpdate(
       hotelId,
       { $inc: { account: hotelAmount } },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedHotel) {
