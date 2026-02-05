@@ -2,13 +2,13 @@ const express = require("express");
 const session = require("express-session");
 const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
+const methodOverride = require("method-override");
 const path = require("path");
 const dotenv = require("dotenv");
 
 const adminRoute = require("./Routes/adminRoute");
 const hotelRoute = require("./Routes/HotelRoute");
 const userRoute = require("./Routes/userRoute");
-const methodOverride = require("method-override");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -25,7 +25,7 @@ app.use(
     secret: process.env.SESSION_SECRET_KEY,
     resave: false,
     saveUninitialized: true,
-  })
+  }),
 );
 app.use(flash());
 app.use((req, res, next) => {
@@ -39,6 +39,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/images", express.static("images"));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
+
 // app.use('./uploads', express.static('uploads'));
 
 app.use(express.static(`${__dirname}/templets`));
