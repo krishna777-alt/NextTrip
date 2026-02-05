@@ -222,6 +222,34 @@
         </p>
       </div>
 
+      <div class="mt-8">
+        <label class="block text-sm font-medium mb-1">
+          Booked (YES/NO)
+        </label>
+        
+
+          <% if(room.isBooked){ %>
+            <input
+            type="text"
+            name="booked"
+          value="YES"
+          class="w-full border rounded-lg px-4 py-2"
+
+          />
+          <%} else{%>
+            <input
+          type="text"
+          name="booked"
+          value="NO"
+          class="w-full border rounded-lg px-4 py-2"
+          
+          />
+          <%}%>
+        
+        
+      </div>
+
+
       <!-- Actions -->
       <div class="mt-10 flex gap-4">
         <button
