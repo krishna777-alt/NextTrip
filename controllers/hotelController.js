@@ -514,6 +514,9 @@ exports.roomUpdate = async (req, res) => {
     const roomImage = req.files?.roomMainImage?.[0]?.filename;
     const galleryImages = req.files?.roomGalleryImages?.map((f) => f.filename);
 
+    const { booked } = req.body;
+
+    const isBooked = booked.toLowerCase() === "yes" ? true : false;
     const updatedData = {
       roomTypeCode: req.body.roomTypeCode,
       price: req.body.price,
@@ -528,6 +531,7 @@ exports.roomUpdate = async (req, res) => {
       bedConfiguration: req.body.bedConfiguration
         ?.split(",")
         .map((b) => b.trim()),
+      isBooked: isBooked,
     };
 
     // console.log("Files:", roomImage, galleryImages);
@@ -544,14 +548,8 @@ exports.roomUpdate = async (req, res) => {
 };
 exports.displayManageBooking = async (req, res) => {
   try {
-    /* ------------------------------------------------
-       1️⃣ Get logged-in manager
-    ------------------------------------------------ */
     const managerId = req.manager.id;
 
-    /* ------------------------------------------------
-       2️⃣ Find hotel owned by manager
-    ------------------------------------------------ */
     const hotel = await Hotel.findOne({ managerId });
 
     if (!hotel) {
@@ -563,9 +561,6 @@ exports.displayManageBooking = async (req, res) => {
 
     const hotelId = hotel._id;
 
-    /* ------------------------------------------------
-       3️⃣ Get bookings of this hotel
-    ------------------------------------------------ */
     const hotelBookings = await Booking.find({ hotelId }, "_id");
 
     if (hotelBookings.length === 0) {
@@ -577,9 +572,6 @@ exports.displayManageBooking = async (req, res) => {
 
     const bookingIds = hotelBookings.map((b) => b._id);
 
-    /* ------------------------------------------------
-       4️⃣ Get payments linked to those bookings
-    ------------------------------------------------ */
     const payments = await Payment.find({
       bookingId: { $in: bookingIds },
     })
@@ -588,9 +580,6 @@ exports.displayManageBooking = async (req, res) => {
       .populate("bookingId") // enough
       .sort({ createdAt: -1 });
 
-    /* ------------------------------------------------
-       5️⃣ Render
-    ------------------------------------------------ */
     res.render("hotel/booking", {
       bookings: payments,
       hotel,
